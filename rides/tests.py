@@ -407,6 +407,10 @@ class BuildSiteTests(TestCase):
             html = index.read_text(encoding="utf-8")
             self.assertIn("/Test/assets/css/style.css", html)
             self.assertIn("Sortie A", html)
+            self.assertIn('id="distance-min"', html)
+            self.assertIn('id="distance-max"', html)
+            self.assertIn('id="elevation-min"', html)
+            self.assertIn('id="elevation-max"', html)
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_uses_ridewithgps_embed_on_detail_pages(self):

@@ -9,14 +9,28 @@
   </div>
 
   <div class="filters">
-    <label class="filter">
-      Distance max : <output id="distance-out">{{ max_distance }}</output> km
-      <input type="range" id="distance" min="0" max="{{ max_distance }}" value="{{ max_distance }}" step="1">
-    </label>
-    <label class="filter">
-      Dénivelé max : <output id="elevation-out">{{ max_elevation }}</output> m
-      <input type="range" id="elevation" min="0" max="{{ max_elevation }}" value="{{ max_elevation }}" step="10">
-    </label>
+    <div class="filter">
+      <span>Distance : <output id="distance-min-out">0</output> – <output id="distance-max-out">{{ max_distance }}</output> km</span>
+      <label>
+        <span class="filter-bound">Min</span>
+        <input type="range" id="distance-min" min="0" max="{{ max_distance }}" value="0" step="1">
+      </label>
+      <label>
+        <span class="filter-bound">Max</span>
+        <input type="range" id="distance-max" min="0" max="{{ max_distance }}" value="{{ max_distance }}" step="1">
+      </label>
+    </div>
+    <div class="filter">
+      <span>Dénivelé : <output id="elevation-min-out">0</output> – <output id="elevation-max-out">{{ max_elevation }}</output> m</span>
+      <label>
+        <span class="filter-bound">Min</span>
+        <input type="range" id="elevation-min" min="0" max="{{ max_elevation }}" value="0" step="10">
+      </label>
+      <label>
+        <span class="filter-bound">Max</span>
+        <input type="range" id="elevation-max" min="0" max="{{ max_elevation }}" value="{{ max_elevation }}" step="10">
+      </label>
+    </div>
     <button type="button" id="reset" class="reset">Réinitialiser</button>
   </div>
 </section>

@@ -4,10 +4,14 @@
   "use strict";
 
   const search = document.getElementById("search");
-  const distance = document.getElementById("distance");
-  const elevation = document.getElementById("elevation");
-  const distanceOut = document.getElementById("distance-out");
-  const elevationOut = document.getElementById("elevation-out");
+  const distanceMin = document.getElementById("distance-min");
+  const distanceMax = document.getElementById("distance-max");
+  const elevationMin = document.getElementById("elevation-min");
+  const elevationMax = document.getElementById("elevation-max");
+  const distanceMinOut = document.getElementById("distance-min-out");
+  const distanceMaxOut = document.getElementById("distance-max-out");
+  const elevationMinOut = document.getElementById("elevation-min-out");
+  const elevationMaxOut = document.getElementById("elevation-max-out");
   const reset = document.getElementById("reset");
   const countEl = document.getElementById("result-count");
   const emptyEl = document.getElementById("empty");
@@ -24,10 +28,22 @@
 
   function apply() {
     const q = normalize(search.value.trim());
-    const maxDist = Number(distance.value);
-    const maxElev = Number(elevation.value);
-    distanceOut.textContent = maxDist;
-    elevationOut.textContent = maxElev;
+    let minDist = Number(distanceMin.value);
+    let maxDist = Number(distanceMax.value);
+    let minElev = Number(elevationMin.value);
+    let maxElev = Number(elevationMax.value);
+
+    if (minDist > maxDist) {
+      [minDist, maxDist] = [maxDist, minDist];
+    }
+    if (minElev > maxElev) {
+      [minElev, maxElev] = [maxElev, minElev];
+    }
+
+    distanceMinOut.textContent = minDist;
+    distanceMaxOut.textContent = maxDist;
+    elevationMinOut.textContent = minElev;
+    elevationMaxOut.textContent = maxElev;
 
     let visible = 0;
     for (const card of cards) {
@@ -37,8 +53,8 @@
       const e = Number(card.dataset.elevation);
 
       const matchesText = !q || name.includes(q) || city.includes(q);
-      const matchesDist = d <= maxDist;
-      const matchesElev = e <= maxElev;
+      const matchesDist = d >= minDist && d <= maxDist;
+      const matchesElev = e >= minElev && e <= maxElev;
       const show = matchesText && matchesDist && matchesElev;
 
       card.hidden = !show;
@@ -49,12 +65,16 @@
   }
 
   search.addEventListener("input", apply);
-  distance.addEventListener("input", apply);
-  elevation.addEventListener("input", apply);
+  distanceMin.addEventListener("input", apply);
+  distanceMax.addEventListener("input", apply);
+  elevationMin.addEventListener("input", apply);
+  elevationMax.addEventListener("input", apply);
   reset.addEventListener("click", function () {
     search.value = "";
-    distance.value = distance.max;
-    elevation.value = elevation.max;
+    distanceMin.value = distanceMin.min;
+    distanceMax.value = distanceMax.max;
+    elevationMin.value = elevationMin.min;
+    elevationMax.value = elevationMax.max;
     apply();
   });
 
