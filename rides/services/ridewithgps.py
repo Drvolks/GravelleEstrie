@@ -85,6 +85,9 @@ class RideWithGPSClient:
             route_id = summary.get("id")
             if route_id is None:
                 continue
+            if str(route_id) in settings.RWGPS_EXCLUDED_ROUTE_IDS:
+                logger.info("Skipping RideWithGPS route %s: excluded by configuration", route_id)
+                continue
             detail = self._get(f"/routes/{route_id}.json").get("route", summary)
             if not self._is_cycling(detail):
                 logger.info("Skipping RideWithGPS route %s: not cycling", route_id)

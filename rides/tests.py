@@ -110,6 +110,19 @@ class RideWithGPSCyclingFilterTests(TestCase):
             rides = client.fetch_rides()
         self.assertEqual({r.external_id for r in rides}, {"10"})
 
+    @override_settings(RWGPS_EXCLUDED_ROUTE_IDS=["20"])
+    def test_fetch_rides_skips_excluded_route_ids(self):
+        client = RideWithGPSClient(api_key="k", user_id="1")
+        summaries = [{"id": 10}, {"id": 20}]
+        details = {
+            10: {"route": {"id": 10, "name": "Gravel loop", "distance": 1000,
+                            "activity_types": ["cycling:gravel"], "track_points": []}},
+        }
+        with mock.patch.object(RideWithGPSClient, "iter_route_summaries", return_value=summaries), \
+             mock.patch.object(RideWithGPSClient, "_get", side_effect=lambda path, **p: details[int(path.split("/")[-1].split(".")[0])]):
+            rides = client.fetch_rides()
+        self.assertEqual({r.external_id for r in rides}, {"10"})
+
 
 class ImporterTests(TestCase):
     def _strava_payload(self, ext_id="1", **over):

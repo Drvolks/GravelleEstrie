@@ -44,7 +44,10 @@ class Command(BaseCommand):
         thumbs_dir = out / "assets" / "thumbs"
         thumbs_dir.mkdir(parents=True, exist_ok=True)
 
-        rides = list(Ride.objects.published())
+        rides_qs = Ride.objects.published()
+        if settings.RWGPS_EXCLUDED_ROUTE_IDS:
+            rides_qs = rides_qs.exclude(rwgps_route_id__in=settings.RWGPS_EXCLUDED_ROUTE_IDS)
+        rides = list(rides_qs)
         views = [self._ride_view(r, base_path, thumbs_dir) for r in rides]
 
         max_distance = self._ceil_max((v.distance_km for v in views), default=100, step=10)

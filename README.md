@@ -203,7 +203,10 @@ same account:
   `cycling:*` (road, gravel, mountain, commute) is imported; `walking:*`,
   `running:*`, `motorcycling:*`, etc. are skipped. Routes with no
   `activity_types` at all (older routes may predate the field) are assumed to
-  be cycling.
+  be cycling. Known source-data mistakes can be suppressed with
+  `RWGPS_EXCLUDED_ROUTE_IDS` (comma-separated RideWithGPS route ids); by
+  default this excludes the two "Course" running routes currently tagged
+  `cycling:gravel` by RideWithGPS.
 - Strava: routes have a `type` of `1` (Ride) or `2` (Run) — only `1` is
   imported. Private routes are also explicitly excluded, regardless of scope.
 
