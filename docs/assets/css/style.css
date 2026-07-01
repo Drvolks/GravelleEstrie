@@ -82,7 +82,7 @@ main.wrap { padding-top: 28px; }
 .detail-meta { color: var(--muted); display: flex; gap: 16px; flex-wrap: wrap; margin: 0 0 20px; }
 .detail-map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); }
 .detail-map img { width: 100%; display: block; }
-.detail-map iframe { width: 1px; min-width: 100%; height: clamp(420px, 72vh, 700px); border: 0; display: block; }
+.detail-map iframe { width: 100%; min-width: 100%; height: clamp(420px, 72vh, 700px); border: 0; display: block; }
 .specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 24px 0; padding: 0; }
 .specs div { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
 .specs dt { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; }

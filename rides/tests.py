@@ -430,6 +430,8 @@ class BuildSiteTests(TestCase):
                 html,
             )
             self.assertIn('title="Carte RideWithGPS de Sortie A"', html)
+            self.assertIn('width="100%"', html)
+            self.assertIn('height="620"', html)
 
 
 class DeleteAllAdminViewTests(TestCase):
