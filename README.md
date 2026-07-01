@@ -46,6 +46,8 @@ Run the data + build commands against the same stack:
 docker compose run --rm web python manage.py seed_demo          # demo rides
 docker compose run --rm web python manage.py import             # bulk import (RideWithGPS + Strava)
 docker compose run --rm web python manage.py build_site         # -> ./docs
+
+docker compose run --rm web python manage.py import_strava
 ```
 
 `./docs` and uploaded thumbnails are mounted as volumes, so the generated
