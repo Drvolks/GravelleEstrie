@@ -134,7 +134,7 @@ LOGGING = {
 # --- Project-specific settings ---------------------------------------------
 
 # Where `build_site` writes the generated static website.
-SITE_OUTPUT_DIR = BASE_DIR / "GravelleEstrie"
+SITE_OUTPUT_DIR = BASE_DIR / "docs"
 
 # Sub-path the committed static site is served from (e.g. "/GravelleEstrie").
 SITE_BASE_PATH = os.environ.get("SITE_BASE_PATH", "/GravelleEstrie").rstrip("/")

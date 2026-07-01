@@ -3,9 +3,9 @@
 #   docker compose up --build          # admin at http://localhost:8000/admin/
 #   docker compose run --rm web python manage.py seed_demo
 #   docker compose run --rm web python manage.py import_strava
-#   docker compose run --rm web python manage.py build_site   # writes ./GravelleEstrie
+#   docker compose run --rm web python manage.py build_site   # writes ./docs
 #
-#   docker compose --profile preview up preview   # serve ./GravelleEstrie at :8080/GravelleEstrie/
+#   docker compose --profile preview up preview   # serve ./docs at :8080/GravelleEstrie/
 #
 services:
   db:
@@ -50,8 +50,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - media:/app/media                         # persisted uploaded thumbnails
-      - ./GravelleEstrie:/app/GravelleEstrie     # committed static site
+      - media:/app/media       # persisted uploaded thumbnails
+      - ./docs:/app/docs       # committed static site for GitHub Pages
 
   # Serves the generated static site exactly as GitHub Pages would.
   # Opt-in via --profile preview so it doesn't start with a plain `up`.
@@ -61,7 +61,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./GravelleEstrie:/usr/share/nginx/html/GravelleEstrie:ro
+      - ./docs:/usr/share/nginx/html/GravelleEstrie:ro
 
 volumes:
   pgdata:

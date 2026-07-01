@@ -8,7 +8,7 @@ __pycache__
 .env
 media/
 output/
-GravelleEstrie/
+docs/
 staticfiles/
 .github/
 *.md
