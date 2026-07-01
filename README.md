@@ -14,12 +14,12 @@ generates a **static website** you can publish on GitHub Pages.
 ## How it works
 
 ```
-Strava / RideWithGPS ──import──▶  Django + Postgres  ──build_site──▶  output/ (static)  ──▶  GitHub Pages
+Strava / RideWithGPS ──import──▶  Django + Postgres  ──build_site──▶  GravelleEstrie/ (static, committed)
                                   (admin console)        thumbnails baked from route geometry
 ```
 
 The database and admin are **development/back-office only** — GitHub Pages only
-ever serves the generated static files in `output/`. Map thumbnails are
+ever serves the generated static files in `GravelleEstrie/`. Map thumbnails are
 pre-rendered PNGs (OpenStreetMap tiles + the route line), so the published site
 needs no map API keys or JavaScript maps.
 
@@ -44,17 +44,17 @@ Run the data + build commands against the same stack:
 ```bash
 docker compose run --rm web python manage.py seed_demo          # demo rides
 docker compose run --rm web python manage.py import             # bulk import (RideWithGPS + Strava)
-docker compose run --rm web python manage.py build_site         # -> ./output
+docker compose run --rm web python manage.py build_site         # -> ./GravelleEstrie
 ```
 
-`./output` and uploaded thumbnails are mounted as volumes, so the generated
-static site appears in `output/` on your host. Put API credentials and secrets
-in a `.env` file (see `.env.example`); Compose reads it automatically for
-Compose variable substitution — but note that `.env` is **not** copied or
-mounted into the container itself (see `.dockerignore`), so settings like
-`SITE_BASE_PATH` that aren't explicitly listed in `docker-compose.yml`'s
-`environment:` block won't apply to commands run this way (see "Building the
-static site" below for why that matters).
+`./GravelleEstrie` and uploaded thumbnails are mounted as volumes, so the
+generated static site appears in `GravelleEstrie/` on your host and can be
+committed. Put API credentials and secrets in a `.env` file (see
+`.env.example`); Compose reads it automatically for Compose variable
+substitution — but note that `.env` is **not** copied or mounted into the
+container itself (see `.dockerignore`), so only values explicitly passed
+through `docker-compose.yml` or provided with `docker compose run -e ...` affect
+commands run inside the container.
 
 ⚠️ **Always run `build_site` the same way you ran `import`.** Each reads
 whatever database it's configured for — if you imported via
@@ -68,16 +68,17 @@ service already exposes 5432 to the host) so local commands see the same data.
 
 ### Previewing the generated static site
 
-An opt-in `preview` profile serves `./output` with nginx, exactly as GitHub
-Pages would (so it won't start with a plain `docker compose up`):
+An opt-in `preview` profile serves `./GravelleEstrie` under the
+`/GravelleEstrie/` path with nginx, exactly as GitHub Pages would (so it won't
+start with a plain `docker compose up`):
 
 ```bash
 docker compose --profile preview up preview
-# open http://localhost:8080/
+# open http://localhost:8080/GravelleEstrie/
 ```
 
 Re-run `build_site` and refresh the page to see changes — nginx reads
-straight from the mounted `output/` directory.
+straight from the mounted `GravelleEstrie/` directory.
 
 ## Setup (without Docker)
 
@@ -227,7 +228,7 @@ after importing both sources for the first time.
 ## Building the static site
 
 ```bash
-python manage.py build_site        # writes to ./output
+python manage.py build_site        # writes to ./GravelleEstrie
 ```
 
 This reads whatever database is currently configured (`DATABASE_URL`, or
@@ -242,27 +243,21 @@ docker compose run --rm web python manage.py build_site
 (or `docker compose exec web ...` if the stack is already up with `docker
 compose up`).
 
-Set `SITE_BASE_PATH` when the site is served from a sub-path (GitHub
-**project** pages), e.g. `SITE_BASE_PATH=/GravelleEstrie` — this is what the
-real deployment (`.github/workflows/deploy.yml`) sets. Leave it empty for a
-user/org root page or a custom domain. Note that a Docker-built site (above)
-always builds with `SITE_BASE_PATH` blank/root-relative regardless of what's
-in your local `.env`, since `.env` isn't available inside the container (see
-"Quick start with Docker") — that's actually what you want for a **local
-preview**, but don't mistake that build for what actually gets deployed; the
-GitHub Actions workflow builds its own copy with the real base path.
+`SITE_BASE_PATH` defaults to `/GravelleEstrie`, matching the committed static
+directory. Override it only if the site is served somewhere else: set it to an
+empty string for a domain root, or another leading-slash path for another
+subdirectory. For Docker runs, pass overrides explicitly, for example
+`docker compose run --rm -e SITE_BASE_PATH= web python manage.py build_site`.
 
 Preview locally:
 
 ```bash
-python -m http.server 8765 --directory output
-# open http://127.0.0.1:8765/
+python -m http.server 8765 --directory .
+# open http://127.0.0.1:8765/GravelleEstrie/
 ```
 
-If your local `.env` has `SITE_BASE_PATH` set (needed for the real
-deployment) but you built locally (not via Docker) and want a quick preview
-without touching that setting, build to a throwaway directory with it
-cleared instead:
+If you want a root-relative throwaway preview, clear `SITE_BASE_PATH` and build
+to `preview/`:
 
 ```bash
 SITE_BASE_PATH= python manage.py build_site --output preview
@@ -271,21 +266,22 @@ python -m http.server 8765 --directory preview
 
 ## Publishing to GitHub Pages
 
-The included workflow (`.github/workflows/deploy.yml`) rebuilds and deploys the
-site from a committed data fixture:
+There is no GitHub Actions deploy workflow. The generated static site is
+committed directly in `GravelleEstrie/`:
 
-1. After editing rides in the admin, export the data fixture:
+1. Import or edit rides, then build the static site:
 
    ```bash
-   python manage.py dumpdata rides.Ride --indent 2 -o rides/fixtures/rides.json
+   docker compose run --rm web python manage.py build_site
    ```
 
-2. Commit and push. CI loads the fixture, re-renders thumbnails, builds the
-   site, and deploys it to GitHub Pages.
-3. In the repo settings, set **Pages → Source → GitHub Actions** (once).
+2. Commit the resulting `GravelleEstrie/` changes and push.
+3. In the repo settings, use **Pages → Source → Deploy from a branch** and
+   publish from the branch root. The site is then available under
+   `/GravelleEstrie/`.
 
-Thumbnails are regenerated in CI from the stored route geometry, so image files
-don't need to be committed.
+Thumbnails are copied into `GravelleEstrie/assets/thumbs/` by `build_site`, so
+they are committed with the static HTML/CSS/JS.
 
 ## Tests
 
@@ -311,9 +307,9 @@ rides/
     seed_demo.py
   templates/site/  Static site templates (index, detail)
   static_src/      CSS + search/filter JS copied into the build
-  fixtures/        rides.json (data used by the deploy workflow)
+  fixtures/        rides.json (optional export/import fixture)
+GravelleEstrie/        Generated static site committed for GitHub Pages
 Dockerfile             Django admin/back-office image
 docker-compose.yml     Postgres + web services
 entrypoint.sh          Container startup: migrate, collectstatic, superuser
-.github/workflows/deploy.yml   Build & deploy to GitHub Pages
 ```

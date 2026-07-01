@@ -1,0 +1,3912 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gravelle Estrie</title>
+  <meta name="description" content="Sorties gravelle du club Gravelle Estrie">
+  <link rel="stylesheet" href="/GravelleEstrie/assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/GravelleEstrie/">
+        <span class="brand-mark">🚲</span>
+        <span class="brand-text">
+          <strong>Gravelle Estrie</strong>
+          <small>Sorties gravelle du club Gravelle Estrie</small>
+        </span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    
+<section class="controls" aria-label="Recherche et filtres">
+  <div class="search-row">
+    <input type="search" id="search" placeholder="Rechercher par nom ou ville de départ…"
+           autocomplete="off" aria-label="Recherche">
+    <span class="result-count"><span id="result-count">175</span> sortie(s)</span>
+  </div>
+
+  <div class="filters">
+    <label class="filter">
+      Distance max : <output id="distance-out">130</output> km
+      <input type="range" id="distance" min="0" max="130" value="130" step="1">
+    </label>
+    <label class="filter">
+      Dénivelé max : <output id="elevation-out">2200</output> m
+      <input type="range" id="elevation" min="0" max="2200" value="2200" step="10">
+    </label>
+    <button type="button" id="reset" class="reset">Réinitialiser</button>
+  </div>
+</section>
+
+<section class="grid" id="rides">
+  
+  <article class="card" data-name="1234" data-city="lac-brome"
+           data-distance="31.8" data-elevation="469">
+    <a class="card-link" href="/GravelleEstrie/rides/1234/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/1234.png" alt="Carte de la sortie 1234" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>1234</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">31.8 km</span>
+          <span class="stat">↗ 469 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="16/08/21 (copier)" data-city="orford"
+           data-distance="63.3" data-elevation="695">
+    <a class="card-link" href="/GravelleEstrie/rides/160821-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/160821-copier.png" alt="Carte de la sortie 16/08/21 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>16/08/21 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Orford</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">63.3 km</span>
+          <span class="stat">↗ 695 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="3 circuits en 1" data-city="bromont"
+           data-distance="69.7" data-elevation="776">
+    <a class="card-link" href="/GravelleEstrie/rides/3-circuits-en-1/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/3-circuits-en-1.png" alt="Carte de la sortie 3 circuits en 1" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>3 circuits en 1</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">69.7 km</span>
+          <span class="stat">↗ 776 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="autumn leaves" data-city="bromont"
+           data-distance="69.4" data-elevation="1103">
+    <a class="card-link" href="/GravelleEstrie/rides/autumn-leaves/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/autumn-leaves.png" alt="Carte de la sortie Autumn Leaves" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Autumn Leaves</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">69.4 km</span>
+          <span class="stat">↗ 1103 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="back on track" data-city="lac-brome"
+           data-distance="44.9" data-elevation="502">
+    <a class="card-link" href="/GravelleEstrie/rides/back-on-track/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/back-on-track.png" alt="Carte de la sortie Back on Track" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Back on Track</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">44.9 km</span>
+          <span class="stat">↗ 502 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="back on track, un autre essai ....." data-city="lac-brome"
+           data-distance="42.8" data-elevation="409">
+    <a class="card-link" href="/GravelleEstrie/rides/back-on-track-un-autre-essai/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/back-on-track-un-autre-essai.png" alt="Carte de la sortie Back on Track, un autre essai ....." loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Back on Track, un autre essai .....</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">42.8 km</span>
+          <span class="stat">↗ 409 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="best day of my life" data-city="lac-brome"
+           data-distance="73.8" data-elevation="1125">
+    <a class="card-link" href="/GravelleEstrie/rides/best-day-of-my-life/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/best-day-of-my-life.png" alt="Carte de la sortie Best Day Of My Life" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Best Day Of My Life</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">73.8 km</span>
+          <span class="stat">↗ 1125 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="bigger heart" data-city="lac-brome"
+           data-distance="46.8" data-elevation="563">
+    <a class="card-link" href="/GravelleEstrie/rides/bigger-heart/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/bigger-heart.png" alt="Carte de la sortie Bigger Heart" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Bigger Heart</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">46.8 km</span>
+          <span class="stat">↗ 563 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="birthday ride 82km / 1281md+" data-city="dunham"
+           data-distance="82.1" data-elevation="1116">
+    <a class="card-link" href="/GravelleEstrie/rides/birthday-ride-82km-1281md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/birthday-ride-82km-1281md.png" alt="Carte de la sortie Birthday Ride 82KM / 1281MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Birthday Ride 82KM / 1281MD+</h2>
+        <p class="card-meta">
+          <span>📍 Dunham</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">82.1 km</span>
+          <span class="stat">↗ 1116 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="brown eyed girl" data-city="lac-brome"
+           data-distance="55.0" data-elevation="747">
+    <a class="card-link" href="/GravelleEstrie/rides/brown-eyed-girl/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/brown-eyed-girl.png" alt="Carte de la sortie Brown Eyed Girl" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Brown Eyed Girl</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">55.0 km</span>
+          <span class="stat">↗ 747 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="brown eyed girl 2025" data-city="lac-brome"
+           data-distance="67.3" data-elevation="818">
+    <a class="card-link" href="/GravelleEstrie/rides/brown-eyed-girl-2025/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/brown-eyed-girl-2025.png" alt="Carte de la sortie Brown Eyed Girl 2025" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Brown Eyed Girl 2025</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">67.3 km</span>
+          <span class="stat">↗ 818 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="ciao bye" data-city="ayer&#x27;s cliff"
+           data-distance="86.9" data-elevation="1267">
+    <a class="card-link" href="/GravelleEstrie/rides/ciao-bye/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/ciao-bye.png" alt="Carte de la sortie Ciao Bye" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Ciao Bye</h2>
+        <p class="card-meta">
+          <span>📍 Ayer&#x27;s Cliff</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">86.9 km</span>
+          <span class="stat">↗ 1267 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="circuit #1     30km/400md+" data-city="bromont"
+           data-distance="29.7" data-elevation="332">
+    <a class="card-link" href="/GravelleEstrie/rides/circuit-1-30km400md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/circuit-1-30km400md.png" alt="Carte de la sortie circuit #1     30km/400MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>circuit #1     30km/400MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">29.7 km</span>
+          <span class="stat">↗ 332 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="circuit #2     51km/750md+" data-city="bromont"
+           data-distance="51.1" data-elevation="640">
+    <a class="card-link" href="/GravelleEstrie/rides/circuit-2-51km750md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/circuit-2-51km750md.png" alt="Carte de la sortie circuit #2     51km/750MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>circuit #2     51km/750MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">51.1 km</span>
+          <span class="stat">↗ 640 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="circuit #3     70km/1100md+" data-city="bromont"
+           data-distance="69.5" data-elevation="901">
+    <a class="card-link" href="/GravelleEstrie/rides/circuit-3-70km1100md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/circuit-3-70km1100md.png" alt="Carte de la sortie circuit #3     70km/1100MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>circuit #3     70km/1100MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">69.5 km</span>
+          <span class="stat">↗ 901 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="collapse" data-city="shefford"
+           data-distance="84.1" data-elevation="825">
+    <a class="card-link" href="/GravelleEstrie/rides/collapse/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/collapse.png" alt="Carte de la sortie Collapse" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Collapse</h2>
+        <p class="card-meta">
+          <span>📍 Shefford</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">84.1 km</span>
+          <span class="stat">↗ 825 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="complete level 1 ---- 87km / 1350md+" data-city="lac-brome"
+           data-distance="86.8" data-elevation="1136">
+    <a class="card-link" href="/GravelleEstrie/rides/complete-level-1-87km-1350md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/complete-level-1-87km-1350md.png" alt="Carte de la sortie Complete Level 1 ---- 87KM / 1350MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Complete Level 1 ---- 87KM / 1350MD+</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">86.8 km</span>
+          <span class="stat">↗ 1136 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="complete level 2 ---- 64km / 1100md+" data-city="lac-brome"
+           data-distance="63.7" data-elevation="905">
+    <a class="card-link" href="/GravelleEstrie/rides/complete-level-2-64km-1100md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/complete-level-2-64km-1100md.png" alt="Carte de la sortie Complete Level 2 ---- 64KM / 1100MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Complete Level 2 ---- 64KM / 1100MD+</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">63.7 km</span>
+          <span class="stat">↗ 905 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="costaude / grange pardue 91km / 1900md+" data-city="ham-nord"
+           data-distance="91.6" data-elevation="1709">
+    <a class="card-link" href="/GravelleEstrie/rides/costaude-grange-pardue-91km-1900md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/costaude-grange-pardue-91km-1900md.png" alt="Carte de la sortie Costaude / Grange Pardue 91KM / 1900MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Costaude / Grange Pardue 91KM / 1900MD+</h2>
+        <p class="card-meta">
+          <span>📍 Ham-Nord</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">91.6 km</span>
+          <span class="stat">↗ 1709 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="course 7k otterburn park" data-city="otterburn park"
+           data-distance="7.0" data-elevation="35">
+    <a class="card-link" href="/GravelleEstrie/rides/course-7k-otterburn-park/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/course-7k-otterburn-park.png" alt="Carte de la sortie Course 7k Otterburn Park" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Course 7k Otterburn Park</h2>
+        <p class="card-meta">
+          <span>📍 Otterburn Park</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">7.0 km</span>
+          <span class="stat">↗ 35 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="course isa" data-city="otterburn park"
+           data-distance="6.5" data-elevation="35">
+    <a class="card-link" href="/GravelleEstrie/rides/course-isa/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/course-isa.png" alt="Carte de la sortie Course Isa" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Course Isa</h2>
+        <p class="card-meta">
+          <span>📍 Otterburn Park</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">6.5 km</span>
+          <span class="stat">↗ 35 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="douglas fir" data-city="lac-brome"
+           data-distance="67.9" data-elevation="911">
+    <a class="card-link" href="/GravelleEstrie/rides/douglas-fir/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/douglas-fir.png" alt="Carte de la sortie Douglas Fir" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Douglas Fir</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">67.9 km</span>
+          <span class="stat">↗ 911 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="drive all night" data-city="bromont"
+           data-distance="59.5" data-elevation="826">
+    <a class="card-link" href="/GravelleEstrie/rides/drive-all-night/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/drive-all-night.png" alt="Carte de la sortie Drive All Night" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Drive All Night</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">59.5 km</span>
+          <span class="stat">↗ 826 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="fête nationale du québec. 74km / 12300md+" data-city="lac-brome"
+           data-distance="73.7" data-elevation="1031">
+    <a class="card-link" href="/GravelleEstrie/rides/fete-nationale-du-quebec-74km-12300md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/fete-nationale-du-quebec-74km-12300md.png" alt="Carte de la sortie Fête Nationale du Québec. 74KM / 12300MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Fête Nationale du Québec. 74KM / 12300MD+</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">73.7 km</span>
+          <span class="stat">↗ 1031 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="free bird 59km / 562md+" data-city="bromont"
+           data-distance="59.2" data-elevation="510">
+    <a class="card-link" href="/GravelleEstrie/rides/free-bird-59km-562md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/free-bird-59km-562md.png" alt="Carte de la sortie Free Bird 59KM / 562MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Free Bird 59KM / 562MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">59.2 km</span>
+          <span class="stat">↗ 510 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="full classique" data-city="bromont"
+           data-distance="69.2" data-elevation="974">
+    <a class="card-link" href="/GravelleEstrie/rides/full-classique/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/full-classique.png" alt="Carte de la sortie Full Classique" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Full Classique</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">69.2 km</span>
+          <span class="stat">↗ 974 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="glory days " data-city="lac-brome"
+           data-distance="74.9" data-elevation="836">
+    <a class="card-link" href="/GravelleEstrie/rides/glory-days/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/glory-days.png" alt="Carte de la sortie Glory Days " loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Glory Days </h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">74.9 km</span>
+          <span class="stat">↗ 836 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="grand hippopotame 66km/900md+" data-city="shefford"
+           data-distance="65.7" data-elevation="743">
+    <a class="card-link" href="/GravelleEstrie/rides/grand-hippopotame-66km900md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/grand-hippopotame-66km900md.png" alt="Carte de la sortie Grand Hippopotame 66KM/900MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Grand Hippopotame 66KM/900MD+</h2>
+        <p class="card-meta">
+          <span>📍 Shefford</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">65.7 km</span>
+          <span class="stat">↗ 743 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="grand lumberjack" data-city="lac-brome"
+           data-distance="90.2" data-elevation="1408">
+    <a class="card-link" href="/GravelleEstrie/rides/grand-lumberjack/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/grand-lumberjack.png" alt="Carte de la sortie Grand Lumberjack" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Grand Lumberjack</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">90.2 km</span>
+          <span class="stat">↗ 1408 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="grand lumberjack" data-city="lac-brome"
+           data-distance="90.4" data-elevation="1408">
+    <a class="card-link" href="/GravelleEstrie/rides/grand-lumberjack-2/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/grand-lumberjack-2.png" alt="Carte de la sortie Grand Lumberjack" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Grand Lumberjack</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">90.4 km</span>
+          <span class="stat">↗ 1408 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="grand lumberjack" data-city="lac-brome"
+           data-distance="90.4" data-elevation="1408">
+    <a class="card-link" href="/GravelleEstrie/rides/grand-lumberjack-3/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/grand-lumberjack-3.png" alt="Carte de la sortie Grand Lumberjack" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Grand Lumberjack</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">90.4 km</span>
+          <span class="stat">↗ 1408 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="gravel &amp; bike 68km / 1068md+" data-city="bromont"
+           data-distance="67.9" data-elevation="918">
+    <a class="card-link" href="/GravelleEstrie/rides/gravel-bike-68km-1068md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/gravel-bike-68km-1068md.png" alt="Carte de la sortie Gravel &amp; Bike 68km / 1068MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Gravel &amp; Bike 68km / 1068MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">67.9 km</span>
+          <span class="stat">↗ 918 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="great balls of fire " data-city="lac-brome"
+           data-distance="82.3" data-elevation="1125">
+    <a class="card-link" href="/GravelleEstrie/rides/great-balls-of-fire/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/great-balls-of-fire.png" alt="Carte de la sortie Great Balls of Fire " loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Great Balls of Fire </h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">82.3 km</span>
+          <span class="stat">↗ 1125 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="happy mother day" data-city="bromont"
+           data-distance="61.5" data-elevation="672">
+    <a class="card-link" href="/GravelleEstrie/rides/happy-mother-day/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/happy-mother-day.png" alt="Carte de la sortie Happy Mother Day" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Happy Mother Day</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">61.5 km</span>
+          <span class="stat">↗ 672 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="hard sun" data-city="bromont"
+           data-distance="73.1" data-elevation="872">
+    <a class="card-link" href="/GravelleEstrie/rides/hard-sun/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/hard-sun.png" alt="Carte de la sortie Hard Sun" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Hard Sun</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">73.1 km</span>
+          <span class="stat">↗ 872 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="hard to tell" data-city="waterloo"
+           data-distance="81.6" data-elevation="883">
+    <a class="card-link" href="/GravelleEstrie/rides/hard-to-tell/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/hard-to-tell.png" alt="Carte de la sortie Hard To Tell" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Hard To Tell</h2>
+        <p class="card-meta">
+          <span>📍 Waterloo</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">81.6 km</span>
+          <span class="stat">↗ 883 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="heureux d&#x27;un printemps " data-city="bromont"
+           data-distance="61.4" data-elevation="571">
+    <a class="card-link" href="/GravelleEstrie/rides/heureux-dun-printemps/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/heureux-dun-printemps.png" alt="Carte de la sortie Heureux d&#x27;un Printemps " loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Heureux d&#x27;un Printemps </h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">61.4 km</span>
+          <span class="stat">↗ 571 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="heureux d&#x27;un printemps mod" data-city="bromont"
+           data-distance="56.6" data-elevation="486">
+    <a class="card-link" href="/GravelleEstrie/rides/heureux-dun-printemps-mod/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/heureux-dun-printemps-mod.png" alt="Carte de la sortie Heureux d&#x27;un Printemps MOD" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Heureux d&#x27;un Printemps MOD</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">56.6 km</span>
+          <span class="stat">↗ 486 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="hippotame à isabelle (mon stef)" data-city="shefford"
+           data-distance="65.3" data-elevation="770">
+    <a class="card-link" href="/GravelleEstrie/rides/hippotame-a-isabelle-mon-stef/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/hippotame-a-isabelle-mon-stef.png" alt="Carte de la sortie Hippotame à Isabelle (Mon Stef)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Hippotame à Isabelle (Mon Stef)</h2>
+        <p class="card-meta">
+          <span>📍 Shefford</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">65.3 km</span>
+          <span class="stat">↗ 770 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="home" data-city="frelighsburg"
+           data-distance="73.1" data-elevation="997">
+    <a class="card-link" href="/GravelleEstrie/rides/home/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/home.png" alt="Carte de la sortie HOME" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>HOME</h2>
+        <p class="card-meta">
+          <span>📍 Frelighsburg</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">73.1 km</span>
+          <span class="stat">↗ 997 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="homeland (classique) 64km / 892md+" data-city="bromont"
+           data-distance="63.7" data-elevation="773">
+    <a class="card-link" href="/GravelleEstrie/rides/homeland-classique-64km-892md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/homeland-classique-64km-892md.png" alt="Carte de la sortie Homeland (Classique) 64km / 892MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Homeland (Classique) 64km / 892MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">63.7 km</span>
+          <span class="stat">↗ 773 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="i like it, i love it     60km/1100md+" data-city="lac-brome"
+           data-distance="60.4" data-elevation="918">
+    <a class="card-link" href="/GravelleEstrie/rides/i-like-it-i-love-it-60km1100md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/i-like-it-i-love-it-60km1100md.png" alt="Carte de la sortie I Like It, I Love It     60KM/1100MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>I Like It, I Love It     60KM/1100MD+</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">60.4 km</span>
+          <span class="stat">↗ 918 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="la classique 59km/826md+" data-city="bromont"
+           data-distance="59.0" data-elevation="726">
+    <a class="card-link" href="/GravelleEstrie/rides/la-classique-59km826md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/la-classique-59km826md.png" alt="Carte de la sortie La Classique 59KM/826MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>La Classique 59KM/826MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">59.0 km</span>
+          <span class="stat">↗ 726 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="la classique (modifiée)" data-city="bromont"
+           data-distance="66.3" data-elevation="786">
+    <a class="card-link" href="/GravelleEstrie/rides/la-classique-modifiee/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/la-classique-modifiee.png" alt="Carte de la sortie La Classique (modifiée)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>La Classique (modifiée)</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">66.3 km</span>
+          <span class="stat">↗ 786 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="la costaude de dixiville" data-city="ayer&#x27;s cliff"
+           data-distance="86.9" data-elevation="1267">
+    <a class="card-link" href="/GravelleEstrie/rides/la-costaude-de-dixiville/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/la-costaude-de-dixiville.png" alt="Carte de la sortie La costaude de DixiVille" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>La costaude de DixiVille</h2>
+        <p class="card-meta">
+          <span>📍 Ayer&#x27;s Cliff</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">86.9 km</span>
+          <span class="stat">↗ 1267 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="la costaude (gravel bike) (copier)" data-city="victoriaville"
+           data-distance="84.4" data-elevation="1400">
+    <a class="card-link" href="/GravelleEstrie/rides/la-costaude-gravel-bike-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/la-costaude-gravel-bike-copier.png" alt="Carte de la sortie La Costaude (Gravel Bike) (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>La Costaude (Gravel Bike) (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Victoriaville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">84.4 km</span>
+          <span class="stat">↗ 1400 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name=" les mollets rouges (gravel bike) (copier)" data-city="ham-nord"
+           data-distance="60.0" data-elevation="1049">
+    <a class="card-link" href="/GravelleEstrie/rides/les-mollets-rouges-gravel-bike-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/les-mollets-rouges-gravel-bike-copier.png" alt="Carte de la sortie  Les mollets rouges (Gravel Bike) (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2> Les mollets rouges (Gravel Bike) (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Ham-Nord</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">60.0 km</span>
+          <span class="stat">↗ 1049 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="loin d&#x27;ici ......" data-city="lac-brome"
+           data-distance="43.1" data-elevation="458">
+    <a class="card-link" href="/GravelleEstrie/rides/loin-dici/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/loin-dici.png" alt="Carte de la sortie Loin d&#x27;ici ......" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Loin d&#x27;ici ......</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">43.1 km</span>
+          <span class="stat">↗ 458 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="lumberjack 122km/2000md+" data-city="lac-brome"
+           data-distance="122.4" data-elevation="1700">
+    <a class="card-link" href="/GravelleEstrie/rides/lumberjack-122km2000md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/lumberjack-122km2000md.png" alt="Carte de la sortie Lumberjack 122KM/2000MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Lumberjack 122KM/2000MD+</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">122.4 km</span>
+          <span class="stat">↗ 1700 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="lumberjack 62km/1050md+" data-city="lac-brome"
+           data-distance="61.7" data-elevation="904">
+    <a class="card-link" href="/GravelleEstrie/rides/lumberjack-62km1050md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/lumberjack-62km1050md.png" alt="Carte de la sortie Lumberjack 62KM/1050MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Lumberjack 62KM/1050MD+</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">61.7 km</span>
+          <span class="stat">↗ 904 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="lumberjack 75km/1300md+" data-city="lac-brome"
+           data-distance="75.3" data-elevation="1126">
+    <a class="card-link" href="/GravelleEstrie/rides/lumberjack-75km1300md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/lumberjack-75km1300md.png" alt="Carte de la sortie Lumberjack 75KM/1300MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Lumberjack 75KM/1300MD+</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">75.3 km</span>
+          <span class="stat">↗ 1126 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="lumberjack 90km/1600md+" data-city="lac-brome"
+           data-distance="90.1" data-elevation="1317">
+    <a class="card-link" href="/GravelleEstrie/rides/lumberjack-90km1600md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/lumberjack-90km1600md.png" alt="Carte de la sortie Lumberjack 90KM/1600MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Lumberjack 90KM/1600MD+</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">90.1 km</span>
+          <span class="stat">↗ 1317 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="mollets rouges / grange pardue 68km / 1400md+" data-city="ham-nord"
+           data-distance="67.7" data-elevation="1298">
+    <a class="card-link" href="/GravelleEstrie/rides/mollets-rouges-grange-pardue-68km-1400md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/mollets-rouges-grange-pardue-68km-1400md.png" alt="Carte de la sortie Mollets Rouges / Grange Pardue 68KM / 1400MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Mollets Rouges / Grange Pardue 68KM / 1400MD+</h2>
+        <p class="card-meta">
+          <span>📍 Ham-Nord</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">67.7 km</span>
+          <span class="stat">↗ 1298 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="moyen lumberjack" data-city="lac-brome"
+           data-distance="69.2" data-elevation="1061">
+    <a class="card-link" href="/GravelleEstrie/rides/moyen-lumberjack/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/moyen-lumberjack.png" alt="Carte de la sortie Moyen Lumberjack" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Moyen Lumberjack</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">69.2 km</span>
+          <span class="stat">↗ 1061 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="moyen lumberjack" data-city="lac-brome"
+           data-distance="69.4" data-elevation="1062">
+    <a class="card-link" href="/GravelleEstrie/rides/moyen-lumberjack-3/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/moyen-lumberjack-3.png" alt="Carte de la sortie Moyen Lumberjack" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Moyen Lumberjack</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">69.4 km</span>
+          <span class="stat">↗ 1062 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="moyen lumberjack" data-city="lac-brome"
+           data-distance="69.4" data-elevation="1062">
+    <a class="card-link" href="/GravelleEstrie/rides/moyen-lumberjack-2/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/moyen-lumberjack-2.png" alt="Carte de la sortie Moyen Lumberjack" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Moyen Lumberjack</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">69.4 km</span>
+          <span class="stat">↗ 1062 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="old guitar" data-city="bromont"
+           data-distance="112.8" data-elevation="1600">
+    <a class="card-link" href="/GravelleEstrie/rides/old-guitar/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/old-guitar.png" alt="Carte de la sortie Old Guitar" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Old Guitar</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">112.8 km</span>
+          <span class="stat">↗ 1600 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="paradise city 80km / 930md+" data-city="waterloo"
+           data-distance="79.5" data-elevation="780">
+    <a class="card-link" href="/GravelleEstrie/rides/paradise-city-80km-930md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/paradise-city-80km-930md.png" alt="Carte de la sortie Paradise City 80km / 930MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Paradise City 80km / 930MD+</h2>
+        <p class="card-meta">
+          <span>📍 Waterloo</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">79.5 km</span>
+          <span class="stat">↗ 780 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="parc de la mauricie 114km / 2300md+" data-city="shawinigan"
+           data-distance="113.7" data-elevation="2124">
+    <a class="card-link" href="/GravelleEstrie/rides/parc-de-la-mauricie-114km-2300md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/parc-de-la-mauricie-114km-2300md.png" alt="Carte de la sortie Parc de la Mauricie 114km / 2300MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Parc de la Mauricie 114km / 2300MD+</h2>
+        <p class="card-meta">
+          <span>📍 Shawinigan</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">113.7 km</span>
+          <span class="stat">↗ 2124 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="petite suisse " data-city="bolton-ouest"
+           data-distance="70.9" data-elevation="1099">
+    <a class="card-link" href="/GravelleEstrie/rides/petite-suisse/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/petite-suisse.png" alt="Carte de la sortie Petite Suisse " loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Petite Suisse </h2>
+        <p class="card-meta">
+          <span>📍 Bolton-Ouest</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">70.9 km</span>
+          <span class="stat">↗ 1099 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="petit hippopotame 55km/780md+" data-city="shefford"
+           data-distance="55.9" data-elevation="659">
+    <a class="card-link" href="/GravelleEstrie/rides/petit-hippopotame-55km780md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/petit-hippopotame-55km780md.png" alt="Carte de la sortie Petit Hippopotame 55KM/780MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Petit Hippopotame 55KM/780MD+</h2>
+        <p class="card-meta">
+          <span>📍 Shefford</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">55.9 km</span>
+          <span class="stat">↗ 659 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="petit lumberjack" data-city="lac-brome"
+           data-distance="51.3" data-elevation="765">
+    <a class="card-link" href="/GravelleEstrie/rides/petit-lumberjack-2/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/petit-lumberjack-2.png" alt="Carte de la sortie Petit Lumberjack" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Petit Lumberjack</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">51.3 km</span>
+          <span class="stat">↗ 765 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="petit lumberjack" data-city="lac-brome"
+           data-distance="51.2" data-elevation="766">
+    <a class="card-link" href="/GravelleEstrie/rides/petit-lumberjack/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/petit-lumberjack.png" alt="Carte de la sortie Petit Lumberjack" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Petit Lumberjack</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">51.2 km</span>
+          <span class="stat">↗ 766 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="porc épic" data-city="potton"
+           data-distance="43.7" data-elevation="623">
+    <a class="card-link" href="/GravelleEstrie/rides/porc-epic/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/porc-epic.png" alt="Carte de la sortie Porc Épic" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Porc Épic</h2>
+        <p class="card-meta">
+          <span>📍 Potton</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">43.7 km</span>
+          <span class="stat">↗ 623 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="porc épic coup de coeur" data-city="potton"
+           data-distance="52.8" data-elevation="800">
+    <a class="card-link" href="/GravelleEstrie/rides/porc-epic-coup-de-coeur/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/porc-epic-coup-de-coeur.png" alt="Carte de la sortie Porc Épic coup de coeur" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Porc Épic coup de coeur</h2>
+        <p class="card-meta">
+          <span>📍 Potton</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">52.8 km</span>
+          <span class="stat">↗ 800 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="porc épic long" data-city="potton"
+           data-distance="68.0" data-elevation="1027">
+    <a class="card-link" href="/GravelleEstrie/rides/porc-epic-long/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/porc-epic-long.png" alt="Carte de la sortie Porc Épic Long" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Porc Épic Long</h2>
+        <p class="card-meta">
+          <span>📍 Potton</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">68.0 km</span>
+          <span class="stat">↗ 1027 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="pork épic 59km" data-city="potton"
+           data-distance="58.9" data-elevation="908">
+    <a class="card-link" href="/GravelleEstrie/rides/pork-epic-59km/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/pork-epic-59km.png" alt="Carte de la sortie Pork Épic 59km" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Pork Épic 59km</h2>
+        <p class="card-meta">
+          <span>📍 Potton</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">58.9 km</span>
+          <span class="stat">↗ 908 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="pork épic 75km" data-city="potton"
+           data-distance="74.5" data-elevation="1147">
+    <a class="card-link" href="/GravelleEstrie/rides/pork-epic-75km/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/pork-epic-75km.png" alt="Carte de la sortie Pork Épic 75km" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Pork Épic 75km</h2>
+        <p class="card-meta">
+          <span>📍 Potton</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">74.5 km</span>
+          <span class="stat">↗ 1147 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="pork épic 78km / 1300md+" data-city="potton"
+           data-distance="77.9" data-elevation="1178">
+    <a class="card-link" href="/GravelleEstrie/rides/pork-epic-78km-1300md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/pork-epic-78km-1300md.png" alt="Carte de la sortie Pork Épic 78km / 1300MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Pork Épic 78km / 1300MD+</h2>
+        <p class="card-meta">
+          <span>📍 Potton</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">77.9 km</span>
+          <span class="stat">↗ 1178 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="quittin time 70km/900md+" data-city="bromont"
+           data-distance="70.5" data-elevation="779">
+    <a class="card-link" href="/GravelleEstrie/rides/quittin-time-70km900md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/quittin-time-70km900md.png" alt="Carte de la sortie Quittin Time 70km/900MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Quittin Time 70km/900MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">70.5 km</span>
+          <span class="stat">↗ 779 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="quittin time 70km/900md+" data-city="bromont"
+           data-distance="70.5" data-elevation="779">
+    <a class="card-link" href="/GravelleEstrie/rides/quittin-time-70km900md-2/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/quittin-time-70km900md-2.png" alt="Carte de la sortie Quittin Time 70km/900MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Quittin Time 70km/900MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">70.5 km</span>
+          <span class="stat">↗ 779 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="quittin time 86km/1220md+" data-city="bromont"
+           data-distance="86.0" data-elevation="1062">
+    <a class="card-link" href="/GravelleEstrie/rides/quittin-time-86km1220md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/quittin-time-86km1220md.png" alt="Carte de la sortie Quittin Time 86km/1220MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Quittin Time 86km/1220MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">86.0 km</span>
+          <span class="stat">↗ 1062 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="rad courte 2025" data-city="tingwick"
+           data-distance="46.0" data-elevation="648">
+    <a class="card-link" href="/GravelleEstrie/rides/rad-courte-2025/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/rad-courte-2025.png" alt="Carte de la sortie RAD courte 2025" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>RAD courte 2025</h2>
+        <p class="card-meta">
+          <span>📍 Tingwick</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">46.0 km</span>
+          <span class="stat">↗ 648 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="rad longue 2025" data-city="tingwick"
+           data-distance="100.5" data-elevation="1368">
+    <a class="card-link" href="/GravelleEstrie/rides/rad-longue-2025/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/rad-longue-2025.png" alt="Carte de la sortie RAD longue 2025" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>RAD longue 2025</h2>
+        <p class="card-meta">
+          <span>📍 Tingwick</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">100.5 km</span>
+          <span class="stat">↗ 1368 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="ride before the sunset" data-city="lac-brome"
+           data-distance="58.1" data-elevation="884">
+    <a class="card-link" href="/GravelleEstrie/rides/ride-before-the-sunset/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/ride-before-the-sunset.png" alt="Carte de la sortie Ride Before the Sunset" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Ride Before the Sunset</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">58.1 km</span>
+          <span class="stat">↗ 884 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="ride on julie" data-city="dunham"
+           data-distance="52.1" data-elevation="723">
+    <a class="card-link" href="/GravelleEstrie/rides/ride-on-julie/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/ride-on-julie.png" alt="Carte de la sortie Ride On Julie" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Ride On Julie</h2>
+        <p class="card-meta">
+          <span>📍 Dunham</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">52.1 km</span>
+          <span class="stat">↗ 723 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="ride on julie#2" data-city="lac-brome"
+           data-distance="49.8" data-elevation="525">
+    <a class="card-link" href="/GravelleEstrie/rides/ride-on-julie2/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/ride-on-julie2.png" alt="Carte de la sortie Ride On Julie#2" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Ride On Julie#2</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">49.8 km</span>
+          <span class="stat">↗ 525 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="road before return to work" data-city="bromont"
+           data-distance="70.2" data-elevation="658">
+    <a class="card-link" href="/GravelleEstrie/rides/road-before-return-to-work/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/road-before-return-to-work.png" alt="Carte de la sortie Road Before Return To Work" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Road Before Return To Work</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">70.2 km</span>
+          <span class="stat">↗ 658 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="rookie ride" data-city="lac-brome"
+           data-distance="72.2" data-elevation="1074">
+    <a class="card-link" href="/GravelleEstrie/rides/rookie-ride/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/rookie-ride.png" alt="Carte de la sortie Rookie Ride" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Rookie Ride</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">72.2 km</span>
+          <span class="stat">↗ 1074 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="rookie ride 70,5km / 1258md+" data-city="lac-brome"
+           data-distance="70.5" data-elevation="1050">
+    <a class="card-link" href="/GravelleEstrie/rides/rookie-ride-705km-1258md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/rookie-ride-705km-1258md.png" alt="Carte de la sortie Rookie Ride 70,5KM / 1258MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Rookie Ride 70,5KM / 1258MD+</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">70.5 km</span>
+          <span class="stat">↗ 1050 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="runnin&#x27; wild 59km / 875md+" data-city="dunham"
+           data-distance="58.5" data-elevation="748">
+    <a class="card-link" href="/GravelleEstrie/rides/runnin-wild-59km-875md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/runnin-wild-59km-875md.png" alt="Carte de la sortie Runnin&#x27; Wild 59KM / 875MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Runnin&#x27; Wild 59KM / 875MD+</h2>
+        <p class="card-meta">
+          <span>📍 Dunham</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">58.5 km</span>
+          <span class="stat">↗ 748 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="saturday sunset" data-city="lac-brome"
+           data-distance="29.7" data-elevation="269">
+    <a class="card-link" href="/GravelleEstrie/rides/saturday-sunset/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/saturday-sunset.png" alt="Carte de la sortie Saturday Sunset" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Saturday Sunset</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">29.7 km</span>
+          <span class="stat">↗ 269 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="semi-route semi-trail" data-city="lac-brome"
+           data-distance="86.5" data-elevation="1206">
+    <a class="card-link" href="/GravelleEstrie/rides/semi-route-semi-trail/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/semi-route-semi-trail.png" alt="Carte de la sortie Semi-Route Semi-Trail" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Semi-Route Semi-Trail</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">86.5 km</span>
+          <span class="stat">↗ 1206 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="snow" data-city="lac-brome"
+           data-distance="46.2" data-elevation="394">
+    <a class="card-link" href="/GravelleEstrie/rides/snow-2/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/snow-2.png" alt="Carte de la sortie Snow" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Snow</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">46.2 km</span>
+          <span class="stat">↗ 394 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="snow" data-city="lac-brome"
+           data-distance="46.2" data-elevation="394">
+    <a class="card-link" href="/GravelleEstrie/rides/snow/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/snow.png" alt="Carte de la sortie Snow" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Snow</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">46.2 km</span>
+          <span class="stat">↗ 394 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="soirée nocturne 64km / 1000md+" data-city="bromont"
+           data-distance="63.8" data-elevation="866">
+    <a class="card-link" href="/GravelleEstrie/rides/soiree-nocturne-64km-1000md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/soiree-nocturne-64km-1000md.png" alt="Carte de la sortie Soirée Nocturne 64km / 1000MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Soirée Nocturne 64km / 1000MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">63.8 km</span>
+          <span class="stat">↗ 866 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="soleil bleu" data-city="bromont"
+           data-distance="98.9" data-elevation="706">
+    <a class="card-link" href="/GravelleEstrie/rides/soleil-bleu/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/soleil-bleu.png" alt="Carte de la sortie Soleil Bleu" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Soleil Bleu</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">98.9 km</span>
+          <span class="stat">↗ 706 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="stayin&#x27; alive 76km / 1375md+" data-city="ayer&#x27;s cliff"
+           data-distance="76.3" data-elevation="1210">
+    <a class="card-link" href="/GravelleEstrie/rides/stayin-alive-76km-1375md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/stayin-alive-76km-1375md.png" alt="Carte de la sortie Stayin&#x27; Alive 76km / 1375MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Stayin&#x27; Alive 76km / 1375MD+</h2>
+        <p class="card-meta">
+          <span>📍 Ayer&#x27;s Cliff</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">76.3 km</span>
+          <span class="stat">↗ 1210 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="storm boy 50km/742md+" data-city="bromont"
+           data-distance="49.8" data-elevation="640">
+    <a class="card-link" href="/GravelleEstrie/rides/storm-boy-50km742md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/storm-boy-50km742md.png" alt="Carte de la sortie Storm Boy 50KM/742MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Storm Boy 50KM/742MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">49.8 km</span>
+          <span class="stat">↗ 640 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="storm boy 68km/983md+" data-city="bromont"
+           data-distance="68.2" data-elevation="849">
+    <a class="card-link" href="/GravelleEstrie/rides/storm-boy-68km983md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/storm-boy-68km983md.png" alt="Carte de la sortie Storm Boy 68KM/983MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Storm Boy 68KM/983MD+</h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">68.2 km</span>
+          <span class="stat">↗ 849 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="sunrise 61km" data-city="ayer&#x27;s cliff"
+           data-distance="60.7" data-elevation="820">
+    <a class="card-link" href="/GravelleEstrie/rides/sunrise-61km/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/sunrise-61km.png" alt="Carte de la sortie Sunrise 61KM" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Sunrise 61KM</h2>
+        <p class="card-meta">
+          <span>📍 Ayer&#x27;s Cliff</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">60.7 km</span>
+          <span class="stat">↗ 820 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="sunrise 76km" data-city="ayer&#x27;s cliff"
+           data-distance="75.8" data-elevation="1165">
+    <a class="card-link" href="/GravelleEstrie/rides/sunrise-76km/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/sunrise-76km.png" alt="Carte de la sortie Sunrise 76KM" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Sunrise 76KM</h2>
+        <p class="card-meta">
+          <span>📍 Ayer&#x27;s Cliff</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">75.8 km</span>
+          <span class="stat">↗ 1165 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="sun to me 57km / 666md+" data-city="dunham"
+           data-distance="56.5" data-elevation="655">
+    <a class="card-link" href="/GravelleEstrie/rides/sun-to-me-57km-666md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/sun-to-me-57km-666md.png" alt="Carte de la sortie Sun To Me 57km / 666MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Sun To Me 57km / 666MD+</h2>
+        <p class="card-meta">
+          <span>📍 Dunham</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">56.5 km</span>
+          <span class="stat">↗ 655 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="sutton " data-city="sutton"
+           data-distance="68.2" data-elevation="1104">
+    <a class="card-link" href="/GravelleEstrie/rides/sutton/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/sutton.png" alt="Carte de la sortie Sutton " loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Sutton </h2>
+        <p class="card-meta">
+          <span>📍 Sutton</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">68.2 km</span>
+          <span class="stat">↗ 1104 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="take a back road 63km" data-city="lac-brome"
+           data-distance="62.7" data-elevation="889">
+    <a class="card-link" href="/GravelleEstrie/rides/take-a-back-road-63km/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/take-a-back-road-63km.png" alt="Carte de la sortie Take a Back Road 63KM" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Take a Back Road 63KM</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">62.7 km</span>
+          <span class="stat">↗ 889 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="take a back road 80km" data-city="lac-brome"
+           data-distance="79.9" data-elevation="1170">
+    <a class="card-link" href="/GravelleEstrie/rides/take-a-back-road-80km/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/take-a-back-road-80km.png" alt="Carte de la sortie Take a Back Road 80KM" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Take a Back Road 80KM</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">79.9 km</span>
+          <span class="stat">↗ 1170 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="take a trip 41km / 465md+" data-city="lac-brome"
+           data-distance="41.1" data-elevation="406">
+    <a class="card-link" href="/GravelleEstrie/rides/take-a-trip-41km-465md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/take-a-trip-41km-465md.png" alt="Carte de la sortie Take a Trip 41KM / 465MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Take a Trip 41KM / 465MD+</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">41.1 km</span>
+          <span class="stat">↗ 406 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="take yours, i&#x27;ll take mine" data-city="potton"
+           data-distance="65.0" data-elevation="1017">
+    <a class="card-link" href="/GravelleEstrie/rides/take-yours-ill-take-mine/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/take-yours-ill-take-mine.png" alt="Carte de la sortie Take Yours, I&#x27;ll Take Mine" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Take Yours, I&#x27;ll Take Mine</h2>
+        <p class="card-meta">
+          <span>📍 Potton</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">65.0 km</span>
+          <span class="stat">↗ 1017 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="the farmer" data-city="ayer&#x27;s cliff"
+           data-distance="81.8" data-elevation="1018">
+    <a class="card-link" href="/GravelleEstrie/rides/the-farmer/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/the-farmer.png" alt="Carte de la sortie The Farmer" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>The Farmer</h2>
+        <p class="card-meta">
+          <span>📍 Ayer&#x27;s Cliff</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">81.8 km</span>
+          <span class="stat">↗ 1018 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="the places we&#x27;ll go" data-city="coaticook"
+           data-distance="62.1" data-elevation="861">
+    <a class="card-link" href="/GravelleEstrie/rides/the-places-well-go/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/the-places-well-go.png" alt="Carte de la sortie The Places We&#x27;ll Go" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>The Places We&#x27;ll Go</h2>
+        <p class="card-meta">
+          <span>📍 Coaticook</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">62.1 km</span>
+          <span class="stat">↗ 861 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="till the sun comes up" data-city="lac-brome"
+           data-distance="69.6" data-elevation="989">
+    <a class="card-link" href="/GravelleEstrie/rides/till-the-sun-comes-up/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/till-the-sun-comes-up.png" alt="Carte de la sortie Till The Sun Comes UP" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Till The Sun Comes UP</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">69.6 km</span>
+          <span class="stat">↗ 989 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="ulverton #5" data-city="l&#x27;avenir"
+           data-distance="54.0" data-elevation="532">
+    <a class="card-link" href="/GravelleEstrie/rides/ulverton-5/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/ulverton-5.png" alt="Carte de la sortie Ulverton #5" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Ulverton #5</h2>
+        <p class="card-meta">
+          <span>📍 L&#x27;Avenir</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">54.0 km</span>
+          <span class="stat">↗ 532 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="une belle ride avant de partir " data-city="bromont"
+           data-distance="71.6" data-elevation="761">
+    <a class="card-link" href="/GravelleEstrie/rides/une-belle-ride-avant-de-partir/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/une-belle-ride-avant-de-partir.png" alt="Carte de la sortie une belle ride avant de partir " loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>une belle ride avant de partir </h2>
+        <p class="card-meta">
+          <span>📍 Bromont</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">71.6 km</span>
+          <span class="stat">↗ 761 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="64.7" data-elevation="806">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-18/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-18.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">64.7 km</span>
+          <span class="stat">↗ 806 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="90.6" data-elevation="1425">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-32/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-32.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">90.6 km</span>
+          <span class="stat">↗ 1425 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="90.5" data-elevation="1074">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-31/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-31.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">90.5 km</span>
+          <span class="stat">↗ 1074 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="50.5" data-elevation="548">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-30/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-30.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">50.5 km</span>
+          <span class="stat">↗ 548 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="53.7" data-elevation="581">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-29/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-29.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">53.7 km</span>
+          <span class="stat">↗ 581 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="80.2" data-elevation="941">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-28/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-28.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">80.2 km</span>
+          <span class="stat">↗ 941 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="62.0" data-elevation="648">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-27/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-27.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">62.0 km</span>
+          <span class="stat">↗ 648 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="67.4" data-elevation="835">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-26/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-26.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">67.4 km</span>
+          <span class="stat">↗ 835 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="55.9" data-elevation="731">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-25/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-25.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">55.9 km</span>
+          <span class="stat">↗ 731 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="74.0" data-elevation="1047">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-24/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-24.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">74.0 km</span>
+          <span class="stat">↗ 1047 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="78.0" data-elevation="1069">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-23/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-23.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">78.0 km</span>
+          <span class="stat">↗ 1069 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="63.2" data-elevation="849">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-22/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-22.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">63.2 km</span>
+          <span class="stat">↗ 849 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="67.7" data-elevation="846">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-21/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-21.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">67.7 km</span>
+          <span class="stat">↗ 846 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="70.5" data-elevation="989">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-20/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-20.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">70.5 km</span>
+          <span class="stat">↗ 989 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="67.9" data-elevation="1075">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-19/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-19.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">67.9 km</span>
+          <span class="stat">↗ 1075 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="warren county"
+           data-distance="101.7" data-elevation="2112">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-33/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-33.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Warren County</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">101.7 km</span>
+          <span class="stat">↗ 2112 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="62.7" data-elevation="774">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-17/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-17.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">62.7 km</span>
+          <span class="stat">↗ 774 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="72.2" data-elevation="417">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-16/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-16.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">72.2 km</span>
+          <span class="stat">↗ 417 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="46.2" data-elevation="609">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-15/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-15.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">46.2 km</span>
+          <span class="stat">↗ 609 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="95.9" data-elevation="1282">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-14/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-14.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">95.9 km</span>
+          <span class="stat">↗ 1282 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="68.9" data-elevation="870">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-13/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-13.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">68.9 km</span>
+          <span class="stat">↗ 870 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="warren county"
+           data-distance="110.3" data-elevation="1984">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-12/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-12.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Warren County</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">110.3 km</span>
+          <span class="stat">↗ 1984 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="warren county"
+           data-distance="109.4" data-elevation="1953">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-11/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-11.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Warren County</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">109.4 km</span>
+          <span class="stat">↗ 1953 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="84.3" data-elevation="1196">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-10/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-10.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">84.3 km</span>
+          <span class="stat">↗ 1196 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="88.9" data-elevation="1186">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-9/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-9.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">88.9 km</span>
+          <span class="stat">↗ 1186 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="92.8" data-elevation="1164">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-8/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-8.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">92.8 km</span>
+          <span class="stat">↗ 1164 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="60.8" data-elevation="956">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-7/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-7.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">60.8 km</span>
+          <span class="stat">↗ 956 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="travilah"
+           data-distance="73.3" data-elevation="215">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-6/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-6.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Travilah</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">73.3 km</span>
+          <span class="stat">↗ 215 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="darnestown"
+           data-distance="83.2" data-elevation="217">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-5/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-5.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Darnestown</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">83.2 km</span>
+          <span class="stat">↗ 217 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="78.0" data-elevation="1104">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-4/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-4.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">78.0 km</span>
+          <span class="stat">↗ 1104 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="80.9" data-elevation="1099">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-3/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-3.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">80.9 km</span>
+          <span class="stat">↗ 1099 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="80.7" data-elevation="1098">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed-2/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed-2.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">80.7 km</span>
+          <span class="stat">↗ 1098 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="(unnamed)" data-city="purcellville"
+           data-distance="84.8" data-elevation="1092">
+    <a class="card-link" href="/GravelleEstrie/rides/unnamed/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/unnamed.png" alt="Carte de la sortie (unnamed)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>(unnamed)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">84.8 km</span>
+          <span class="stat">↗ 1092 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="up around the bend" data-city="waterloo"
+           data-distance="73.8" data-elevation="611">
+    <a class="card-link" href="/GravelleEstrie/rides/up-around-the-bend/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/up-around-the-bend.png" alt="Carte de la sortie Up Around the Bend" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Up Around the Bend</h2>
+        <p class="card-meta">
+          <span>📍 Waterloo</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">73.8 km</span>
+          <span class="stat">↗ 611 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-br60 (copier)" data-city="purcellville"
+           data-distance="60.8" data-elevation="954">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-br60-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-br60-copier.png" alt="Carte de la sortie VA24-BR60 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-BR60 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">60.8 km</span>
+          <span class="stat">↗ 954 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-br75 (copier)" data-city="purcellville"
+           data-distance="74.0" data-elevation="1048">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-br75-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-br75-copier.png" alt="Carte de la sortie VA24-BR75 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-BR75 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">74.0 km</span>
+          <span class="stat">↗ 1048 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-br80 (copier)" data-city="purcellville"
+           data-distance="78.0" data-elevation="1105">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-br80-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-br80-copier.png" alt="Carte de la sortie VA24-BR80 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-BR80 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">78.0 km</span>
+          <span class="stat">↗ 1105 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-br85 (copier)" data-city="purcellville"
+           data-distance="84.3" data-elevation="1198">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-br85-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-br85-copier.png" alt="Carte de la sortie VA24-BR85 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-BR85 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">84.3 km</span>
+          <span class="stat">↗ 1198 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24b-wod (copier)" data-city="purcellville"
+           data-distance="72.2" data-elevation="416">
+    <a class="card-link" href="/GravelleEstrie/rides/va24b-wod-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24b-wod-copier.png" alt="Carte de la sortie VA24b-WOD (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24b-WOD (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">72.2 km</span>
+          <span class="stat">↗ 416 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middle78 (copier)" data-city="purcellville"
+           data-distance="78.0" data-elevation="1066">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middle78-copier-2/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middle78-copier-2.png" alt="Carte de la sortie VA24-Middle78 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Middle78 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">78.0 km</span>
+          <span class="stat">↗ 1066 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middle78 (copier)" data-city="purcellville"
+           data-distance="78.0" data-elevation="1066">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middle78-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middle78-copier.png" alt="Carte de la sortie VA24-Middle78 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Middle78 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">78.0 km</span>
+          <span class="stat">↗ 1066 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middleburg65 (copier)" data-city="purcellville"
+           data-distance="63.2" data-elevation="849">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middleburg65-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middleburg65-copier.png" alt="Carte de la sortie Va24-Middleburg65 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Va24-Middleburg65 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">63.2 km</span>
+          <span class="stat">↗ 849 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middleburg80 (copier)" data-city="purcellville"
+           data-distance="80.9" data-elevation="1105">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middleburg80-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middleburg80-copier.png" alt="Carte de la sortie Va24-Middleburg80 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Va24-Middleburg80 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">80.9 km</span>
+          <span class="stat">↗ 1105 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middleburg90 (copier)" data-city="purcellville"
+           data-distance="88.9" data-elevation="1187">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middleburg90-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middleburg90-copier.png" alt="Carte de la sortie Va24-Middleburg90 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Va24-Middleburg90 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">88.9 km</span>
+          <span class="stat">↗ 1187 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middleloco45 (copier)" data-city="purcellville"
+           data-distance="46.2" data-elevation="610">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middleloco45-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middleloco45-copier.png" alt="Carte de la sortie VA24-MiddleLoCo45 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-MiddleLoCo45 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">46.2 km</span>
+          <span class="stat">↗ 610 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middleloco56 (copier)" data-city="purcellville"
+           data-distance="55.9" data-elevation="732">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middleloco56-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middleloco56-copier.png" alt="Carte de la sortie VA24-MiddleLoCo56 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-MiddleLoCo56 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">55.9 km</span>
+          <span class="stat">↗ 732 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middleloco65 (copier)" data-city="purcellville"
+           data-distance="62.7" data-elevation="774">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middleloco65-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middleloco65-copier.png" alt="Carte de la sortie VA24-MiddleLoCo65 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-MiddleLoCo65 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">62.7 km</span>
+          <span class="stat">↗ 774 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middleloco70 (copier)" data-city="purcellville"
+           data-distance="68.9" data-elevation="871">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middleloco70-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middleloco70-copier.png" alt="Carte de la sortie VA24-MiddleLoCo70 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-MiddleLoCo70 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">68.9 km</span>
+          <span class="stat">↗ 871 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middleloco85" data-city="purcellville"
+           data-distance="84.8" data-elevation="1093">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middleloco85/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middleloco85.png" alt="Carte de la sortie VA24-MiddleLoCo85" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-MiddleLoCo85</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">84.8 km</span>
+          <span class="stat">↗ 1093 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middleloco85 (copier)" data-city="purcellville"
+           data-distance="84.8" data-elevation="1093">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middleloco85-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middleloco85-copier.png" alt="Carte de la sortie VA24-MiddleLoCo85 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-MiddleLoCo85 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">84.8 km</span>
+          <span class="stat">↗ 1093 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-middleloco95 (copier)" data-city="purcellville"
+           data-distance="92.8" data-elevation="1168">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-middleloco95-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-middleloco95-copier.png" alt="Carte de la sortie VA24-MiddleLoCo95 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-MiddleLoCo95 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">92.8 km</span>
+          <span class="stat">↗ 1168 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-purc-lees70 (copier)" data-city="purcellville"
+           data-distance="67.7" data-elevation="842">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-purc-lees70-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-purc-lees70-copier.png" alt="Carte de la sortie VA24-Purc-Lees70 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Purc-Lees70 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">67.7 km</span>
+          <span class="stat">↗ 842 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-purc-mid62 (copier)" data-city="purcellville"
+           data-distance="62.0" data-elevation="649">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-purc-mid62-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-purc-mid62-copier.png" alt="Carte de la sortie VA24-Purc-Mid62 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Purc-Mid62 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">62.0 km</span>
+          <span class="stat">↗ 649 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-purc-mid67 (copier)" data-city="purcellville"
+           data-distance="67.4" data-elevation="835">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-purc-mid67-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-purc-mid67-copier.png" alt="Carte de la sortie VA24-Purc-Mid67 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Purc-Mid67 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">67.4 km</span>
+          <span class="stat">↗ 835 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-purc-mid80 (copier)" data-city="purcellville"
+           data-distance="80.2" data-elevation="941">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-purc-mid80-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-purc-mid80-copier.png" alt="Carte de la sortie VA24-Purc-Mid80 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Purc-Mid80 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">80.2 km</span>
+          <span class="stat">↗ 941 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-purc-mid90 (copier)" data-city="purcellville"
+           data-distance="90.5" data-elevation="1075">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-purc-mid90-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-purc-mid90-copier.png" alt="Carte de la sortie VA24-Purc-Mid90 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Purc-Mid90 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">90.5 km</span>
+          <span class="stat">↗ 1075 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-purc-n50 (copier)" data-city="purcellville"
+           data-distance="50.5" data-elevation="545">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-purc-n50-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-purc-n50-copier.png" alt="Carte de la sortie VA24-Purc-N50 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Purc-N50 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">50.5 km</span>
+          <span class="stat">↗ 545 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-purc-n55 (copier)" data-city="purcellville"
+           data-distance="53.7" data-elevation="581">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-purc-n55-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-purc-n55-copier.png" alt="Carte de la sortie VA24-Purc-N55 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Purc-N55 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">53.7 km</span>
+          <span class="stat">↗ 581 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-purc-n65 (copier)" data-city="purcellville"
+           data-distance="64.7" data-elevation="806">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-purc-n65-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-purc-n65-copier.png" alt="Carte de la sortie VA24-Purc-N65 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Purc-N65 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">64.7 km</span>
+          <span class="stat">↗ 806 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-purc-n70 (copier)" data-city="purcellville"
+           data-distance="70.5" data-elevation="989">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-purc-n70-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-purc-n70-copier.png" alt="Carte de la sortie VA24-Purc-N70 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Purc-N70 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">70.5 km</span>
+          <span class="stat">↗ 989 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-purc-n80 (copier)" data-city="purcellville"
+           data-distance="80.7" data-elevation="1098">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-purc-n80-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-purc-n80-copier.png" alt="Carte de la sortie VA24-Purc-N80 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Purc-N80 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">80.7 km</span>
+          <span class="stat">↗ 1098 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-purc-n95 (copier)" data-city="purcellville"
+           data-distance="95.9" data-elevation="1275">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-purc-n95-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-purc-n95-copier.png" alt="Carte de la sortie VA24-Purc-N95 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Purc-N95 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">95.9 km</span>
+          <span class="stat">↗ 1275 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-shan70 (copier)" data-city="purcellville"
+           data-distance="67.9" data-elevation="1074">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-shan70-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-shan70-copier.png" alt="Carte de la sortie VA24-Shan70 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Shan70 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">67.9 km</span>
+          <span class="stat">↗ 1074 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-shan90 (copier)" data-city="purcellville"
+           data-distance="90.6" data-elevation="1418">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-shan90-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-shan90-copier.png" alt="Carte de la sortie VA24-Shan90 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Shan90 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Purcellville</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">90.6 km</span>
+          <span class="stat">↗ 1418 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-skyline (copier)" data-city="warren county"
+           data-distance="101.7" data-elevation="2111">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-skyline-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-skyline-copier.png" alt="Carte de la sortie VA24-Skyline (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Skyline (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Warren County</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">101.7 km</span>
+          <span class="stat">↗ 2111 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-skylinee (copier)" data-city="warren county"
+           data-distance="109.4" data-elevation="1952">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-skylinee-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-skylinee-copier.png" alt="Carte de la sortie VA24-SkylineE (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-SkylineE (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Warren County</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">109.4 km</span>
+          <span class="stat">↗ 1952 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-skylineo (copier)" data-city="warren county"
+           data-distance="110.3" data-elevation="1985">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-skylineo-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-skylineo-copier.png" alt="Carte de la sortie VA24-SkylineO (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-SkylineO (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Warren County</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">110.3 km</span>
+          <span class="stat">↗ 1985 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-wash75 (copier)" data-city="travilah"
+           data-distance="73.3" data-elevation="213">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-wash75-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-wash75-copier.png" alt="Carte de la sortie VA24-Wash75 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Wash75 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Travilah</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">73.3 km</span>
+          <span class="stat">↗ 213 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="va24-wash85 (copier)" data-city="darnestown"
+           data-distance="83.2" data-elevation="215">
+    <a class="card-link" href="/GravelleEstrie/rides/va24-wash85-copier/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/va24-wash85-copier.png" alt="Carte de la sortie VA24-Wash85 (copier)" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>VA24-Wash85 (copier)</h2>
+        <p class="card-meta">
+          <span>📍 Darnestown</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">83.2 km</span>
+          <span class="stat">↗ 215 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="vacation" data-city="potton"
+           data-distance="78.6" data-elevation="1109">
+    <a class="card-link" href="/GravelleEstrie/rides/vacation/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/vacation.png" alt="Carte de la sortie Vacation" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Vacation</h2>
+        <p class="card-meta">
+          <span>📍 Potton</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">78.6 km</span>
+          <span class="stat">↗ 1109 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="we were young" data-city="ayer&#x27;s cliff"
+           data-distance="79.3" data-elevation="985">
+    <a class="card-link" href="/GravelleEstrie/rides/we-were-young/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/we-were-young.png" alt="Carte de la sortie We Were Young" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>We Were Young</h2>
+        <p class="card-meta">
+          <span>📍 Ayer&#x27;s Cliff</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">79.3 km</span>
+          <span class="stat">↗ 985 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="when i get to heaven 53km/500md+" data-city="lac-brome"
+           data-distance="53.3" data-elevation="443">
+    <a class="card-link" href="/GravelleEstrie/rides/when-i-get-to-heaven-53km500md/">
+      <div class="card-thumb">
+        
+          <img src="/GravelleEstrie/assets/thumbs/when-i-get-to-heaven-53km500md.png" alt="Carte de la sortie When I Get To Heaven 53KM/500MD+" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>When I Get To Heaven 53KM/500MD+</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">53.3 km</span>
+          <span class="stat">↗ 443 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+</section>
+
+<p class="empty" id="empty" hidden>Aucune sortie ne correspond à votre recherche.</p>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Sorties consolidées depuis Strava et RideWithGPS · Cartes © OpenStreetMap</p>
+    </div>
+  </footer>
+  
+<script src="/GravelleEstrie/assets/js/search.js" defer></script>
+
+</body>
+</html>

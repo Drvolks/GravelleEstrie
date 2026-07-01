@@ -134,10 +134,10 @@ LOGGING = {
 # --- Project-specific settings ---------------------------------------------
 
 # Where `build_site` writes the generated static website.
-SITE_OUTPUT_DIR = BASE_DIR / "output"
+SITE_OUTPUT_DIR = BASE_DIR / "GravelleEstrie"
 
-# Sub-path the site is served from on GitHub Pages (e.g. "/GravelleEstrie").
-SITE_BASE_PATH = os.environ.get("SITE_BASE_PATH", "").rstrip("/")
+# Sub-path the committed static site is served from (e.g. "/GravelleEstrie").
+SITE_BASE_PATH = os.environ.get("SITE_BASE_PATH", "/GravelleEstrie").rstrip("/")
 
 SITE_TITLE = "Gravelle Estrie"
 SITE_TAGLINE = "Sorties gravelle du club Gravelle Estrie"
