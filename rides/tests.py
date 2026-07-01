@@ -408,6 +408,29 @@ class BuildSiteTests(TestCase):
             self.assertIn("/Test/assets/css/style.css", html)
             self.assertIn("Sortie A", html)
 
+    @override_settings(SITE_BASE_PATH="/Test")
+    def test_build_site_uses_ridewithgps_embed_on_detail_pages(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(
+            name="Sortie A",
+            geometry=SQUARE,
+            distance_m=1000,
+            start_city="Magog",
+            rwgps_route_id="123",
+            ridewithgps_url="https://ridewithgps.com/routes/123",
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            detail = Path(tmp) / "rides" / "sortie-a" / "index.html"
+            html = detail.read_text(encoding="utf-8")
+            self.assertIn(
+                'src="https://ridewithgps.com/embeds?type=route&amp;id=123&amp;sampleGraph=true"',
+                html,
+            )
+            self.assertIn('title="Carte RideWithGPS de Sortie A"', html)
+
 
 class DeleteAllAdminViewTests(TestCase):
     def setUp(self):

@@ -14,10 +14,19 @@
     </p>
   </header>
 
-  {% if ride.thumb_url %}
+  {% if ride.ridewithgps_embed_url %}
   <div class="detail-map">
-    <img src="{{ ride.thumb_url }}" alt="Carte du tracé de {{ ride.name }}">
+    <iframe
+      src="{{ ride.ridewithgps_embed_url }}"
+      title="Carte RideWithGPS de {{ ride.name }}"
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      scrolling="no"></iframe>
   </div>
+  {% elif ride.thumb_url %}
+    <div class="detail-map">
+      <img src="{{ ride.thumb_url }}" alt="Carte du tracé de {{ ride.name }}">
+    </div>
   {% endif %}
 
   <dl class="specs">

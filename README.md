@@ -8,7 +8,8 @@ generates a **static website** you can publish on GitHub Pages.
 - **Search** by name and start city
 - **Filter** by distance and elevation gain
 - **Ride cards** with a baked map thumbnail
-- **Detail page** per ride: map, full specs, links to Strava & RideWithGPS
+- **Detail page** per ride: RideWithGPS map embed when available, full specs,
+  links to Strava & RideWithGPS
 - _Post-MVP:_ a "Send to Garmin" button (placeholder left in the detail template)
 
 ## How it works

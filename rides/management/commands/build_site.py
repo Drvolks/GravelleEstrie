@@ -10,6 +10,7 @@ import math
 import shutil
 from pathlib import Path
 from types import SimpleNamespace
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -110,9 +111,23 @@ class Command(BaseCommand):
             elevation_m=ride.elevation_m,
             strava_url=ride.strava_url,
             ridewithgps_url=ride.ridewithgps_url,
+            ridewithgps_embed_url=self._ridewithgps_embed_url(ride),
             source_label=ride.get_source_display(),
             thumb_url=thumb_url,
         )
+
+    @staticmethod
+    def _ridewithgps_embed_url(ride: Ride) -> str:
+        if not ride.rwgps_route_id:
+            return ""
+        query = urlencode(
+            {
+                "type": "route",
+                "id": ride.rwgps_route_id,
+                "sampleGraph": "true",
+            }
+        )
+        return f"https://ridewithgps.com/embeds?{query}"
 
     @staticmethod
     def _ceil_max(values, *, default: int, step: int) -> int:
