@@ -17,6 +17,7 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
 from rides.models import Ride
+from rides.services.location import geometry_starts_in_quebec
 
 
 class Command(BaseCommand):
@@ -48,7 +49,7 @@ class Command(BaseCommand):
         rides_qs = Ride.objects.published()
         if settings.RWGPS_EXCLUDED_ROUTE_IDS:
             rides_qs = rides_qs.exclude(rwgps_route_id__in=settings.RWGPS_EXCLUDED_ROUTE_IDS)
-        rides = list(rides_qs)
+        rides = [ride for ride in rides_qs if geometry_starts_in_quebec(ride.geometry)]
         views = [self._ride_view(r, base_path, thumbs_dir) for r in rides]
 
         max_distance = self._ceil_max((v.distance_km for v in views), default=100, step=10)

@@ -13,6 +13,8 @@ from datetime import date
 import requests
 from django.conf import settings
 
+from .location import rwgps_route_starts_in_quebec
+
 logger = logging.getLogger(__name__)
 
 _API = "https://ridewithgps.com"
@@ -96,8 +98,11 @@ class RideWithGPSClient:
             if not self._is_cycling(detail):
                 logger.info("Skipping RideWithGPS route %s: not cycling", route_id)
                 continue
+            if not rwgps_route_starts_in_quebec(detail):
+                logger.info("Skipping RideWithGPS route %s: start is outside Quebec", route_id)
+                continue
             rides.append(self._to_ride(detail))
-        logger.info("Fetched %d RideWithGPS route(s), %d after cycling filter", count, len(rides))
+        logger.info("Fetched %d RideWithGPS route(s), %d after filters", count, len(rides))
         return rides
 
     @staticmethod

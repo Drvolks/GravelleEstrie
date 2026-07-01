@@ -34,6 +34,7 @@ import requests
 from django.conf import settings
 
 from .geometry import decode_polyline
+from .location import geometry_starts_in_quebec
 
 logger = logging.getLogger(__name__)
 
@@ -137,7 +138,11 @@ class StravaClient:
             if not self._is_public_cycling_route(detail):
                 logger.info("Skipping Strava route %s: not a public ride", route_id)
                 continue
-            routes.append(self._to_ride(detail))
+            ride = self._to_ride(detail)
+            if not geometry_starts_in_quebec(ride.geometry):
+                logger.info("Skipping Strava route %s: start is outside Quebec", route_id)
+                continue
+            routes.append(ride)
         return routes
 
     @staticmethod

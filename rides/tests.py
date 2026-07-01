@@ -9,11 +9,14 @@ from django.urls import reverse
 from rides.models import Ride
 from rides.services import importer
 from rides.services.geometry import bounds, decode_polyline, downsample
+from rides.services.location import administrative_area_is_quebec, geometry_starts_in_quebec
 from rides.services.ridewithgps import RideWithGPSClient, RWGPSRide
 from rides.services.strava import StravaClient, StravaRide
 
 
 SQUARE = [[45.0, -72.0], [45.1, -72.0], [45.1, -71.9], [45.0, -71.9], [45.0, -72.0]]
+QUEBEC_POLYLINE = "_atqG~nmvL_pR?"
+VIRGINIA_POLYLINE = "_f{mFzbjyM_`K{iB"
 
 
 class GeometryTests(TestCase):
@@ -33,6 +36,19 @@ class GeometryTests(TestCase):
     def test_bounds(self):
         self.assertEqual(bounds(SQUARE), (45.0, -72.0, 45.1, -71.9))
         self.assertIsNone(bounds([]))
+
+
+class QuebecLocationFilterTests(TestCase):
+    def test_administrative_area_accepts_quebec_variants(self):
+        self.assertTrue(administrative_area_is_quebec("Quebec"))
+        self.assertTrue(administrative_area_is_quebec("Québec"))
+        self.assertTrue(administrative_area_is_quebec("QC"))
+        self.assertFalse(administrative_area_is_quebec("Virginia"))
+
+    def test_geometry_start_must_be_in_quebec(self):
+        self.assertTrue(geometry_starts_in_quebec([[45.4, -71.9], [45.5, -71.8]]))
+        self.assertFalse(geometry_starts_in_quebec([[39.1384, -77.7171], [39.2, -77.7]]))
+        self.assertFalse(geometry_starts_in_quebec([]))
 
 
 class RideModelTests(TestCase):
@@ -55,11 +71,11 @@ class StravaRoutesFilterTests(TestCase):
         client = self._client(route_ids=["1", "2", "3"])
         details = {
             "1": {"id": 1, "type": 1, "private": False, "name": "A", "distance": 1000,
-                  "elevation_gain": 10, "map": {"polyline": ""}},
+                  "elevation_gain": 10, "map": {"polyline": QUEBEC_POLYLINE}},
             "2": {"id": 2, "type": 2, "private": False, "name": "B", "distance": 1000,
-                  "elevation_gain": 10, "map": {"polyline": ""}},  # run -> excluded
+                  "elevation_gain": 10, "map": {"polyline": QUEBEC_POLYLINE}},  # run -> excluded
             "3": {"id": 3, "type": 1, "private": True, "name": "C", "distance": 1000,
-                  "elevation_gain": 10, "map": {"polyline": ""}},  # private -> excluded
+                  "elevation_gain": 10, "map": {"polyline": QUEBEC_POLYLINE}},  # private -> excluded
         }
         with mock.patch.object(StravaClient, "_get_route", side_effect=lambda rid: details[rid]):
             rides = client.fetch_rides()
@@ -68,7 +84,8 @@ class StravaRoutesFilterTests(TestCase):
     def test_route_urls_and_no_ride_date(self):
         client = self._client(route_ids=["42"])
         details = {"42": {"id": 42, "type": 1, "private": False, "name": "Boucle",
-                           "distance": 5000, "elevation_gain": 100, "map": {"polyline": ""}}}
+                           "distance": 5000, "elevation_gain": 100,
+                           "map": {"polyline": QUEBEC_POLYLINE}}}
         with mock.patch.object(StravaClient, "_get_route", side_effect=lambda rid: details[rid]):
             rides = client.fetch_rides()
         self.assertEqual(len(rides), 1)
@@ -87,6 +104,18 @@ class StravaRoutesFilterTests(TestCase):
             rides = client.fetch_rides(skip_route_ids={"42"})
         self.assertEqual(rides, [])
         get_route.assert_not_called()
+
+    def test_fetch_rides_skips_routes_outside_quebec(self):
+        client = self._client(route_ids=["1", "2"])
+        details = {
+            "1": {"id": 1, "type": 1, "private": False, "name": "A", "distance": 1000,
+                  "elevation_gain": 10, "map": {"polyline": QUEBEC_POLYLINE}},
+            "2": {"id": 2, "type": 1, "private": False, "name": "B", "distance": 1000,
+                  "elevation_gain": 10, "map": {"polyline": VIRGINIA_POLYLINE}},
+        }
+        with mock.patch.object(StravaClient, "_get_route", side_effect=lambda rid: details[rid]):
+            rides = client.fetch_rides()
+        self.assertEqual({r.external_id for r in rides}, {"1"})
 
 
 class RideWithGPSCyclingFilterTests(TestCase):
@@ -108,7 +137,8 @@ class RideWithGPSCyclingFilterTests(TestCase):
         summaries = [{"id": 10}, {"id": 20}]
         details = {
             10: {"route": {"id": 10, "name": "Gravel loop", "distance": 1000,
-                            "activity_types": ["cycling:gravel"], "track_points": []}},
+                            "activity_types": ["cycling:gravel"], "administrative_area": "Quebec",
+                            "track_points": []}},
             20: {"route": {"id": 20, "name": "Nature hike", "distance": 1000,
                             "activity_types": ["walking:hiking"], "track_points": []}},
         }
@@ -122,7 +152,8 @@ class RideWithGPSCyclingFilterTests(TestCase):
         summaries = [{"id": 10}, {"id": 20}]
         details = {
             10: {"route": {"id": 10, "name": "Gravel loop", "distance": 1000,
-                            "activity_types": ["cycling:gravel"], "track_points": []}},
+                            "activity_types": ["cycling:gravel"], "administrative_area": "Quebec",
+                            "track_points": []}},
         }
         with mock.patch.object(RideWithGPSClient, "iter_route_summaries", return_value=summaries), \
              mock.patch.object(RideWithGPSClient, "_get", side_effect=lambda path, **p: details[int(path.split("/")[-1].split(".")[0])]) as get_detail:
@@ -136,7 +167,37 @@ class RideWithGPSCyclingFilterTests(TestCase):
         summaries = [{"id": 10}, {"id": 20}]
         details = {
             10: {"route": {"id": 10, "name": "Gravel loop", "distance": 1000,
-                            "activity_types": ["cycling:gravel"], "track_points": []}},
+                            "activity_types": ["cycling:gravel"], "administrative_area": "Quebec",
+                            "track_points": []}},
+        }
+        with mock.patch.object(RideWithGPSClient, "iter_route_summaries", return_value=summaries), \
+             mock.patch.object(RideWithGPSClient, "_get", side_effect=lambda path, **p: details[int(path.split("/")[-1].split(".")[0])]):
+            rides = client.fetch_rides()
+        self.assertEqual({r.external_id for r in rides}, {"10"})
+
+    def test_fetch_rides_skips_routes_outside_quebec(self):
+        client = RideWithGPSClient(api_key="k", user_id="1")
+        summaries = [{"id": 10}, {"id": 20}]
+        details = {
+            10: {"route": {"id": 10, "name": "Gravel loop", "distance": 1000,
+                            "activity_types": ["cycling:gravel"], "administrative_area": "Quebec",
+                            "track_points": []}},
+            20: {"route": {"id": 20, "name": "Virginia loop", "distance": 1000,
+                            "activity_types": ["cycling:gravel"], "administrative_area": "Virginia",
+                            "track_points": [{"y": 39.1384, "x": -77.7171}]}},
+        }
+        with mock.patch.object(RideWithGPSClient, "iter_route_summaries", return_value=summaries), \
+             mock.patch.object(RideWithGPSClient, "_get", side_effect=lambda path, **p: details[int(path.split("/")[-1].split(".")[0])]):
+            rides = client.fetch_rides()
+        self.assertEqual({r.external_id for r in rides}, {"10"})
+
+    def test_fetch_rides_accepts_quebec_start_point_when_area_missing(self):
+        client = RideWithGPSClient(api_key="k", user_id="1")
+        summaries = [{"id": 10}]
+        details = {
+            10: {"route": {"id": 10, "name": "Gravel loop", "distance": 1000,
+                            "activity_types": ["cycling:gravel"],
+                            "track_points": [{"y": 45.4, "x": -71.9}, {"y": 45.5, "x": -71.8}]}},
         }
         with mock.patch.object(RideWithGPSClient, "iter_route_summaries", return_value=summaries), \
              mock.patch.object(RideWithGPSClient, "_get", side_effect=lambda path, **p: details[int(path.split("/")[-1].split(".")[0])]):
@@ -411,6 +472,26 @@ class BuildSiteTests(TestCase):
             self.assertIn('id="distance-max"', html)
             self.assertIn('id="elevation-min"', html)
             self.assertIn('id="elevation-max"', html)
+
+    @override_settings(SITE_BASE_PATH="/Test")
+    def test_build_site_skips_rides_that_start_outside_quebec(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(name="Sortie Québec", geometry=SQUARE, distance_m=1000)
+        Ride.objects.create(
+            name="Sortie Virginie",
+            geometry=[[39.1384, -77.7171], [39.2, -77.7]],
+            distance_m=1000,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            index = Path(tmp) / "index.html"
+            outside = Path(tmp) / "rides" / "sortie-virginie" / "index.html"
+            html = index.read_text(encoding="utf-8")
+            self.assertIn("Sortie Québec", html)
+            self.assertNotIn("Sortie Virginie", html)
+            self.assertFalse(outside.exists())
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_uses_ridewithgps_embed_on_detail_pages(self):

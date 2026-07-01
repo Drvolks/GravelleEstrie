@@ -200,19 +200,23 @@ skipped, API calls, thumbnail failures) — useful when running non-interactivel
 (cron, `docker compose run`). Set `DJANGO_LOG_LEVEL=DEBUG` in `.env` for
 per-API-request detail, or `WARNING` to quiet it down to just problems.
 
-Both importers only pull **cycling** routes, skipping other sports on the
-same account:
+Both importers only pull **cycling** routes that start in Quebec, skipping
+other sports on the same account and routes whose first point is outside
+Quebec:
 
 - RideWithGPS: filters on the route's `activity_types` — anything tagged
   `cycling:*` (road, gravel, mountain, commute) is imported; `walking:*`,
   `running:*`, `motorcycling:*`, etc. are skipped. Routes with no
   `activity_types` at all (older routes may predate the field) are assumed to
-  be cycling. Known source-data mistakes can be suppressed with
+  be cycling. The start province comes from RideWithGPS's
+  `administrative_area` when available; otherwise the first track point is
+  used. Known source-data mistakes can be suppressed with
   `RWGPS_EXCLUDED_ROUTE_IDS` (comma-separated RideWithGPS route ids); by
   default this excludes the two "Course" running routes currently tagged
   `cycling:gravel` by RideWithGPS.
 - Strava: routes have a `type` of `1` (Ride) or `2` (Run) — only `1` is
-  imported. Private routes are also explicitly excluded, regardless of scope.
+  imported. Private routes are also explicitly excluded, regardless of scope,
+  and the decoded route polyline must start in Quebec.
 
 ### Cross-source matching
 
