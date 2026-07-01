@@ -1,0 +1,319 @@
+# Gravelle Estrie — ride tracker
+
+A consolidated catalogue of the [Gravelle Estrie](https://www.facebook.com/groups/388978452640649/events)
+cycling club's rides. A small Django back-office (admin console + Postgres)
+imports rides from Strava and RideWithGPS, renders map thumbnails, and
+generates a **static website** you can publish on GitHub Pages.
+
+- **Search** by name and start city
+- **Filter** by distance and elevation gain
+- **Ride cards** with a baked map thumbnail
+- **Detail page** per ride: map, full specs, links to Strava & RideWithGPS
+- _Post-MVP:_ a "Send to Garmin" button (placeholder left in the detail template)
+
+## How it works
+
+```
+Strava / RideWithGPS ──import──▶  Django + Postgres  ──build_site──▶  output/ (static)  ──▶  GitHub Pages
+                                  (admin console)        thumbnails baked from route geometry
+```
+
+The database and admin are **development/back-office only** — GitHub Pages only
+ever serves the generated static files in `output/`. Map thumbnails are
+pre-rendered PNGs (OpenStreetMap tiles + the route line), so the published site
+needs no map API keys or JavaScript maps.
+
+## Requirements
+
+- Docker + Docker Compose (recommended), **or**
+- Python 3.11+ and PostgreSQL for a local (non-container) setup. Local
+  development without a `DATABASE_URL` falls back to SQLite automatically.
+
+## Quick start with Docker
+
+Brings up Postgres + the Django admin console, and creates a first admin user
+(`admin` / `admin` by default — override with `DJANGO_SUPERUSER_*`):
+
+```bash
+docker compose up --build
+# admin console: http://localhost:8000/admin/
+```
+
+Run the data + build commands against the same stack:
+
+```bash
+docker compose run --rm web python manage.py seed_demo          # demo rides
+docker compose run --rm web python manage.py import             # bulk import (RideWithGPS + Strava)
+docker compose run --rm web python manage.py build_site         # -> ./output
+```
+
+`./output` and uploaded thumbnails are mounted as volumes, so the generated
+static site appears in `output/` on your host. Put API credentials and secrets
+in a `.env` file (see `.env.example`); Compose reads it automatically for
+Compose variable substitution — but note that `.env` is **not** copied or
+mounted into the container itself (see `.dockerignore`), so settings like
+`SITE_BASE_PATH` that aren't explicitly listed in `docker-compose.yml`'s
+`environment:` block won't apply to commands run this way (see "Building the
+static site" below for why that matters).
+
+⚠️ **Always run `build_site` the same way you ran `import`.** Each reads
+whatever database it's configured for — if you imported via
+`docker compose run` (Postgres, inside the stack) but then run
+`python manage.py build_site` locally with the venv activated, it'll silently
+read your local SQLite file instead (likely just demo data) and you'll get a
+site with the wrong rides. Keep both steps either inside Docker, or set
+`DATABASE_URL` in your local `.env` to point at the same Postgres
+(`postgres://gravelle:gravelle@localhost:5432/gravelle_estrie` — the `db`
+service already exposes 5432 to the host) so local commands see the same data.
+
+### Previewing the generated static site
+
+An opt-in `preview` profile serves `./output` with nginx, exactly as GitHub
+Pages would (so it won't start with a plain `docker compose up`):
+
+```bash
+docker compose --profile preview up preview
+# open http://localhost:8080/
+```
+
+Re-run `build_site` and refresh the page to see changes — nginx reads
+straight from the mounted `output/` directory.
+
+## Setup (without Docker)
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+cp .env.example .env        # then edit as needed
+
+python manage.py migrate
+python manage.py createsuperuser
+```
+
+### Run the admin console
+
+```bash
+python manage.py runserver
+# open http://127.0.0.1:8000/admin/
+```
+
+Add, edit, publish/unpublish rides, and regenerate thumbnails from the admin.
+
+### Seed demo data (optional)
+
+No credentials needed — creates four sample Estrie rides with real map thumbnails:
+
+```bash
+python manage.py seed_demo
+```
+
+## Importing rides
+
+Both sources import **routes/courses** (reusable planned rides), not
+individually recorded activities — Strava's `GET /athlete/activities` and
+RideWithGPS's "trips" are deliberately not used. This is what the club
+actually wants published (the course, not a specific member's logged ride).
+
+**RideWithGPS is the primary, bulk source** — its API can list every route
+for a given user with normal pagination, scaling to hundreds of routes with
+zero manual work. **Strava is secondary and optional**: its public API has no
+way to list another athlete's routes at all (see "Why Strava can't be
+bulk-imported" below), so it only ever imports whatever handful of route ids
+you've manually added to `STRAVA_ROUTE_IDS` — useful for linking a Strava URL
+onto a few specific rides, not for getting everything. If you don't care
+about Strava links, leave `STRAVA_ROUTE_IDS` empty and RideWithGPS alone
+covers the whole import.
+
+### Setup
+
+1. **RideWithGPS** (do this one — it's what actually gets you all the
+   routes): request an API key at <https://ridewithgps.com/api>. Fill
+   `RWGPS_API_KEY` (and `RWGPS_AUTH_TOKEN` for private routes) in `.env`.
+   `RWGPS_USER_ID` defaults to the club user from the spec.
+2. **Strava** (optional): create an API application at
+   <https://www.strava.com/settings/api> to get a client id/secret. Put
+   `STRAVA_CLIENT_ID` and `STRAVA_CLIENT_SECRET` in `.env`, then run the
+   one-time OAuth consent helper:
+
+   ```bash
+   python manage.py strava_auth
+   ```
+
+   This opens a browser to Strava's consent screen (only needs the basic
+   `read` scope), runs a small local server to catch the redirect, exchanges
+   the code for tokens, and writes `STRAVA_REFRESH_TOKEN` straight into
+   `.env`. Any Strava account can authorize this. Pass `--no-browser` to just
+   print the URL (e.g. over SSH).
+
+   Then, if you want any Strava links at all, collect route ids into
+   `STRAVA_ROUTE_IDS` (comma-separated) in `.env` — one at a time, since
+   there's no bulk way to do this (see below): open each route in the Strava
+   app and tap its share icon, or open it on strava.com, and copy the numeric
+   id from the `strava.com/routes/<id>` link.
+
+### Why Strava can't be bulk-imported
+
+Strava's route *listing* endpoint (`GET /athletes/{id}/routes`) only ever
+returns routes for whichever athlete is currently authenticated — passing any
+other athlete's id returns `403 Forbidden`, even for public routes, and
+there's no supported way around that for a third-party app. The Strava
+mobile/web app can browse another athlete's public routes tab because it
+uses Strava's private, unpublished API — not available to OAuth apps, and
+not worth reverse-engineering past its certificate pinning (Charles Proxy
+and friends won't get you there either). So there is no way to auto-discover
+an arbitrary athlete's routes through the public API — `import_strava`
+instead fetches each route individually by id (`GET /routes/{id}`, which
+*does* work for public routes regardless of who authorized the token — the
+same mechanism behind Strava's shareable route links) from the explicit list
+in `STRAVA_ROUTE_IDS`. This doesn't scale past a handful of manually-picked
+routes, which is why RideWithGPS is the source to rely on for the full set.
+
+### Running the import
+
+```bash
+python manage.py import
+```
+
+`import_ridewithgps` runs first (bulk-creates/updates a `Ride` per public
+RideWithGPS route), then `import_strava` matches each `STRAVA_ROUTE_IDS`
+route onto an existing RideWithGPS-sourced ride (same name, similar distance)
+and merges its link in — or creates a new ride if genuinely not already
+present. Both steps are idempotent (keyed on their own source's route id):
+re-running updates existing rides and only renders a thumbnail when one is
+missing. Pass `--no-thumbnails` to skip tile downloads.
+
+You can also run either step on its own — `python manage.py import_ridewithgps`
+or `python manage.py import_strava` — each with a `--require-<other>-match`
+flag (`--require-strava-match` / `--require-rwgps-match`) if you want a
+strict "only enrich, never create a new ride" run instead of the default
+(create a standalone ride when nothing matches).
+
+Both steps log to stdout as they run (each ride created/updated/merged/
+skipped, API calls, thumbnail failures) — useful when running non-interactively
+(cron, `docker compose run`). Set `DJANGO_LOG_LEVEL=DEBUG` in `.env` for
+per-API-request detail, or `WARNING` to quiet it down to just problems.
+
+Both importers only pull **cycling** routes, skipping other sports on the
+same account:
+
+- RideWithGPS: filters on the route's `activity_types` — anything tagged
+  `cycling:*` (road, gravel, mountain, commute) is imported; `walking:*`,
+  `running:*`, `motorcycling:*`, etc. are skipped. Routes with no
+  `activity_types` at all (older routes may predate the field) are assumed to
+  be cycling.
+- Strava: routes have a `type` of `1` (Ride) or `2` (Run) — only `1` is
+  imported. Private routes are also explicitly excluded, regardless of scope.
+
+### Cross-source matching
+
+A Strava route is matched onto an existing RideWithGPS-sourced ride by the
+**same name** (case- and whitespace-insensitive) and a distance within 15%
+(tolerant of the two platforms measuring slightly differently) — not by
+date. Neither source's route object carries the day the club actually rode
+it (at most a route *creation* date), so `ride_date` is left blank on
+auto-imported rides; fill it in manually in the admin when known. When
+matched, the two links live on the same `Ride` — its detail page shows both
+"Voir sur Strava" and "Voir sur RideWithGPS" buttons, and the admin's "Liens"
+column shows clickable links to whichever are present, so you can see what
+matched (or didn't) after an import.
+
+This relies on rides being named consistently across both platforms. It's a
+heuristic, not exact matching — two unrelated rides with the same name and a
+similar distance could incorrectly merge; check the admin's "Liens" column
+after importing both sources for the first time.
+
+## Building the static site
+
+```bash
+python manage.py build_site        # writes to ./output
+```
+
+This reads whatever database is currently configured (`DATABASE_URL`, or
+local SQLite if unset) — run it against the **same** database you imported
+into, or you'll get a site built from stale/demo data. If you're using the
+Docker stack, that means running it the same way:
+
+```bash
+docker compose run --rm web python manage.py build_site
+```
+
+(or `docker compose exec web ...` if the stack is already up with `docker
+compose up`).
+
+Set `SITE_BASE_PATH` when the site is served from a sub-path (GitHub
+**project** pages), e.g. `SITE_BASE_PATH=/GravelleEstrie` — this is what the
+real deployment (`.github/workflows/deploy.yml`) sets. Leave it empty for a
+user/org root page or a custom domain. Note that a Docker-built site (above)
+always builds with `SITE_BASE_PATH` blank/root-relative regardless of what's
+in your local `.env`, since `.env` isn't available inside the container (see
+"Quick start with Docker") — that's actually what you want for a **local
+preview**, but don't mistake that build for what actually gets deployed; the
+GitHub Actions workflow builds its own copy with the real base path.
+
+Preview locally:
+
+```bash
+python -m http.server 8765 --directory output
+# open http://127.0.0.1:8765/
+```
+
+If your local `.env` has `SITE_BASE_PATH` set (needed for the real
+deployment) but you built locally (not via Docker) and want a quick preview
+without touching that setting, build to a throwaway directory with it
+cleared instead:
+
+```bash
+SITE_BASE_PATH= python manage.py build_site --output preview
+python -m http.server 8765 --directory preview
+```
+
+## Publishing to GitHub Pages
+
+The included workflow (`.github/workflows/deploy.yml`) rebuilds and deploys the
+site from a committed data fixture:
+
+1. After editing rides in the admin, export the data fixture:
+
+   ```bash
+   python manage.py dumpdata rides.Ride --indent 2 -o rides/fixtures/rides.json
+   ```
+
+2. Commit and push. CI loads the fixture, re-renders thumbnails, builds the
+   site, and deploys it to GitHub Pages.
+3. In the repo settings, set **Pages → Source → GitHub Actions** (once).
+
+Thumbnails are regenerated in CI from the stored route geometry, so image files
+don't need to be committed.
+
+## Tests
+
+```bash
+python manage.py test rides
+```
+
+## Project layout
+
+```
+config/            Django project (settings, urls, wsgi)
+rides/
+  models.py        Ride model
+  admin.py         Admin console + import/thumbnail actions
+  services/        Strava & RideWithGPS clients, geometry, thumbnails, importer
+  management/commands/
+    strava_auth.py      One-time Strava OAuth helper, writes STRAVA_REFRESH_TOKEN to .env
+    import.py           Runs import_strava then import_ridewithgps in order
+    import_strava.py
+    import_ridewithgps.py
+    render_thumbnails.py
+    build_site.py       Static site generator
+    seed_demo.py
+  templates/site/  Static site templates (index, detail)
+  static_src/      CSS + search/filter JS copied into the build
+  fixtures/        rides.json (data used by the deploy workflow)
+Dockerfile             Django admin/back-office image
+docker-compose.yml     Postgres + web services
+entrypoint.sh          Container startup: migrate, collectstatic, superuser
+.github/workflows/deploy.yml   Build & deploy to GitHub Pages
+```

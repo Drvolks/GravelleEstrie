@@ -1,0 +1,19 @@
+# Core
+Django>=5.1
+dj-database-url>=2.1
+python-dotenv>=1.0
+
+# API imports
+requests>=2.31
+polyline>=2.0
+
+# Map thumbnail rendering
+staticmap>=0.5.7
+Pillow>=10.0
+
+# Postgres driver (production). Uses binary wheels; no local libpq needed.
+psycopg[binary]>=3.1
+
+# WSGI server + static file serving for the containerised admin console
+gunicorn>=22.0
+whitenoise>=6.6

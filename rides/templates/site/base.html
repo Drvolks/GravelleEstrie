@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site_title }}{% endblock %}</title>
+  <meta name="description" content="{{ site_tagline }}">
+  <link rel="stylesheet" href="{{ base_path }}/assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="{{ base_path }}/">
+        <span class="brand-mark">🚲</span>
+        <span class="brand-text">
+          <strong>{{ site_title }}</strong>
+          <small>{{ site_tagline }}</small>
+        </span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Sorties consolidées depuis Strava et RideWithGPS · Cartes © OpenStreetMap</p>
+    </div>
+  </footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

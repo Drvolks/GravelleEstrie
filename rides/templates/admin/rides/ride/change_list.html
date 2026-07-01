@@ -1,0 +1,9 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+
+{% block object-tools-items %}
+  <li>
+    <a href="{% url 'admin:rides_ride_delete_all' %}" class="deletelink">Supprimer toutes les sorties</a>
+  </li>
+  {{ block.super }}
+{% endblock %}

@@ -1,0 +1,68 @@
+# Runs the Postgres database and the Django admin/back-office.
+#
+#   docker compose up --build          # admin at http://localhost:8000/admin/
+#   docker compose run --rm web python manage.py seed_demo
+#   docker compose run --rm web python manage.py import_strava
+#   docker compose run --rm web python manage.py build_site   # writes ./output
+#
+#   docker compose --profile preview up preview   # serve ./output at :8080
+#
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: gravelle_estrie
+      POSTGRES_USER: gravelle
+      POSTGRES_PASSWORD: gravelle
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gravelle -d gravelle_estrie"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    ports:
+      # Exposed so local (non-container) commands can point DATABASE_URL at
+      # this same database — e.g. to run `build_site` outside Docker against
+      # data imported inside it. Local dev only; fine to remove if unwanted.
+      - "5432:5432"
+
+  web:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://gravelle:gravelle@db:5432/gravelle_estrie
+      DJANGO_DEBUG: "false"
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-dev-insecure-change-me}
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      # A first admin user is created on startup from these (change them!).
+      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME:-admin}
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD:-admin}
+      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL:-admin@example.com}
+      # API credentials for the importers (optional; set in a .env file).
+      STRAVA_CLIENT_ID: ${STRAVA_CLIENT_ID:-}
+      STRAVA_CLIENT_SECRET: ${STRAVA_CLIENT_SECRET:-}
+      STRAVA_REFRESH_TOKEN: ${STRAVA_REFRESH_TOKEN:-}
+      RWGPS_API_KEY: ${RWGPS_API_KEY:-}
+      RWGPS_AUTH_TOKEN: ${RWGPS_AUTH_TOKEN:-}
+    ports:
+      - "8000:8000"
+    volumes:
+      - media:/app/media       # persisted uploaded thumbnails
+      - ./output:/app/output   # generated static site, accessible on the host
+
+  # Serves the generated static site (./output) exactly as GitHub Pages would.
+  # Opt-in via --profile preview so it doesn't start with a plain `up`.
+  preview:
+    image: nginx:alpine
+    profiles: ["preview"]
+    ports:
+      - "8080:80"
+    volumes:
+      - ./output:/usr/share/nginx/html:ro
+
+volumes:
+  pgdata:
+  media:

@@ -1,0 +1,57 @@
+{% extends "site/base.html" %}
+
+{% block content %}
+<section class="controls" aria-label="Recherche et filtres">
+  <div class="search-row">
+    <input type="search" id="search" placeholder="Rechercher par nom ou ville de départ…"
+           autocomplete="off" aria-label="Recherche">
+    <span class="result-count"><span id="result-count">{{ rides|length }}</span> sortie(s)</span>
+  </div>
+
+  <div class="filters">
+    <label class="filter">
+      Distance max : <output id="distance-out">{{ max_distance }}</output> km
+      <input type="range" id="distance" min="0" max="{{ max_distance }}" value="{{ max_distance }}" step="1">
+    </label>
+    <label class="filter">
+      Dénivelé max : <output id="elevation-out">{{ max_elevation }}</output> m
+      <input type="range" id="elevation" min="0" max="{{ max_elevation }}" value="{{ max_elevation }}" step="10">
+    </label>
+    <button type="button" id="reset" class="reset">Réinitialiser</button>
+  </div>
+</section>
+
+<section class="grid" id="rides">
+  {% for ride in rides %}
+  <article class="card" data-name="{{ ride.name|lower }}" data-city="{{ ride.start_city|lower }}"
+           data-distance="{{ ride.distance_km }}" data-elevation="{{ ride.elevation_m }}">
+    <a class="card-link" href="{{ base_path }}/rides/{{ ride.slug }}/">
+      <div class="card-thumb">
+        {% if ride.thumb_url %}
+          <img src="{{ ride.thumb_url }}" alt="Carte de la sortie {{ ride.name }}" loading="lazy">
+        {% else %}
+          <div class="thumb-placeholder">Pas de tracé</div>
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <h2>{{ ride.name }}</h2>
+        <p class="card-meta">
+          {% if ride.start_city %}<span>📍 {{ ride.start_city }}</span>{% endif %}
+          {% if ride.ride_date %}<span>📅 {{ ride.ride_date }}</span>{% endif %}
+        </p>
+        <p class="card-stats">
+          <span class="stat">{{ ride.distance_km }} km</span>
+          <span class="stat">↗ {{ ride.elevation_m }} m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  {% endfor %}
+</section>
+
+<p class="empty" id="empty" hidden>Aucune sortie ne correspond à votre recherche.</p>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ base_path }}/assets/js/search.js" defer></script>
+{% endblock %}

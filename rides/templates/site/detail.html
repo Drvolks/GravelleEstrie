@@ -1,0 +1,47 @@
+{% extends "site/base.html" %}
+
+{% block title %}{{ ride.name }} · {{ site_title }}{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb"><a href="{{ base_path }}/">← Toutes les sorties</a></nav>
+
+<article class="detail">
+  <header class="detail-head">
+    <h1>{{ ride.name }}</h1>
+    <p class="detail-meta">
+      {% if ride.start_city %}<span>📍 Départ : {{ ride.start_city }}</span>{% endif %}
+      {% if ride.ride_date %}<span>📅 {{ ride.ride_date }}</span>{% endif %}
+    </p>
+  </header>
+
+  {% if ride.thumb_url %}
+  <div class="detail-map">
+    <img src="{{ ride.thumb_url }}" alt="Carte du tracé de {{ ride.name }}">
+  </div>
+  {% endif %}
+
+  <dl class="specs">
+    <div><dt>Distance</dt><dd>{{ ride.distance_km }} km</dd></div>
+    <div><dt>Dénivelé positif</dt><dd>{{ ride.elevation_m }} m</dd></div>
+    {% if ride.start_city %}<div><dt>Ville de départ</dt><dd>{{ ride.start_city }}</dd></div>{% endif %}
+    <div><dt>Source</dt><dd>{{ ride.source_label }}</dd></div>
+  </dl>
+
+  {% if ride.description %}
+  <div class="detail-description">
+    <h2>Description</h2>
+    <p>{{ ride.description|linebreaksbr }}</p>
+  </div>
+  {% endif %}
+
+  <div class="detail-links">
+    {% if ride.strava_url %}
+      <a class="btn btn-strava" href="{{ ride.strava_url }}" target="_blank" rel="noopener">Voir sur Strava</a>
+    {% endif %}
+    {% if ride.ridewithgps_url %}
+      <a class="btn btn-rwgps" href="{{ ride.ridewithgps_url }}" target="_blank" rel="noopener">Voir sur RideWithGPS</a>
+    {% endif %}
+    {# Post-MVP: bouton « Envoyer vers Garmin » #}
+  </div>
+</article>
+{% endblock %}

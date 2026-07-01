@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gravelle Estrie</title>
+  <meta name="description" content="Sorties gravelle du club Gravelle Estrie">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <span class="brand-mark">🚲</span>
+        <span class="brand-text">
+          <strong>Gravelle Estrie</strong>
+          <small>Sorties gravelle du club Gravelle Estrie</small>
+        </span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    
+<section class="controls" aria-label="Recherche et filtres">
+  <div class="search-row">
+    <input type="search" id="search" placeholder="Rechercher par nom ou ville de départ…"
+           autocomplete="off" aria-label="Recherche">
+    <span class="result-count"><span id="result-count">5</span> sortie(s)</span>
+  </div>
+
+  <div class="filters">
+    <label class="filter">
+      Distance max : <output id="distance-out">80</output> km
+      <input type="range" id="distance" min="0" max="80" value="80" step="1">
+    </label>
+    <label class="filter">
+      Dénivelé max : <output id="elevation-out">1200</output> m
+      <input type="range" id="elevation" min="0" max="1200" value="1200" step="10">
+    </label>
+    <button type="button" id="reset" class="reset">Réinitialiser</button>
+  </div>
+</section>
+
+<section class="grid" id="rides">
+  
+  <article class="card" data-name="rando north hatley" data-city="north hatley"
+           data-distance="74.8" data-elevation="960">
+    <a class="card-link" href="/rides/rando-north-hatley/">
+      <div class="card-thumb">
+        
+          <img src="/assets/thumbs/rando-north-hatley.png" alt="Carte de la sortie Rando North Hatley" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Rando North Hatley</h2>
+        <p class="card-meta">
+          <span>📍 North Hatley</span>
+          <span>📅 29 Jun 2026</span>
+        </p>
+        <p class="card-stats">
+          <span class="stat">74.8 km</span>
+          <span class="stat">↗ 960 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="sentiers de sherbrooke" data-city="sherbrooke"
+           data-distance="35.2" data-elevation="540">
+    <a class="card-link" href="/rides/sentiers-de-sherbrooke/">
+      <div class="card-thumb">
+        
+          <img src="/assets/thumbs/sentiers-de-sherbrooke.png" alt="Carte de la sortie Sentiers de Sherbrooke" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Sentiers de Sherbrooke</h2>
+        <p class="card-meta">
+          <span>📍 Sherbrooke</span>
+          <span>📅 15 Jun 2026</span>
+        </p>
+        <p class="card-stats">
+          <span class="stat">35.2 km</span>
+          <span class="stat">↗ 540 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="gravelle du mont-orford" data-city="orford"
+           data-distance="48.5" data-elevation="1120">
+    <a class="card-link" href="/rides/gravelle-du-mont-orford/">
+      <div class="card-thumb">
+        
+          <img src="/assets/thumbs/gravelle-du-mont-orford.png" alt="Carte de la sortie Gravelle du Mont-Orford" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Gravelle du Mont-Orford</h2>
+        <p class="card-meta">
+          <span>📍 Orford</span>
+          <span>📅 1 Jun 2026</span>
+        </p>
+        <p class="card-stats">
+          <span class="stat">48.5 km</span>
+          <span class="stat">↗ 1120 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="boucle du lac memphrémagog" data-city="magog"
+           data-distance="62.0" data-elevation="780">
+    <a class="card-link" href="/rides/boucle-du-lac-memphremagog/">
+      <div class="card-thumb">
+        
+          <img src="/assets/thumbs/boucle-du-lac-memphremagog.png" alt="Carte de la sortie Boucle du Lac Memphrémagog" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Boucle du Lac Memphrémagog</h2>
+        <p class="card-meta">
+          <span>📍 Magog</span>
+          <span>📅 18 May 2026</span>
+        </p>
+        <p class="card-stats">
+          <span class="stat">62.0 km</span>
+          <span class="stat">↗ 780 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+  <article class="card" data-name="boucle test" data-city="magog"
+           data-distance="45.0" data-elevation="600">
+    <a class="card-link" href="/rides/boucle-test/">
+      <div class="card-thumb">
+        
+          <img src="/assets/thumbs/boucle-test.png" alt="Carte de la sortie Boucle Test" loading="lazy">
+        
+      </div>
+      <div class="card-body">
+        <h2>Boucle Test</h2>
+        <p class="card-meta">
+          <span>📍 Magog</span>
+          
+        </p>
+        <p class="card-stats">
+          <span class="stat">45.0 km</span>
+          <span class="stat">↗ 600 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+  
+</section>
+
+<p class="empty" id="empty" hidden>Aucune sortie ne correspond à votre recherche.</p>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Sorties consolidées depuis Strava et RideWithGPS · Cartes © OpenStreetMap</p>
+    </div>
+  </footer>
+  
+<script src="/assets/js/search.js" defer></script>
+
+</body>
+</html>

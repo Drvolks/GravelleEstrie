@@ -1,0 +1,66 @@
+name: Build & deploy site
+
+# Regenerates the static site from the committed rides fixture and publishes it
+# to GitHub Pages. Trigger it after committing an updated fixture, or manually.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "rides/**"
+      - "config/**"
+      - "requirements.txt"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Subpath the site is served from, e.g. /<repo> for a project page.
+      SITE_BASE_PATH: /${{ github.event.repository.name }}
+      DJANGO_DEBUG: "false"
+      DJANGO_SECRET_KEY: build-only-not-secret
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Prepare database and data
+        run: |
+          python manage.py migrate --noinput
+          python manage.py loaddata rides/fixtures/rides.json
+
+      - name: Render thumbnails
+        run: python manage.py render_thumbnails --all
+
+      - name: Build static site
+        run: python manage.py build_site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: output
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

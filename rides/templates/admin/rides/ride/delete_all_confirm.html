@@ -1,0 +1,16 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<p>
+  Cette action va supprimer <strong>{{ count }}</strong> sortie{{ count|pluralize }}
+  (et leurs vignettes) de façon <strong>définitive</strong>. Cette opération ne peut
+  pas être annulée.
+</p>
+<form method="post">
+  {% csrf_token %}
+  <input type="submit" value="Oui, tout supprimer" class="button"
+         style="background:#ba2121;color:#fff;">
+  <a href="{% url 'admin:rides_ride_changelist' %}" class="button cancel-link">Annuler</a>
+</form>
+{% endblock %}
