@@ -5,18 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ site_title }}{% endblock %}</title>
   <meta name="description" content="{{ site_tagline }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ base_path }}/assets/css/style.css">
 </head>
 <body>
   <header class="site-header">
-    <div class="wrap">
+    <div class="wrap header-row">
       <a class="brand" href="{{ base_path }}/">
-        <span class="brand-mark">🚲</span>
+        <img class="brand-mark" src="{{ base_path }}/assets/img/logo.png" alt="{{ site_title }}">
         <span class="brand-text">
           <strong>{{ site_title }}</strong>
           <small>{{ site_tagline }}</small>
         </span>
       </a>
+      <span class="anniversary-badge">★ 5ᵉ anniversaire · 2026</span>
     </div>
   </header>
 

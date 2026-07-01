@@ -113,7 +113,6 @@ class Command(BaseCommand):
             strava_url=ride.strava_url,
             ridewithgps_url=ride.ridewithgps_url,
             ridewithgps_embed_url=self._ridewithgps_embed_url(ride),
-            source_label=ride.get_source_display(),
             thumb_url=thumb_url,
         )
 

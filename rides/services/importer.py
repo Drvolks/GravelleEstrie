@@ -22,6 +22,7 @@ distance is a secondary sanity check.
 from __future__ import annotations
 
 import logging
+import re
 from dataclasses import dataclass
 
 from rides.models import Ride
@@ -36,9 +37,20 @@ logger = logging.getLogger(__name__)
 # be considered "the same ride" when matching across sources.
 _DISTANCE_TOLERANCE = 0.15
 
+# Both sources sometimes carry a "(copier)"/"(copy)" suffix left over from
+# duplicating a route in the source app before tweaking it — not meaningful
+# to riders, so it's stripped from the name we store.
+_COPY_SUFFIX_RE = re.compile(r"\s*\((?:copier|copy)\)\s*$", re.IGNORECASE)
+
+
+def clean_ride_name(name: str) -> str:
+    name = (name or "").strip()
+    name = _COPY_SUFFIX_RE.sub("", name).strip()
+    return name
+
 
 def _normalize_name(name: str) -> str:
-    return " ".join((name or "").strip().casefold().split())
+    return " ".join(clean_ride_name(name).casefold().split())
 
 
 @dataclass
@@ -131,7 +143,7 @@ def _upsert(
         if len(payload.geometry) > len(ride.geometry or []):
             ride.geometry = payload.geometry
     else:
-        ride.name = payload.name
+        ride.name = clean_ride_name(payload.name)
         ride.distance_m = payload.distance_m
         ride.elevation_gain_m = payload.elevation_gain_m
         ride.geometry = payload.geometry

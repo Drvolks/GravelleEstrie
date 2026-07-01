@@ -36,8 +36,9 @@
     <div><dt>Distance</dt><dd>{{ ride.distance_km }} km</dd></div>
     <div><dt>Dénivelé positif</dt><dd>{{ ride.elevation_m }} m</dd></div>
     {% if ride.start_city %}<div><dt>Ville de départ</dt><dd>{{ ride.start_city }}</dd></div>{% endif %}
-    <div><dt>Source</dt><dd>{{ ride.source_label }}</dd></div>
   </dl>
+
+  <p class="detail-map-note">Carte et profil intégrés depuis RideWithGPS — apparence gérée par RideWithGPS.</p>
 
   {% if ride.description %}
   <div class="detail-description">
