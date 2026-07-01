@@ -4,8 +4,13 @@
   "use strict";
 
   const search = document.getElementById("search");
+  const sortBy = document.getElementById("sort-by");
+  const sortDirection = document.getElementById("sort-direction");
+  const sortDirectionIcon = sortDirection.querySelector(".sort-direction-icon");
+  const distanceSlider = document.getElementById("distance-slider");
   const distanceMin = document.getElementById("distance-min");
   const distanceMax = document.getElementById("distance-max");
+  const elevationSlider = document.getElementById("elevation-slider");
   const elevationMin = document.getElementById("elevation-min");
   const elevationMax = document.getElementById("elevation-max");
   const distanceMinOut = document.getElementById("distance-min-out");
@@ -15,6 +20,7 @@
   const reset = document.getElementById("reset");
   const countEl = document.getElementById("result-count");
   const emptyEl = document.getElementById("empty");
+  const grid = document.getElementById("rides");
   const cards = Array.from(document.querySelectorAll(".card"));
 
   if (!cards.length) return;
@@ -26,19 +32,96 @@
       .replace(/[̀-ͯ]/g, ""); // strip accents
   }
 
-  function apply() {
-    const q = normalize(search.value.trim());
-    let minDist = Number(distanceMin.value);
-    let maxDist = Number(distanceMax.value);
-    let minElev = Number(elevationMin.value);
-    let maxElev = Number(elevationMax.value);
+  function compareText(a, b) {
+    return a.localeCompare(b, "fr", { sensitivity: "base" });
+  }
 
-    if (minDist > maxDist) {
-      [minDist, maxDist] = [maxDist, minDist];
+  function getSortDirection() {
+    return sortDirection.dataset.direction === "desc" ? "desc" : "asc";
+  }
+
+  function setSortDirection(direction) {
+    const value = direction === "desc" ? "desc" : "asc";
+    const label = value === "desc" ? "Tri descendant" : "Tri ascendant";
+    sortDirection.dataset.direction = value;
+    sortDirection.setAttribute("aria-label", label);
+    sortDirection.title = label;
+    sortDirectionIcon.textContent = value === "desc" ? "\u2193" : "\u2191";
+  }
+
+  function normalizeRange(minInput, maxInput, activeInput) {
+    let min = Number(minInput.value);
+    let max = Number(maxInput.value);
+
+    if (min > max) {
+      if (activeInput === minInput) {
+        min = max;
+        minInput.value = String(min);
+      } else if (activeInput === maxInput) {
+        max = min;
+        maxInput.value = String(max);
+      } else {
+        [min, max] = [max, min];
+        minInput.value = String(min);
+        maxInput.value = String(max);
+      }
     }
-    if (minElev > maxElev) {
-      [minElev, maxElev] = [maxElev, minElev];
+
+    return [min, max];
+  }
+
+  function updateRangeSlider(slider, minInput, maxInput) {
+    const min = Number(minInput.min);
+    const max = Number(maxInput.max);
+    const span = max - min || 1;
+    const low = ((Number(minInput.value) - min) / span) * 100;
+    const high = ((Number(maxInput.value) - min) / span) * 100;
+
+    slider.style.setProperty("--range-low", `${low}%`);
+    slider.style.setProperty("--range-high", `${high}%`);
+  }
+
+  function sortCards() {
+    const sorted = cards.slice();
+    const field = sortBy.value;
+    const direction = getSortDirection() === "desc" ? -1 : 1;
+
+    sorted.sort(function (a, b) {
+      let result;
+      if (field === "distance") {
+        result = Number(a.dataset.distance) - Number(b.dataset.distance)
+          || compareText(a.dataset.name, b.dataset.name);
+        return direction * result;
+      }
+      if (field === "elevation") {
+        result = Number(a.dataset.elevation) - Number(b.dataset.elevation)
+          || compareText(a.dataset.name, b.dataset.name);
+        return direction * result;
+      }
+      if (field === "city") {
+        if (!a.dataset.city && b.dataset.city) return 1;
+        if (a.dataset.city && !b.dataset.city) return -1;
+        result = compareText(a.dataset.city, b.dataset.city)
+          || compareText(a.dataset.name, b.dataset.name);
+        return direction * result;
+      }
+      return direction * compareText(a.dataset.name, b.dataset.name);
+    });
+
+    for (const card of sorted) {
+      grid.appendChild(card);
     }
+  }
+
+  function apply(activeInput) {
+    sortCards();
+
+    const q = normalize(search.value.trim());
+    const [minDist, maxDist] = normalizeRange(distanceMin, distanceMax, activeInput);
+    const [minElev, maxElev] = normalizeRange(elevationMin, elevationMax, activeInput);
+
+    updateRangeSlider(distanceSlider, distanceMin, distanceMax);
+    updateRangeSlider(elevationSlider, elevationMin, elevationMax);
 
     distanceMinOut.textContent = minDist;
     distanceMaxOut.textContent = maxDist;
@@ -64,13 +147,20 @@
     emptyEl.hidden = visible !== 0;
   }
 
-  search.addEventListener("input", apply);
-  distanceMin.addEventListener("input", apply);
-  distanceMax.addEventListener("input", apply);
-  elevationMin.addEventListener("input", apply);
-  elevationMax.addEventListener("input", apply);
+  search.addEventListener("input", function () { apply(); });
+  sortBy.addEventListener("change", function () { apply(); });
+  sortDirection.addEventListener("click", function () {
+    setSortDirection(getSortDirection() === "desc" ? "asc" : "desc");
+    apply();
+  });
+  distanceMin.addEventListener("input", function (event) { apply(event.currentTarget); });
+  distanceMax.addEventListener("input", function (event) { apply(event.currentTarget); });
+  elevationMin.addEventListener("input", function (event) { apply(event.currentTarget); });
+  elevationMax.addEventListener("input", function (event) { apply(event.currentTarget); });
   reset.addEventListener("click", function () {
     search.value = "";
+    sortBy.value = "name";
+    setSortDirection("asc");
     distanceMin.value = distanceMin.min;
     distanceMax.value = distanceMax.max;
     elevationMin.value = elevationMin.min;
@@ -78,5 +168,6 @@
     apply();
   });
 
+  setSortDirection(getSortDirection());
   apply();
 })();

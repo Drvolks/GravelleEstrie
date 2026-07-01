@@ -468,10 +468,17 @@ class BuildSiteTests(TestCase):
             html = index.read_text(encoding="utf-8")
             self.assertIn("/Test/assets/css/style.css", html)
             self.assertIn("Sortie A", html)
+            self.assertIn('id="sort-by"', html)
+            self.assertIn('id="sort-direction"', html)
+            self.assertIn('data-direction="asc"', html)
+            self.assertIn('<option value="distance">Distance</option>', html)
+            self.assertIn('class="sort-direction-icon"', html)
             self.assertIn('id="distance-min"', html)
             self.assertIn('id="distance-max"', html)
+            self.assertIn('id="distance-slider"', html)
             self.assertIn('id="elevation-min"', html)
             self.assertIn('id="elevation-max"', html)
+            self.assertIn('id="elevation-slider"', html)
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_skips_rides_that_start_outside_quebec(self):
