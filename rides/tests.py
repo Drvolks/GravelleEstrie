@@ -67,8 +67,8 @@ class StravaRoutesFilterTests(TestCase):
     def _client(self, route_ids):
         return StravaClient(client_id="x", client_secret="y", refresh_token="z", route_ids=route_ids)
 
-    def test_fetch_rides_keeps_only_public_ride_type_routes(self):
-        client = self._client(route_ids=["1", "2", "3"])
+    def test_fetch_rides_keeps_only_public_cycling_type_routes(self):
+        client = self._client(route_ids=["1", "2", "3", "4"])
         details = {
             "1": {"id": 1, "type": 1, "private": False, "name": "A", "distance": 1000,
                   "elevation_gain": 10, "map": {"polyline": QUEBEC_POLYLINE}},
@@ -76,10 +76,12 @@ class StravaRoutesFilterTests(TestCase):
                   "elevation_gain": 10, "map": {"polyline": QUEBEC_POLYLINE}},  # run -> excluded
             "3": {"id": 3, "type": 1, "private": True, "name": "C", "distance": 1000,
                   "elevation_gain": 10, "map": {"polyline": QUEBEC_POLYLINE}},  # private -> excluded
+            "4": {"id": 4, "type": 6, "private": False, "name": "D", "distance": 1000,
+                  "elevation_gain": 10, "map": {"polyline": QUEBEC_POLYLINE}},
         }
         with mock.patch.object(StravaClient, "_get_route", side_effect=lambda rid: details[rid]):
             rides = client.fetch_rides()
-        self.assertEqual({r.external_id for r in rides}, {"1"})
+        self.assertEqual({r.external_id for r in rides}, {"1", "4"})
 
     def test_route_urls_and_no_ride_date(self):
         client = self._client(route_ids=["42"])

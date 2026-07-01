@@ -42,9 +42,10 @@ _TOKEN_URL = "https://www.strava.com/oauth/token"
 _API = "https://www.strava.com/api/v3"
 _TIMEOUT = 30
 
-# Strava routes only distinguish Ride (1) vs Run (2) via this integer `type`
-# field — there's no richer sport_type like on activities.
-_ROUTE_TYPE_RIDE = 1
+# Strava route objects expose an integer `type` rather than the newer
+# `sport_type` field used by activities. In practice Strava returns 1 for
+# regular ride routes and 6 for gravel ride routes.
+_CYCLING_ROUTE_TYPES = {1, 6}
 
 
 class StravaError(RuntimeError):
@@ -115,7 +116,7 @@ class StravaClient:
 
     @staticmethod
     def _is_public_cycling_route(route: dict) -> bool:
-        if route.get("type") != _ROUTE_TYPE_RIDE:
+        if route.get("type") not in _CYCLING_ROUTE_TYPES:
             return False
         # Explicit safety net: only ever import public courses.
         return not route.get("private", False)
@@ -136,7 +137,12 @@ class StravaClient:
                 continue
             detail = self._get_route(route_id)
             if not self._is_public_cycling_route(detail):
-                logger.info("Skipping Strava route %s: not a public ride", route_id)
+                logger.info(
+                    "Skipping Strava route %s: not a public cycling route (type=%r, private=%r)",
+                    route_id,
+                    detail.get("type"),
+                    detail.get("private"),
+                )
                 continue
             ride = self._to_ride(detail)
             if not geometry_starts_in_quebec(ride.geometry):

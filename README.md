@@ -216,9 +216,11 @@ Quebec:
   `RWGPS_EXCLUDED_ROUTE_IDS` (comma-separated RideWithGPS route ids); by
   default this excludes the two "Course" running routes currently tagged
   `cycling:gravel` by RideWithGPS.
-- Strava: routes have a `type` of `1` (Ride) or `2` (Run) — only `1` is
-  imported. Private routes are also explicitly excluded, regardless of scope,
-  and the decoded route polyline must start in Quebec.
+- Strava: route `type` values `1` and `6` are treated as cycling routes
+  (Strava returns `6` for at least some gravel ride routes); known non-cycling
+  values such as `2` (Run) are skipped. Private routes are also explicitly
+  excluded, regardless of scope, and the decoded route polyline must start in
+  Quebec.
 
 ### Cross-source matching
 
