@@ -81,6 +81,13 @@ class StravaRoutesFilterTests(TestCase):
         client = self._client(route_ids=[])
         self.assertEqual(client.fetch_rides(), [])
 
+    def test_fetch_rides_skips_existing_route_ids_before_api_fetch(self):
+        client = self._client(route_ids=["42"])
+        with mock.patch.object(StravaClient, "_get_route") as get_route:
+            rides = client.fetch_rides(skip_route_ids={"42"})
+        self.assertEqual(rides, [])
+        get_route.assert_not_called()
+
 
 class RideWithGPSCyclingFilterTests(TestCase):
     def test_is_cycling_accepts_cycling_prefixed_types(self):
@@ -109,6 +116,19 @@ class RideWithGPSCyclingFilterTests(TestCase):
              mock.patch.object(RideWithGPSClient, "_get", side_effect=lambda path, **p: details[int(path.split("/")[-1].split(".")[0])]):
             rides = client.fetch_rides()
         self.assertEqual({r.external_id for r in rides}, {"10"})
+
+    def test_fetch_rides_skips_existing_route_ids_before_detail_fetch(self):
+        client = RideWithGPSClient(api_key="k", user_id="1")
+        summaries = [{"id": 10}, {"id": 20}]
+        details = {
+            10: {"route": {"id": 10, "name": "Gravel loop", "distance": 1000,
+                            "activity_types": ["cycling:gravel"], "track_points": []}},
+        }
+        with mock.patch.object(RideWithGPSClient, "iter_route_summaries", return_value=summaries), \
+             mock.patch.object(RideWithGPSClient, "_get", side_effect=lambda path, **p: details[int(path.split("/")[-1].split(".")[0])]) as get_detail:
+            rides = client.fetch_rides(skip_route_ids={"20"})
+        self.assertEqual({r.external_id for r in rides}, {"10"})
+        self.assertEqual(get_detail.call_count, 1)
 
     @override_settings(RWGPS_EXCLUDED_ROUTE_IDS=["20"])
     def test_fetch_rides_skips_excluded_route_ids(self):
@@ -144,16 +164,43 @@ class ImporterTests(TestCase):
         return RWGPSRide(**data)
 
     @mock.patch("rides.services.importer.build_thumbnail_file", return_value=None)
-    def test_import_creates_then_updates(self, _thumb):
+    def test_full_import_creates_then_updates(self, _thumb):
         client = mock.Mock(spec=StravaClient)
         client.fetch_rides.return_value = [self._strava_payload(distance_m=1000)]
         res = importer.import_strava(client=client)
         self.assertEqual((res.created, res.updated, res.merged), (1, 0, 0))
 
         client.fetch_rides.return_value = [self._strava_payload(distance_m=2000)]
-        res2 = importer.import_strava(client=client)
+        res2 = importer.import_strava(client=client, full=True)
         self.assertEqual((res2.created, res2.updated, res2.merged), (0, 1, 0))
         self.assertEqual(Ride.objects.get(strava_activity_id="1").distance_m, 2000)
+
+    def test_rwgps_import_skips_existing_ids_by_default(self):
+        Ride.objects.create(name="Existing", rwgps_route_id="9")
+        client = mock.Mock(spec=RideWithGPSClient)
+        client.fetch_rides.return_value = []
+
+        importer.import_ridewithgps(client=client)
+
+        client.fetch_rides.assert_called_once_with(skip_route_ids={"9"})
+
+    def test_rwgps_full_import_does_not_skip_existing_ids(self):
+        Ride.objects.create(name="Existing", rwgps_route_id="9")
+        client = mock.Mock(spec=RideWithGPSClient)
+        client.fetch_rides.return_value = []
+
+        importer.import_ridewithgps(client=client, full=True)
+
+        client.fetch_rides.assert_called_once_with(skip_route_ids=set())
+
+    def test_strava_import_skips_existing_ids_by_default(self):
+        Ride.objects.create(name="Existing", strava_activity_id="1")
+        client = mock.Mock(spec=StravaClient)
+        client.fetch_rides.return_value = []
+
+        importer.import_strava(client=client)
+
+        client.fetch_rides.assert_called_once_with(skip_route_ids={"1"})
 
     @mock.patch("rides.services.importer.build_thumbnail_file", return_value=None)
     def test_import_skips_rides_without_geometry(self, _thumb):
@@ -314,6 +361,34 @@ class ImportCommandTests(TestCase):
             call_command("import")
 
         self.assertEqual(calls, ["ridewithgps", "strava"])
+
+    def test_import_defaults_incremental_and_full_flag_overrides(self):
+        from django.core.management import call_command
+
+        calls = []
+
+        def fake_strava(**kwargs):
+            calls.append(("strava", kwargs))
+            return importer.ImportResult()
+
+        def fake_rwgps(**kwargs):
+            calls.append(("ridewithgps", kwargs))
+            return importer.ImportResult()
+
+        with mock.patch("rides.management.commands.import.import_strava", side_effect=fake_strava), \
+             mock.patch("rides.management.commands.import.import_ridewithgps", side_effect=fake_rwgps):
+            call_command("import")
+            call_command("import", "--full")
+
+        self.assertEqual(
+            [(source, kwargs["full"]) for source, kwargs in calls],
+            [
+                ("ridewithgps", False),
+                ("strava", False),
+                ("ridewithgps", True),
+                ("strava", True),
+            ],
+        )
 
 
 class BuildSiteTests(TestCase):

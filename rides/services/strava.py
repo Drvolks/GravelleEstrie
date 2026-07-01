@@ -119,16 +119,20 @@ class StravaClient:
         # Explicit safety net: only ever import public courses.
         return not route.get("private", False)
 
-    def fetch_rides(self) -> list[StravaRide]:
+    def fetch_rides(self, *, skip_route_ids: set[str] | None = None) -> list[StravaRide]:
         # STRAVA_ROUTE_IDS is optional — Strava is a secondary, manually
         # curated enrichment source (see importer.py), not required for a
         # working import. Empty means "nothing to do", not an error.
         if not self.route_ids:
             logger.info("STRAVA_ROUTE_IDS is empty — nothing to fetch")
             return []
+        skip_route_ids = skip_route_ids or set()
         logger.info("Fetching %d Strava route(s): %s", len(self.route_ids), self.route_ids)
         routes: list[StravaRide] = []
         for route_id in self.route_ids:
+            if str(route_id) in skip_route_ids:
+                logger.debug("Skipping Strava route %s: already imported", route_id)
+                continue
             detail = self._get_route(route_id)
             if not self._is_public_cycling_route(detail):
                 logger.info("Skipping Strava route %s: not a public ride", route_id)

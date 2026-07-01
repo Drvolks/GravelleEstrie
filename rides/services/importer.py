@@ -171,6 +171,7 @@ def import_strava(
     render_thumbnails: bool = True,
     client: StravaClient | None = None,
     create_if_unmatched: bool = True,
+    full: bool = False,
 ) -> ImportResult:
     """Import Strava routes (from the manually curated ``STRAVA_ROUTE_IDS``).
 
@@ -180,9 +181,16 @@ def import_strava(
     want Strava to enrich rides RideWithGPS already imported.
     """
     client = client or StravaClient()
-    logger.info("Starting Strava import (create_if_unmatched=%s)", create_if_unmatched)
+    logger.info(
+        "Starting Strava import (create_if_unmatched=%s, full=%s)",
+        create_if_unmatched,
+        full,
+    )
     result = ImportResult()
-    for ride in client.fetch_rides():
+    skip_route_ids = set() if full else set(
+        Ride.objects.exclude(strava_activity_id="").values_list("strava_activity_id", flat=True)
+    )
+    for ride in client.fetch_rides(skip_route_ids=skip_route_ids):
         _upsert(
             Ride.Source.STRAVA,
             ride,
@@ -201,12 +209,20 @@ def import_ridewithgps(
     render_thumbnails: bool = True,
     client: RideWithGPSClient | None = None,
     create_if_unmatched: bool = True,
+    full: bool = False,
 ) -> ImportResult:
     """Import RideWithGPS routes — the primary, bulk source (see module docstring)."""
     client = client or RideWithGPSClient()
-    logger.info("Starting RideWithGPS import (create_if_unmatched=%s)", create_if_unmatched)
+    logger.info(
+        "Starting RideWithGPS import (create_if_unmatched=%s, full=%s)",
+        create_if_unmatched,
+        full,
+    )
     result = ImportResult()
-    for ride in client.fetch_rides():
+    skip_route_ids = set() if full else set(
+        Ride.objects.exclude(rwgps_route_id="").values_list("rwgps_route_id", flat=True)
+    )
+    for ride in client.fetch_rides(skip_route_ids=skip_route_ids):
         _upsert(
             Ride.Source.RWGPS,
             ride,

@@ -26,12 +26,18 @@ class Command(BaseCommand):
             action="store_true",
             help="Skip rendering map thumbnails (faster, no tile downloads).",
         )
+        parser.add_argument(
+            "--full",
+            action="store_true",
+            help="Fetch and update routes even when their source ids already exist locally.",
+        )
 
     def handle(self, *args, **options):
         render = not options["no_thumbnails"]
+        full = options["full"]
 
         try:
-            rwgps_result = import_ridewithgps(render_thumbnails=render)
+            rwgps_result = import_ridewithgps(render_thumbnails=render, full=full)
         except RideWithGPSError as exc:
             self.stderr.write(self.style.ERROR(str(exc)))
             return
@@ -40,7 +46,7 @@ class Command(BaseCommand):
             self.stderr.write(self.style.WARNING(err))
 
         try:
-            strava_result = import_strava(render_thumbnails=render)
+            strava_result = import_strava(render_thumbnails=render, full=full)
         except StravaError as exc:
             self.stderr.write(self.style.ERROR(str(exc)))
             return

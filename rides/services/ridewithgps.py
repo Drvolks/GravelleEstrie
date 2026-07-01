@@ -77,7 +77,8 @@ class RideWithGPSClient:
                 return
             yield from results
 
-    def fetch_rides(self) -> list[RWGPSRide]:
+    def fetch_rides(self, *, skip_route_ids: set[str] | None = None) -> list[RWGPSRide]:
+        skip_route_ids = skip_route_ids or set()
         rides: list[RWGPSRide] = []
         count = 0
         for summary in self.iter_route_summaries():
@@ -87,6 +88,9 @@ class RideWithGPSClient:
                 continue
             if str(route_id) in settings.RWGPS_EXCLUDED_ROUTE_IDS:
                 logger.info("Skipping RideWithGPS route %s: excluded by configuration", route_id)
+                continue
+            if str(route_id) in skip_route_ids:
+                logger.debug("Skipping RideWithGPS route %s: already imported", route_id)
                 continue
             detail = self._get(f"/routes/{route_id}.json").get("route", summary)
             if not self._is_cycling(detail):

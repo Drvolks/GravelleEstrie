@@ -24,12 +24,18 @@ class Command(BaseCommand):
             action="store_true",
             help="Only merge onto an existing RideWithGPS-sourced ride; skip routes with no match instead of creating one.",
         )
+        parser.add_argument(
+            "--full",
+            action="store_true",
+            help="Fetch and update routes even when their Strava ids already exist locally.",
+        )
 
     def handle(self, *args, **options):
         try:
             result = import_strava(
                 render_thumbnails=not options["no_thumbnails"],
                 create_if_unmatched=not options["require_rwgps_match"],
+                full=options["full"],
             )
         except StravaError as exc:
             self.stderr.write(self.style.ERROR(str(exc)))

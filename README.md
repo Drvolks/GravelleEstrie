@@ -177,19 +177,22 @@ routes, which is why RideWithGPS is the source to rely on for the full set.
 python manage.py import
 ```
 
-`import_ridewithgps` runs first (bulk-creates/updates a `Ride` per public
-RideWithGPS route), then `import_strava` matches each `STRAVA_ROUTE_IDS`
+`import_ridewithgps` runs first (bulk-creates a `Ride` per new public
+RideWithGPS route), then `import_strava` matches each new `STRAVA_ROUTE_IDS`
 route onto an existing RideWithGPS-sourced ride (same name, similar distance)
 and merges its link in — or creates a new ride if genuinely not already
-present. Both steps are idempotent (keyed on their own source's route id):
-re-running updates existing rides and only renders a thumbnail when one is
-missing. Pass `--no-thumbnails` to skip tile downloads.
+present. Both steps are incremental by default: they still read the source
+route lists, but skip detail fetches for source ids already present locally,
+which keeps repeat runs lighter on API calls. Pass `--full` to fetch and
+update every configured route, including already-imported ones. Pass
+`--no-thumbnails` to skip tile downloads.
 
 You can also run either step on its own — `python manage.py import_ridewithgps`
-or `python manage.py import_strava` — each with a `--require-<other>-match`
-flag (`--require-strava-match` / `--require-rwgps-match`) if you want a
-strict "only enrich, never create a new ride" run instead of the default
-(create a standalone ride when nothing matches).
+or `python manage.py import_strava` — each supports `--full` and a
+`--require-<other>-match` flag (`--require-strava-match` /
+`--require-rwgps-match`) if you want a strict "only enrich, never create a new
+ride" run instead of the default (create a standalone ride when nothing
+matches).
 
 Both steps log to stdout as they run (each ride created/updated/merged/
 skipped, API calls, thumbnail failures) — useful when running non-interactively
@@ -229,16 +232,6 @@ similar distance could incorrectly merge; check the admin's "Liens" column
 after importing both sources for the first time.
 
 ## Building the static site
-
-```bash
-python manage.py build_site        # writes to ./docs
-```
-
-This reads whatever database is currently configured (`DATABASE_URL`, or
-local SQLite if unset) — run it against the **same** database you imported
-into, or you'll get a site built from stale/demo data. If you're using the
-Docker stack, that means running it the same way:
-
 ```bash
 docker compose run --rm web python manage.py build_site
 ```
@@ -303,7 +296,7 @@ rides/
   services/        Strava & RideWithGPS clients, geometry, thumbnails, importer
   management/commands/
     strava_auth.py      One-time Strava OAuth helper, writes STRAVA_REFRESH_TOKEN to .env
-    import.py           Runs import_strava then import_ridewithgps in order
+    import.py           Runs import_ridewithgps then import_strava in order
     import_strava.py
     import_ridewithgps.py
     render_thumbnails.py
