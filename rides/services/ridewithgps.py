@@ -2,7 +2,9 @@
 
 RideWithGPS exposes routes under /users/{id}/routes.json. Full track points
 come from the individual route endpoint (/routes/{id}.json). Auth is via an
-API key plus (optionally) a user auth token for private routes.
+API key plus (optionally) a user auth token for private routes. Extra routes
+outside the configured user can be fetched directly by id via
+``RWGPS_EXTRA_ROUTE_IDS``.
 """
 from __future__ import annotations
 
@@ -39,13 +41,18 @@ class RWGPSRide:
 
 
 class RideWithGPSClient:
-    def __init__(self, api_key="", auth_token="", user_id=""):
+    def __init__(self, api_key="", auth_token="", user_id="", extra_route_ids=None):
         self.api_key = api_key or settings.RWGPS_API_KEY
         self.auth_token = auth_token or settings.RWGPS_AUTH_TOKEN
         self.user_id = str(user_id or settings.RWGPS_USER_ID)
+        self.extra_route_ids = (
+            list(extra_route_ids)
+            if extra_route_ids is not None
+            else list(settings.RWGPS_EXTRA_ROUTE_IDS)
+        )
 
     def is_configured(self) -> bool:
-        return bool(self.api_key and self.user_id)
+        return bool(self.api_key and (self.user_id or self.extra_route_ids))
 
     def _params(self, **extra) -> dict:
         params = {"version": 2}
@@ -63,8 +70,14 @@ class RideWithGPSClient:
             raise RideWithGPSError(f"GET {path} failed ({resp.status_code}): {resp.text}")
         return resp.json()
 
+    def _get_route_detail(self, route_id: str, *, fallback: dict | None = None) -> dict:
+        detail = self._get(f"/routes/{route_id}.json").get("route") or fallback or {}
+        if detail.get("id") is None:
+            detail = {**detail, "id": route_id}
+        return detail
+
     def iter_route_summaries(self, per_page: int = 50, max_pages: int = 20):
-        if not self.is_configured():
+        if not (self.api_key and self.user_id):
             raise RideWithGPSError(
                 "RideWithGPS is not configured. Set RWGPS_API_KEY and RWGPS_USER_ID."
             )
@@ -79,30 +92,72 @@ class RideWithGPSClient:
                 return
             yield from results
 
+    def _fetch_ride(self, route_id: str, *, fallback: dict | None = None) -> RWGPSRide | None:
+        detail = self._get_route_detail(route_id, fallback=fallback)
+        if not self._is_cycling(detail):
+            logger.info("Skipping RideWithGPS route %s: not cycling", route_id)
+            return None
+        if not rwgps_route_starts_in_quebec(detail):
+            logger.info("Skipping RideWithGPS route %s: start is outside Quebec", route_id)
+            return None
+        return self._to_ride(detail)
+
     def fetch_rides(self, *, skip_route_ids: set[str] | None = None) -> list[RWGPSRide]:
-        skip_route_ids = skip_route_ids or set()
+        if not self.is_configured():
+            raise RideWithGPSError(
+                "RideWithGPS is not configured. Set RWGPS_API_KEY and RWGPS_USER_ID "
+                "or RWGPS_EXTRA_ROUTE_IDS."
+            )
+        skip_route_ids = {str(route_id) for route_id in (skip_route_ids or set())}
         rides: list[RWGPSRide] = []
         count = 0
-        for summary in self.iter_route_summaries():
-            count += 1
-            route_id = summary.get("id")
-            if route_id is None:
+        seen_route_ids: set[str] = set()
+
+        if self.user_id:
+            for summary in self.iter_route_summaries():
+                count += 1
+                route_id = summary.get("id")
+                if route_id is None:
+                    continue
+                route_id = str(route_id)
+                if route_id in seen_route_ids:
+                    logger.debug("Skipping RideWithGPS route %s: duplicate in user listing", route_id)
+                    continue
+                seen_route_ids.add(route_id)
+                if route_id in settings.RWGPS_EXCLUDED_ROUTE_IDS:
+                    logger.info("Skipping RideWithGPS route %s: excluded by configuration", route_id)
+                    continue
+                if route_id in skip_route_ids:
+                    logger.debug("Skipping RideWithGPS route %s: already imported", route_id)
+                    continue
+                ride = self._fetch_ride(route_id, fallback=summary)
+                if ride is not None:
+                    rides.append(ride)
+
+        for route_id in self.extra_route_ids:
+            route_id = str(route_id).strip()
+            if not route_id:
                 continue
-            if str(route_id) in settings.RWGPS_EXCLUDED_ROUTE_IDS:
+            if route_id in seen_route_ids:
+                logger.debug("Skipping RideWithGPS route %s: duplicate extra route id", route_id)
+                continue
+            seen_route_ids.add(route_id)
+            if route_id in settings.RWGPS_EXCLUDED_ROUTE_IDS:
                 logger.info("Skipping RideWithGPS route %s: excluded by configuration", route_id)
                 continue
-            if str(route_id) in skip_route_ids:
+            if route_id in skip_route_ids:
                 logger.debug("Skipping RideWithGPS route %s: already imported", route_id)
                 continue
-            detail = self._get(f"/routes/{route_id}.json").get("route", summary)
-            if not self._is_cycling(detail):
-                logger.info("Skipping RideWithGPS route %s: not cycling", route_id)
-                continue
-            if not rwgps_route_starts_in_quebec(detail):
-                logger.info("Skipping RideWithGPS route %s: start is outside Quebec", route_id)
-                continue
-            rides.append(self._to_ride(detail))
-        logger.info("Fetched %d RideWithGPS route(s), %d after filters", count, len(rides))
+            ride = self._fetch_ride(route_id)
+            if ride is not None:
+                rides.append(ride)
+
+        logger.info(
+            "Fetched %d RideWithGPS route(s), %d configured extra route id(s), %d after filters",
+            count,
+            len(self.extra_route_ids),
+            len(rides),
+        )
         return rides
 
     @staticmethod

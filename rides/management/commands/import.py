@@ -1,10 +1,10 @@
 """Import rides from RideWithGPS, then match Strava routes onto them.
 
 Runs RideWithGPS first because it's the primary, bulk source (its API can
-list an arbitrary user's routes) — Strava's API has no equivalent listing
-capability for other athletes, so it only ever contributes whatever routes
-are manually listed in STRAVA_ROUTE_IDS, matched onto the RideWithGPS rides
-just imported.
+list an arbitrary user's routes, plus explicit RWGPS_EXTRA_ROUTE_IDS) —
+Strava's API has no equivalent listing capability for other athletes, so it
+only ever contributes whatever routes are manually listed in STRAVA_ROUTE_IDS,
+matched onto the RideWithGPS rides just imported.
 """
 from django.core.management.base import BaseCommand
 
@@ -15,9 +15,9 @@ from rides.services.strava import StravaError
 
 class Command(BaseCommand):
     help = (
-        "Import from RideWithGPS (bulk), then import Strava routes from "
-        "STRAVA_ROUTE_IDS if configured (matched onto the RideWithGPS rides "
-        "just imported)."
+        "Import from RideWithGPS (bulk plus RWGPS_EXTRA_ROUTE_IDS), then "
+        "import Strava routes from STRAVA_ROUTE_IDS if configured (matched "
+        "onto the RideWithGPS rides just imported)."
     )
 
     def add_arguments(self, parser):

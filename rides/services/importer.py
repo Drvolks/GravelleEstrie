@@ -3,9 +3,10 @@
 Both Strava and RideWithGPS import *routes/courses* here, not individually
 recorded activities — see ``strava.py`` and ``ridewithgps.py``. RideWithGPS is
 the primary, bulk source (its API can list an arbitrary user's routes, with
-pagination — scales to hundreds with no manual work) and normally runs first
-(see the ``import`` management command). Strava is secondary and optional:
-its public API has no way to list another athlete's routes at all (only the
+pagination — scales to hundreds with no manual work, plus explicit direct ids
+from ``RWGPS_EXTRA_ROUTE_IDS``) and normally runs first (see the ``import``
+management command). Strava is secondary and optional: its public API has no
+way to list another athlete's routes at all (only the
 authenticated athlete's own — see ``strava.py``), so it only ever imports
 whatever handful of route ids you've manually collected into
 ``STRAVA_ROUTE_IDS``. Each Strava route is matched onto an existing

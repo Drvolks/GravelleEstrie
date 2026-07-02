@@ -63,7 +63,8 @@ python -m http.server 8765 --directory preview
 - `rides/management/commands/`:
   - `import.py` runs `import_ridewithgps` then `import_strava` in order.
   - `import_ridewithgps.py` is the **bulk, primary** source — lists all of a user's
-    routes via pagination.
+    routes via pagination, then also fetches any direct ids in
+    `RWGPS_EXTRA_ROUTE_IDS`.
   - `import_strava.py` is **secondary/optional**: Strava's public API cannot list
     another athlete's routes at all (`GET /athletes/{id}/routes` 403s for anyone but
     the authenticated athlete — no way around it for third-party apps), so it only
@@ -78,8 +79,9 @@ python -m http.server 8765 --directory preview
     tile downloads.
   - Both importers only keep **cycling** routes starting in **Quebec**: RideWithGPS
     filters on `activity_types` (`cycling:*`; untagged routes assumed cycling; known
-    bad tags suppressed via `RWGPS_EXCLUDED_ROUTE_IDS`), Strava on route `type` `1`
-    and `6` (gravel rides come back as `6`) plus decoded-polyline start point.
+    bad tags suppressed via `RWGPS_EXCLUDED_ROUTE_IDS`; direct ids can be added with
+    `RWGPS_EXTRA_ROUTE_IDS`), Strava on route `type` `1` and `6` (gravel rides come
+    back as `6`) plus decoded-polyline start point.
   - `build_site.py` — reads published rides, renders `site/index.html` +
     `site/detail.html` per ride into `SITE_OUTPUT_DIR`, copies `rides/static_src/`
     to `assets/`, copies thumbnail PNGs to `assets/thumbs/`. No runtime API or JS

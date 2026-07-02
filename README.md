@@ -122,20 +122,24 @@ actually wants published (the course, not a specific member's logged ride).
 
 **RideWithGPS is the primary, bulk source** — its API can list every route
 for a given user with normal pagination, scaling to hundreds of routes with
-zero manual work. **Strava is secondary and optional**: its public API has no
-way to list another athlete's routes at all (see "Why Strava can't be
-bulk-imported" below), so it only ever imports whatever handful of route ids
-you've manually added to `STRAVA_ROUTE_IDS` — useful for linking a Strava URL
-onto a few specific rides, not for getting everything. If you don't care
-about Strava links, leave `STRAVA_ROUTE_IDS` empty and RideWithGPS alone
-covers the whole import.
+zero manual work. If a RideWithGPS route lives outside that account, add its
+numeric id to `RWGPS_EXTRA_ROUTE_IDS`; those routes are fetched directly in
+addition to `RWGPS_USER_ID`'s bulk list. **Strava is secondary and optional**:
+its public API has no way to list another athlete's routes at all (see "Why
+Strava can't be bulk-imported" below), so it only ever imports whatever
+handful of route ids you've manually added to `STRAVA_ROUTE_IDS` — useful for
+linking a Strava URL onto a few specific rides, not for getting everything.
+If you don't care about Strava links, leave `STRAVA_ROUTE_IDS` empty and
+RideWithGPS alone covers the whole import.
 
 ### Setup
 
 1. **RideWithGPS** (do this one — it's what actually gets you all the
    routes): request an API key at <https://ridewithgps.com/api>. Fill
    `RWGPS_API_KEY` (and `RWGPS_AUTH_TOKEN` for private routes) in `.env`.
-   `RWGPS_USER_ID` defaults to the club user from the spec.
+   `RWGPS_USER_ID` defaults to the club user from the spec. Add
+   comma-separated route ids to `RWGPS_EXTRA_ROUTE_IDS` for routes that should
+   be imported even though they are not listed under that user.
 2. **Strava** (optional): create an API application at
    <https://www.strava.com/settings/api> to get a client id/secret. Put
    `STRAVA_CLIENT_ID` and `STRAVA_CLIENT_SECRET` in `.env`, then run the
@@ -181,13 +185,14 @@ python manage.py import
 ```
 
 `import_ridewithgps` runs first (bulk-creates a `Ride` per new public
-RideWithGPS route), then `import_strava` matches each new `STRAVA_ROUTE_IDS`
-route onto an existing RideWithGPS-sourced ride (same name, similar distance)
-and merges its link in — or creates a new ride if genuinely not already
-present. Both steps are incremental by default: they still read the source
-route lists, but skip detail fetches for source ids already present locally,
-which keeps repeat runs lighter on API calls. Pass `--full` to fetch and
-update every configured route, including already-imported ones. Pass
+RideWithGPS route from `RWGPS_USER_ID`, plus any route ids in
+`RWGPS_EXTRA_ROUTE_IDS`), then `import_strava` matches each new
+`STRAVA_ROUTE_IDS` route onto an existing RideWithGPS-sourced ride (same name,
+similar distance) and merges its link in — or creates a new ride if genuinely
+not already present. Both steps are incremental by default: they still read
+the source route lists, but skip detail fetches for source ids already present
+locally, which keeps repeat runs lighter on API calls. Pass `--full` to fetch
+and update every configured route, including already-imported ones. Pass
 `--no-thumbnails` to skip tile downloads.
 
 You can also run either step on its own — `python manage.py import_ridewithgps`
@@ -210,7 +215,8 @@ Quebec:
   `cycling:*` (road, gravel, mountain, commute) is imported; `walking:*`,
   `running:*`, `motorcycling:*`, etc. are skipped. Routes with no
   `activity_types` at all (older routes may predate the field) are assumed to
-  be cycling. The start province comes from RideWithGPS's
+  be cycling. This applies to both the user-list routes and direct ids from
+  `RWGPS_EXTRA_ROUTE_IDS`. The start province comes from RideWithGPS's
   `administrative_area` when available; otherwise the first track point is
   used. Known source-data mistakes can be suppressed with
   `RWGPS_EXCLUDED_ROUTE_IDS` (comma-separated RideWithGPS route ids); by

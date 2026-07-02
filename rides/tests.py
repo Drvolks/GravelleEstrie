@@ -163,6 +163,63 @@ class RideWithGPSCyclingFilterTests(TestCase):
         self.assertEqual({r.external_id for r in rides}, {"10"})
         self.assertEqual(get_detail.call_count, 1)
 
+    @override_settings(RWGPS_EXTRA_ROUTE_IDS=["30"], RWGPS_EXCLUDED_ROUTE_IDS=[])
+    def test_fetch_rides_includes_extra_route_ids(self):
+        client = RideWithGPSClient(api_key="k", user_id="1")
+        summaries = [{"id": 10}]
+        details = {
+            "10": {"route": {"id": 10, "name": "User route", "distance": 1000,
+                              "activity_types": ["cycling:gravel"],
+                              "administrative_area": "Quebec", "track_points": []}},
+            "30": {"route": {"id": 30, "name": "Extra route", "distance": 2000,
+                              "activity_types": ["cycling:road"],
+                              "administrative_area": "Quebec", "track_points": []}},
+        }
+
+        def fake_get(path, **_params):
+            route_id = path.split("/")[-1].split(".")[0]
+            return details[route_id]
+
+        with mock.patch.object(RideWithGPSClient, "iter_route_summaries", return_value=summaries), \
+             mock.patch.object(RideWithGPSClient, "_get", side_effect=fake_get):
+            rides = client.fetch_rides()
+
+        self.assertEqual({r.external_id for r in rides}, {"10", "30"})
+
+    @override_settings(RWGPS_EXTRA_ROUTE_IDS=["10", "30"], RWGPS_EXCLUDED_ROUTE_IDS=[])
+    def test_fetch_rides_does_not_fetch_extra_route_ids_already_seen_in_user_routes(self):
+        client = RideWithGPSClient(api_key="k", user_id="1")
+        summaries = [{"id": 10}]
+        details = {
+            "10": {"route": {"id": 10, "name": "User route", "distance": 1000,
+                              "activity_types": ["cycling:gravel"],
+                              "administrative_area": "Quebec", "track_points": []}},
+            "30": {"route": {"id": 30, "name": "Extra route", "distance": 2000,
+                              "activity_types": ["cycling:road"],
+                              "administrative_area": "Quebec", "track_points": []}},
+        }
+
+        def fake_get(path, **_params):
+            route_id = path.split("/")[-1].split(".")[0]
+            return details[route_id]
+
+        with mock.patch.object(RideWithGPSClient, "iter_route_summaries", return_value=summaries), \
+             mock.patch.object(RideWithGPSClient, "_get", side_effect=fake_get) as get_detail:
+            rides = client.fetch_rides()
+
+        self.assertEqual({r.external_id for r in rides}, {"10", "30"})
+        self.assertEqual(get_detail.call_count, 2)
+
+    @override_settings(RWGPS_EXTRA_ROUTE_IDS=["30"], RWGPS_EXCLUDED_ROUTE_IDS=[])
+    def test_fetch_rides_skips_existing_extra_route_ids_before_detail_fetch(self):
+        client = RideWithGPSClient(api_key="k", user_id="1")
+        with mock.patch.object(RideWithGPSClient, "iter_route_summaries", return_value=[]), \
+             mock.patch.object(RideWithGPSClient, "_get") as get_detail:
+            rides = client.fetch_rides(skip_route_ids={"30"})
+
+        self.assertEqual(rides, [])
+        get_detail.assert_not_called()
+
     @override_settings(RWGPS_EXCLUDED_ROUTE_IDS=["20"])
     def test_fetch_rides_skips_excluded_route_ids(self):
         client = RideWithGPSClient(api_key="k", user_id="1")

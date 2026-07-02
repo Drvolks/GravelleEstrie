@@ -7,7 +7,8 @@ from rides.services.ridewithgps import RideWithGPSError
 class Command(BaseCommand):
     help = (
         "Import all routes from the configured RideWithGPS user — the "
-        "primary, bulk import source (see README). Each route is matched "
+        "primary, bulk import source — plus RWGPS_EXTRA_ROUTE_IDS "
+        "if configured (see README). Each route is matched "
         "onto an existing Strava-sourced ride if one exists (same name, "
         "similar distance) and merged in; otherwise a new ride is created."
     )

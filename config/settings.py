@@ -161,6 +161,11 @@ STRAVA_ROUTE_IDS = [
 RWGPS_API_KEY = os.environ.get("RWGPS_API_KEY", "")
 RWGPS_AUTH_TOKEN = os.environ.get("RWGPS_AUTH_TOKEN", "")
 RWGPS_USER_ID = os.environ.get("RWGPS_USER_ID", "4058724")
+# Optional comma-separated RideWithGPS route ids to import in addition to the
+# configured user's route list. Useful for public routes owned by another user.
+RWGPS_EXTRA_ROUTE_IDS = [
+    rid.strip() for rid in os.environ.get("RWGPS_EXTRA_ROUTE_IDS", "").split(",") if rid.strip()
+]
 # Comma-separated RideWithGPS route ids to ignore even if RideWithGPS marks
 # them as cycling. These known running routes are currently tagged
 # ``cycling:gravel`` at the source.
