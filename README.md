@@ -228,6 +228,25 @@ Quebec:
   excluded, regardless of scope, and the decoded route polyline must start in
   Quebec.
 
+### Local ride images
+
+Ride photos can live in the local, git-ignored `images/` directory:
+
+```text
+images/<ride id>/photo.jpg
+images/<ride id>/another-photo.webp
+```
+
+The lookup uses `rwgps_route_id` first (for example `images/55674259/`), then
+`strava_activity_id`, `external_id`, the Django row id, and finally the slug.
+The admin ride form shows any matching local images and serves them through a
+protected admin URL. `build_site` copies them into
+`docs/assets/ride-images/<slug>/`; on the detail page they appear under the
+distance/elevation/city stats, open in a popover, and the first image becomes
+a subtle transparent page background. Rides without local photos use
+`rides/static_src/img/default-ride-cover.jpg` as the same transparent
+background.
+
 ### Cross-source matching
 
 A Strava route is matched onto an existing RideWithGPS-sourced ride by the

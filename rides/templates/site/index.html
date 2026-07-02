@@ -1,5 +1,8 @@
 {% extends "site/base.html" %}
 
+{% block body_class %}has-ride-cover{% endblock %}
+{% block body_style %}--ride-cover-image: url('{{ default_cover_url }}');{% endblock %}
+
 {% block content %}
 <section class="controls" aria-label="Recherche et filtres">
   <div class="search-row">

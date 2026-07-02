@@ -1,6 +1,8 @@
 {% extends "site/base.html" %}
 
 {% block title %}{{ ride.name }} · {{ site_title }}{% endblock %}
+{% block body_class %}{% if ride.cover_image_url %}has-ride-cover{% endif %}{% endblock %}
+{% block body_style %}{% if ride.cover_image_url %}--ride-cover-image: url('{{ ride.cover_image_url }}');{% endif %}{% endblock %}
 
 {% block content %}
 <nav class="breadcrumb"><a href="{{ base_path }}/">← Toutes les sorties</a></nav>
@@ -32,13 +34,35 @@
     </div>
   {% endif %}
 
+  {% if ride.ridewithgps_embed_url or ride.thumb_url %}
+  <p class="detail-map-note">Carte et profil intégrés depuis RideWithGPS — apparence gérée par RideWithGPS.</p>
+  {% endif %}
+
   <dl class="specs">
     <div><dt>Distance</dt><dd>{{ ride.distance_km }} km</dd></div>
     <div><dt>Dénivelé positif</dt><dd>{{ ride.elevation_m }} m</dd></div>
     {% if ride.start_city %}<div><dt>Ville de départ</dt><dd>{{ ride.start_city }}</dd></div>{% endif %}
   </dl>
 
-  <p class="detail-map-note">Carte et profil intégrés depuis RideWithGPS — apparence gérée par RideWithGPS.</p>
+  {% if ride.images %}
+  <section class="ride-photos" aria-label="Photos de {{ ride.name }}" data-photo-gallery>
+    {% for image in ride.images %}
+      <button
+        class="ride-photo-thumb"
+        type="button"
+        data-full-src="{{ image.url }}"
+        data-full-alt="{{ image.alt }}"
+        aria-label="Agrandir {{ image.filename }}">
+        <img src="{{ image.url }}" alt="{{ image.alt }}" loading="lazy">
+      </button>
+    {% endfor %}
+  </section>
+
+  <dialog class="photo-dialog" id="photo-dialog" aria-label="Photo agrandie">
+    <button class="photo-dialog-close" type="button" data-photo-close aria-label="Fermer">×</button>
+    <img class="photo-dialog-image" alt="">
+  </dialog>
+  {% endif %}
 
   {% if ride.description %}
   <div class="detail-description">
@@ -57,4 +81,10 @@
     {# Post-MVP: bouton « Envoyer vers Garmin » #}
   </div>
 </article>
+{% endblock %}
+
+{% block scripts %}
+{% if ride.images %}
+<script src="{{ base_path }}/assets/js/gallery.js" defer></script>
+{% endif %}
 {% endblock %}

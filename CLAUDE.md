@@ -59,7 +59,8 @@ python -m http.server 8765 --directory preview
   JSON list of `[lat, lng]` pairs used to bake thumbnails.
 - `rides/services/` — `strava.py`, `ridewithgps.py` (API clients), `geometry.py`,
   `location.py` (Quebec start-point filtering), `thumbnails.py` (renders PNGs from
-  route geometry + OSM tiles), `importer.py`.
+  route geometry + OSM tiles), `images.py` (discovers git-ignored local ride photos),
+  `importer.py`.
 - `rides/management/commands/`:
   - `import.py` runs `import_ridewithgps` then `import_strava` in order.
   - `import_ridewithgps.py` is the **bulk, primary** source — lists all of a user's
@@ -84,9 +85,12 @@ python -m http.server 8765 --directory preview
     back as `6`) plus decoded-polyline start point.
   - `build_site.py` — reads published rides, renders `site/index.html` +
     `site/detail.html` per ride into `SITE_OUTPUT_DIR`, copies `rides/static_src/`
-    to `assets/`, copies thumbnail PNGs to `assets/thumbs/`. No runtime API or JS
-    map in the output — thumbnails and the RideWithGPS iframe embed are the only map
-    rendering.
+    to `assets/`, copies thumbnail PNGs to `assets/thumbs/`, and copies local photos
+    from `images/<ride id>/` to `assets/ride-images/<slug>/`. Local photo lookup tries
+    `rwgps_route_id` first, then Strava/manual ids, pk, and slug. Detail pages use the
+    first local photo as a subtle background, falling back to
+    `assets/img/default-ride-cover.jpg`. No runtime API or JS map in the output —
+    thumbnails and the RideWithGPS iframe embed are the only map rendering.
   - `strava_auth.py` — one-time local-server OAuth flow that writes
     `STRAVA_REFRESH_TOKEN` into `.env`.
 - `rides/templates/site/` — the static site templates (`index.html`, `detail.html`,

@@ -25,6 +25,35 @@ body {
   line-height: 1.5;
 }
 
+body.has-ride-cover::before,
+body.has-ride-cover::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+body.has-ride-cover::before {
+  background-image: var(--ride-cover-image);
+  background-size: cover;
+  background-position: center;
+  opacity: .42;
+  filter: saturate(.9) contrast(.96);
+}
+
+body.has-ride-cover::after {
+  background:
+    linear-gradient(180deg, rgba(246, 243, 236, .34), rgba(246, 243, 236, .72) 54%, rgba(246, 243, 236, .88)),
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, .2), rgba(255, 255, 255, 0) 42%);
+  backdrop-filter: blur(2px);
+}
+
+body.has-ride-cover > * {
+  position: relative;
+  z-index: 1;
+}
+
 a { color: var(--orange); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
@@ -32,6 +61,10 @@ a:hover { text-decoration: underline; }
 
 /* Header / footer */
 .site-header { background: var(--navy); padding: 20px 0; }
+body.has-ride-cover .site-header {
+  background: rgba(15, 30, 61, .9);
+  backdrop-filter: blur(14px);
+}
 .header-row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
 .brand { display: inline-flex; align-items: center; gap: 12px; color: #f6ecd6; }
 .brand:hover { text-decoration: none; }
@@ -222,7 +255,7 @@ main.wrap { padding-top: 28px; }
 .detail-map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-strong); box-shadow: var(--shadow); background: #fff; }
 .detail-map img { width: 100%; display: block; }
 .detail-map iframe { width: 100%; min-width: 100%; height: clamp(420px, 72vh, 700px); border: 0; display: block; }
-.detail-map-note { font-size: .78rem; color: var(--muted-2); font-weight: 600; font-style: italic; margin: -12px 0 0; }
+.detail-map-note { font-size: .78rem; color: var(--muted-2); font-weight: 600; font-style: italic; margin: 8px 0 0; }
 .specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 24px 0; padding: 0; }
 .specs div {
   background: var(--card);
@@ -234,9 +267,92 @@ main.wrap { padding-top: 28px; }
 .specs div:last-child { border-top-color: var(--ink); }
 .specs dt { color: var(--muted-2); font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; }
 .specs dd { margin: 4px 0 0; font-size: 1.25rem; font-weight: 700; color: var(--ink); }
+.ride-photos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: -6px 0 24px;
+}
+.ride-photo-thumb {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, .58);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+.ride-photo-thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform .16s ease, opacity .16s ease;
+}
+.ride-photo-thumb:hover img { transform: scale(1.025); opacity: .94; }
+.ride-photo-thumb:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+.photo-dialog {
+  width: min(1040px, 92vw);
+  max-height: 88vh;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, .44);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, .22);
+  box-shadow: 0 28px 80px -30px rgba(15, 30, 61, .58);
+  backdrop-filter: blur(18px);
+}
+.photo-dialog::backdrop {
+  background: rgba(15, 30, 61, .42);
+  backdrop-filter: blur(8px);
+}
+.photo-dialog-image {
+  width: 100%;
+  max-height: 88vh;
+  display: block;
+  object-fit: contain;
+}
+.photo-dialog-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 255, 255, .42);
+  border-radius: 50%;
+  color: var(--ink);
+  background: rgba(255, 255, 255, .78);
+  font: inherit;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 10px 28px -18px rgba(15, 30, 61, .8);
+}
+.photo-dialog-close:hover { background: rgba(255, 255, 255, .92); }
+.photo-dialog-close:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+body.has-ride-cover .detail-map,
+body.has-ride-cover .specs div,
+body.has-ride-cover .ride-photo-thumb {
+  background-color: rgba(255, 255, 255, .68);
+  backdrop-filter: blur(12px);
+}
 .detail-description { margin: 24px 0; }
 .detail-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
 .btn { display: inline-block; padding: 10px 18px; border-radius: var(--radius); font-weight: 700; color: #fff; }
 .btn:hover { text-decoration: none; opacity: .92; }
 .btn-strava { background: #fc4c02; }
 .btn-rwgps { background: var(--orange); color: var(--navy); }
+
+@media (max-width: 640px) {
+  .ride-photos {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}

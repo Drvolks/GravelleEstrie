@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import math
 import shutil
+import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 from urllib.parse import urlencode
@@ -17,7 +18,10 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
 from rides.models import Ride
+from rides.services.images import list_ride_images
 from rides.services.location import geometry_starts_in_quebec
+
+DEFAULT_RIDE_COVER = "default-ride-cover.jpg"
 
 
 class Command(BaseCommand):
@@ -33,54 +37,68 @@ class Command(BaseCommand):
         out = Path(options["output"]) if options.get("output") else settings.SITE_OUTPUT_DIR
         base_path = settings.SITE_BASE_PATH
 
-        # Clear the directory's *contents* rather than the directory itself,
-        # so it works when `out` is a mounted volume (e.g. in Docker).
-        out.mkdir(parents=True, exist_ok=True)
-        for child in out.iterdir():
-            if child.is_dir():
-                shutil.rmtree(child)
-            else:
-                child.unlink()
+        with tempfile.TemporaryDirectory() as tmp:
+            thumb_backup_dir = self._backup_existing_dir(
+                out / "assets" / "thumbs", Path(tmp) / "thumbs"
+            )
 
-        self._copy_assets(out)
-        thumbs_dir = out / "assets" / "thumbs"
-        thumbs_dir.mkdir(parents=True, exist_ok=True)
+            # Clear the directory's *contents* rather than the directory itself,
+            # so it works when `out` is a mounted volume (e.g. in Docker).
+            out.mkdir(parents=True, exist_ok=True)
+            for child in out.iterdir():
+                if child.is_dir():
+                    shutil.rmtree(child)
+                else:
+                    child.unlink()
 
-        rides_qs = Ride.objects.published()
-        if settings.RWGPS_EXCLUDED_ROUTE_IDS:
-            rides_qs = rides_qs.exclude(rwgps_route_id__in=settings.RWGPS_EXCLUDED_ROUTE_IDS)
-        rides = [ride for ride in rides_qs if geometry_starts_in_quebec(ride.geometry)]
-        views = [self._ride_view(r, base_path, thumbs_dir) for r in rides]
+            self._copy_assets(out)
+            thumbs_dir = out / "assets" / "thumbs"
+            thumbs_dir.mkdir(parents=True, exist_ok=True)
 
-        max_distance = self._ceil_max((v.distance_km for v in views), default=100, step=10)
-        max_elevation = self._ceil_max((v.elevation_m for v in views), default=1000, step=100)
+            rides_qs = Ride.objects.published()
+            if settings.RWGPS_EXCLUDED_ROUTE_IDS:
+                rides_qs = rides_qs.exclude(rwgps_route_id__in=settings.RWGPS_EXCLUDED_ROUTE_IDS)
+            rides = [ride for ride in rides_qs if geometry_starts_in_quebec(ride.geometry)]
+            views = [
+                self._ride_view(r, base_path, out, thumbs_dir, thumb_backup_dir)
+                for r in rides
+            ]
 
-        common = {
-            "base_path": base_path,
-            "site_title": settings.SITE_TITLE,
-            "site_tagline": settings.SITE_TAGLINE,
-        }
+            max_distance = self._ceil_max((v.distance_km for v in views), default=100, step=10)
+            max_elevation = self._ceil_max((v.elevation_m for v in views), default=1000, step=100)
 
-        # Index
-        (out / "index.html").write_text(
-            render_to_string(
-                "site/index.html",
-                {**common, "rides": views, "max_distance": max_distance, "max_elevation": max_elevation},
-            ),
-            encoding="utf-8",
-        )
+            common = {
+                "base_path": base_path,
+                "site_title": settings.SITE_TITLE,
+                "site_tagline": settings.SITE_TAGLINE,
+                "default_cover_url": self._default_cover_url(base_path),
+            }
 
-        # Detail pages at /rides/<slug>/index.html
-        for view in views:
-            ride_dir = out / "rides" / view.slug
-            ride_dir.mkdir(parents=True, exist_ok=True)
-            (ride_dir / "index.html").write_text(
-                render_to_string("site/detail.html", {**common, "ride": view}),
+            # Index
+            (out / "index.html").write_text(
+                render_to_string(
+                    "site/index.html",
+                    {
+                        **common,
+                        "rides": views,
+                        "max_distance": max_distance,
+                        "max_elevation": max_elevation,
+                    },
+                ),
                 encoding="utf-8",
             )
 
-        # Tell GitHub Pages not to run Jekyll (keeps files predictable).
-        (out / ".nojekyll").write_text("", encoding="utf-8")
+            # Detail pages at /rides/<slug>/index.html
+            for view in views:
+                ride_dir = out / "rides" / view.slug
+                ride_dir.mkdir(parents=True, exist_ok=True)
+                (ride_dir / "index.html").write_text(
+                    render_to_string("site/detail.html", {**common, "ride": view}),
+                    encoding="utf-8",
+                )
+
+            # Tell GitHub Pages not to run Jekyll (keeps files predictable).
+            (out / ".nojekyll").write_text("", encoding="utf-8")
 
         self.stdout.write(
             self.style.SUCCESS(
@@ -95,12 +113,33 @@ class Command(BaseCommand):
         dest = out / "assets"
         shutil.copytree(src, dest, dirs_exist_ok=True)
 
-    def _ride_view(self, ride: Ride, base_path: str, thumbs_dir: Path) -> SimpleNamespace:
+    @staticmethod
+    def _backup_existing_dir(source: Path, dest: Path) -> Path | None:
+        if not source.is_dir():
+            return None
+        shutil.copytree(source, dest)
+        return dest
+
+    def _ride_view(
+        self,
+        ride: Ride,
+        base_path: str,
+        out: Path,
+        thumbs_dir: Path,
+        thumb_backup_dir: Path | None,
+    ) -> SimpleNamespace:
         thumb_url = ""
+        dest = thumbs_dir / f"{ride.slug}.png"
         if ride.thumbnail and Path(ride.thumbnail.path).exists():
-            dest = thumbs_dir / f"{ride.slug}.png"
             shutil.copyfile(ride.thumbnail.path, dest)
+        elif thumb_backup_dir:
+            backup = thumb_backup_dir / dest.name
+            if backup.exists():
+                shutil.copyfile(backup, dest)
+        if dest.exists():
             thumb_url = f"{base_path}/assets/thumbs/{ride.slug}.png"
+
+        images = self._copy_ride_images(ride, base_path, out)
 
         return SimpleNamespace(
             name=ride.name,
@@ -114,7 +153,32 @@ class Command(BaseCommand):
             ridewithgps_url=ride.ridewithgps_url,
             ridewithgps_embed_url=self._ridewithgps_embed_url(ride),
             thumb_url=thumb_url,
+            images=images,
+            cover_image_url=(
+                images[0].url if images else self._default_cover_url(base_path)
+            ),
         )
+
+    @staticmethod
+    def _default_cover_url(base_path: str) -> str:
+        return f"{base_path}/assets/img/{DEFAULT_RIDE_COVER}"
+
+    def _copy_ride_images(self, ride: Ride, base_path: str, out: Path) -> list[SimpleNamespace]:
+        images = []
+        dest_dir = out / "assets" / "ride-images" / ride.slug
+        for index, image in enumerate(list_ride_images(ride), start=1):
+            ext = image.path.suffix.lower()
+            dest = dest_dir / f"image-{index}{ext}"
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(image.path, dest)
+            images.append(
+                SimpleNamespace(
+                    url=f"{base_path}/assets/ride-images/{ride.slug}/{dest.name}",
+                    filename=image.filename,
+                    alt=f"Photo de la sortie {ride.name}",
+                )
+            )
+        return images
 
     @staticmethod
     def _ridewithgps_embed_url(ride: Ride) -> str:

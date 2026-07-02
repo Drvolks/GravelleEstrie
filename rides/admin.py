@@ -1,11 +1,13 @@
 from django.contrib import admin, messages
+from django.http import FileResponse, Http404
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
-from django.urls import path
-from django.utils.html import format_html
+from django.urls import path, reverse
+from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 
 from .models import Ride
+from .services.images import expected_ride_image_dir, list_ride_images
 from .services.thumbnails import build_thumbnail_file
 
 
@@ -19,6 +21,7 @@ class RideAdmin(admin.ModelAdmin):
         "elevation_display",
         "source",
         "linked_sources",
+        "local_image_count",
         "is_published",
         "thumb_preview",
     )
@@ -27,13 +30,21 @@ class RideAdmin(admin.ModelAdmin):
     list_editable = ("is_published",)
     date_hierarchy = "ride_date"
     prepopulated_fields = {"slug": ("name",)}
-    readonly_fields = ("created_at", "updated_at", "thumb_preview", "point_count")
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "thumb_preview",
+        "point_count",
+        "local_image_folder",
+        "local_images_preview",
+    )
     actions = ("regenerate_thumbnails",)
 
     fieldsets = (
         (None, {"fields": ("name", "slug", "description", "ride_date", "is_published")}),
         ("Lieu & statistiques", {"fields": ("start_city", "distance_m", "elevation_gain_m")}),
         ("Tracé", {"fields": ("geometry", "point_count", "thumbnail", "thumb_preview")}),
+        ("Images locales", {"fields": ("local_image_folder", "local_images_preview")}),
         (
             "Source & liens",
             {
@@ -88,6 +99,55 @@ class RideAdmin(admin.ModelAdmin):
             )
         return "—"
 
+    @admin.display(description="Images")
+    def local_image_count(self, obj):
+        count = len(list_ride_images(obj))
+        return count if count else "—"
+
+    @admin.display(description="Dossier")
+    def local_image_folder(self, obj):
+        if obj is None:
+            return "—"
+        folder = expected_ride_image_dir(obj)
+        try:
+            display_path = folder.relative_to(folder.parents[1])
+        except (IndexError, ValueError):
+            display_path = folder
+        return format_html("<code>{}</code>", display_path)
+
+    @admin.display(description="Aperçu")
+    def local_images_preview(self, obj):
+        if obj is None:
+            return "—"
+        images = list_ride_images(obj)
+        if not images:
+            return format_html(
+                '<span style="color:#6b7280">Aucune image trouvée dans <code>{}</code>.</span>',
+                expected_ride_image_dir(obj),
+            )
+
+        rows = []
+        for image in images:
+            url = reverse("admin:rides_ride_local_image", args=[obj.pk, image.filename])
+            rows.append((url, image.filename, image.filename))
+        thumbs = format_html_join(
+            "",
+            (
+                '<a href="{}" target="_blank" rel="noopener" '
+                'style="display:block;width:150px;aspect-ratio:4/3;overflow:hidden;'
+                'border-radius:10px;border:1px solid rgba(20,38,77,.14);'
+                'background:#f6f3ec">'
+                '<img src="{}" alt="{}" loading="lazy" '
+                'style="width:100%;height:100%;object-fit:cover;display:block">'
+                "</a>"
+            ),
+            rows,
+        )
+        return format_html(
+            '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start">{}</div>',
+            thumbs,
+        )
+
     @admin.action(description="Régénérer les vignettes du tracé")
     def regenerate_thumbnails(self, request, queryset):
         done, failed = 0, 0
@@ -116,8 +176,22 @@ class RideAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.delete_all_view),
                 name="rides_ride_delete_all",
             ),
+            path(
+                "<int:object_id>/local-images/<path:filename>/",
+                self.admin_site.admin_view(self.local_image_view),
+                name="rides_ride_local_image",
+            ),
         ]
         return custom + super().get_urls()
+
+    def local_image_view(self, request, object_id, filename):
+        ride = self.get_object(request, object_id)
+        if ride is None:
+            raise Http404("Ride not found")
+        for image in list_ride_images(ride):
+            if image.filename == filename:
+                return FileResponse(open(image.path, "rb"))
+        raise Http404("Image not found")
 
     def delete_all_view(self, request):
         count = Ride.objects.count()

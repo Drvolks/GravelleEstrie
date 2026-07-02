@@ -15,6 +15,7 @@ staticfiles/
 
 # Generated static site
 output/
+images/
 
 # OS / editors
 .DS_Store

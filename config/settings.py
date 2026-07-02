@@ -136,6 +136,10 @@ LOGGING = {
 # Where `build_site` writes the generated static website.
 SITE_OUTPUT_DIR = BASE_DIR / "docs"
 
+# Local, git-ignored ride photos. Images are grouped by ride/source id, e.g.
+# images/<rwgps_route_id>/photo.jpg, and copied into the generated site.
+LOCAL_RIDE_IMAGES_DIR = BASE_DIR / "images"
+
 # Sub-path the committed static site is served from (e.g. "/GravelleEstrie").
 SITE_BASE_PATH = os.environ.get("SITE_BASE_PATH", "/GravelleEstrie").rstrip("/")
 

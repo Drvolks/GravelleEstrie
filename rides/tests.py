@@ -120,6 +120,7 @@ class StravaRoutesFilterTests(TestCase):
         self.assertEqual({r.external_id for r in rides}, {"1"})
 
 
+@override_settings(RWGPS_EXTRA_ROUTE_IDS=[])
 class RideWithGPSCyclingFilterTests(TestCase):
     def test_is_cycling_accepts_cycling_prefixed_types(self):
         is_cycling = RideWithGPSClient._is_cycling
@@ -527,6 +528,8 @@ class BuildSiteTests(TestCase):
             html = index.read_text(encoding="utf-8")
             self.assertIn("/Test/assets/css/style.css", html)
             self.assertIn("Sortie A", html)
+            self.assertIn("has-ride-cover", html)
+            self.assertIn("/Test/assets/img/default-ride-cover.jpg", html)
             self.assertIn('id="sort-by"', html)
             self.assertIn('id="sort-direction"', html)
             self.assertIn('data-direction="asc"', html)
@@ -583,6 +586,70 @@ class BuildSiteTests(TestCase):
             self.assertIn('title="Carte RideWithGPS de Sortie A"', html)
             self.assertIn('width="100%"', html)
             self.assertIn('height="620"', html)
+            self.assertIn("/Test/assets/img/default-ride-cover.jpg", html)
+
+    @override_settings(SITE_BASE_PATH="/Test")
+    def test_build_site_copies_local_ride_images_to_detail_pages(self):
+        from django.core.management import call_command
+        import tempfile
+
+        ride = Ride.objects.create(
+            name="Sortie A",
+            geometry=SQUARE,
+            distance_m=1000,
+            start_city="Magog",
+            rwgps_route_id="123",
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            images_root = Path(tmp) / "images"
+            source_dir = images_root / ride.rwgps_route_id
+            source_dir.mkdir(parents=True)
+            (source_dir / "photo.jpg").write_bytes(b"fake image")
+
+            out = Path(tmp) / "site"
+            with self.settings(LOCAL_RIDE_IMAGES_DIR=images_root):
+                call_command("build_site", output=out)
+
+            copied = out / "assets" / "ride-images" / ride.slug / "image-1.jpg"
+            detail = out / "rides" / ride.slug / "index.html"
+            html = detail.read_text(encoding="utf-8")
+            copied_exists = copied.exists()
+            copied_bytes = copied.read_bytes()
+
+        self.assertTrue(copied_exists)
+        self.assertEqual(copied_bytes, b"fake image")
+        self.assertIn("/Test/assets/ride-images/sortie-a/image-1.jpg", html)
+        self.assertIn('class="ride-photos"', html)
+        self.assertIn("--ride-cover-image", html)
+
+    @override_settings(SITE_BASE_PATH="/Test")
+    def test_build_site_preserves_existing_thumbnails_when_media_file_is_missing(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(
+            name="Sortie A",
+            geometry=SQUARE,
+            distance_m=1000,
+            start_city="Magog",
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "site"
+            thumbs_dir = out / "assets" / "thumbs"
+            thumbs_dir.mkdir(parents=True)
+            (thumbs_dir / "sortie-a.png").write_bytes(b"existing thumb")
+
+            call_command("build_site", output=out)
+
+            copied = thumbs_dir / "sortie-a.png"
+            html = (out / "index.html").read_text(encoding="utf-8")
+            copied_exists = copied.exists()
+            copied_bytes = copied.read_bytes()
+
+        self.assertTrue(copied_exists)
+        self.assertEqual(copied_bytes, b"existing thumb")
+        self.assertIn("/Test/assets/thumbs/sortie-a.png", html)
+        self.assertNotIn("Pas de tracé", html)
 
 
 class DeleteAllAdminViewTests(TestCase):
@@ -610,6 +677,29 @@ class DeleteAllAdminViewTests(TestCase):
     def test_button_present_on_changelist(self):
         resp = self.client.get(reverse("admin:rides_ride_changelist"))
         self.assertContains(resp, reverse("admin:rides_ride_delete_all"))
+
+    def test_local_ride_images_are_visible_and_served_in_admin(self):
+        import tempfile
+
+        ride = Ride.objects.create(name="Sortie A", rwgps_route_id="123")
+        with tempfile.TemporaryDirectory() as tmp:
+            images_root = Path(tmp) / "images"
+            source_dir = images_root / ride.rwgps_route_id
+            source_dir.mkdir(parents=True)
+            (source_dir / "photo.jpg").write_bytes(b"fake image")
+
+            with self.settings(LOCAL_RIDE_IMAGES_DIR=images_root):
+                change_url = reverse("admin:rides_ride_change", args=[ride.pk])
+                resp = self.client.get(change_url)
+                image_url = reverse("admin:rides_ride_local_image", args=[ride.pk, "photo.jpg"])
+                image_resp = self.client.get(image_url)
+
+                streamed = b"".join(image_resp.streaming_content)
+
+        self.assertContains(resp, "photo.jpg")
+        self.assertContains(resp, image_url)
+        self.assertEqual(image_resp.status_code, 200)
+        self.assertEqual(streamed, b"fake image")
 
 
 class StravaAuthCommandTests(TestCase):
