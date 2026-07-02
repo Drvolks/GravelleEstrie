@@ -9,6 +9,7 @@ from __future__ import annotations
 import math
 import shutil
 import tempfile
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from types import SimpleNamespace
 from urllib.parse import urlencode
@@ -22,6 +23,11 @@ from rides.services.images import list_ride_images
 from rides.services.location import geometry_starts_in_quebec
 
 DEFAULT_RIDE_COVER = "default-ride-cover.jpg"
+GPX_NS = "http://www.topografix.com/GPX/1/1"
+XSI_NS = "http://www.w3.org/2001/XMLSchema-instance"
+
+ET.register_namespace("", GPX_NS)
+ET.register_namespace("xsi", XSI_NS)
 
 
 class Command(BaseCommand):
@@ -140,6 +146,7 @@ class Command(BaseCommand):
             thumb_url = f"{base_path}/assets/thumbs/{ride.slug}.png"
 
         images = self._copy_ride_images(ride, base_path, out)
+        gpx_url = self._write_gpx_file(ride, base_path, out)
 
         return SimpleNamespace(
             name=ride.name,
@@ -154,6 +161,7 @@ class Command(BaseCommand):
             ridewithgps_embed_url=self._ridewithgps_embed_url(ride),
             thumb_url=thumb_url,
             images=images,
+            gpx_url=gpx_url,
             cover_image_url=(
                 images[0].url if images else self._default_cover_url(base_path)
             ),
@@ -179,6 +187,65 @@ class Command(BaseCommand):
                 )
             )
         return images
+
+    def _write_gpx_file(self, ride: Ride, base_path: str, out: Path) -> str:
+        points = self._geometry_points(ride.geometry)
+        if len(points) < 2:
+            return ""
+
+        dest_dir = out / "assets" / "gpx"
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        dest = dest_dir / f"{ride.slug}.gpx"
+
+        root = ET.Element(
+            f"{{{GPX_NS}}}gpx",
+            {
+                "version": "1.1",
+                "creator": settings.SITE_TITLE,
+                f"{{{XSI_NS}}}schemaLocation": (
+                    f"{GPX_NS} http://www.topografix.com/GPX/1/1/gpx.xsd"
+                ),
+            },
+        )
+        metadata = ET.SubElement(root, f"{{{GPX_NS}}}metadata")
+        ET.SubElement(metadata, f"{{{GPX_NS}}}name").text = ride.name
+        if ride.description:
+            ET.SubElement(metadata, f"{{{GPX_NS}}}desc").text = ride.description
+
+        trk = ET.SubElement(root, f"{{{GPX_NS}}}trk")
+        ET.SubElement(trk, f"{{{GPX_NS}}}name").text = ride.name
+        trkseg = ET.SubElement(trk, f"{{{GPX_NS}}}trkseg")
+        for lat, lon in points:
+            ET.SubElement(
+                trkseg,
+                f"{{{GPX_NS}}}trkpt",
+                {
+                    "lat": self._format_coordinate(lat),
+                    "lon": self._format_coordinate(lon),
+                },
+            )
+
+        ET.indent(root, space="  ")
+        ET.ElementTree(root).write(dest, encoding="utf-8", xml_declaration=True)
+        return f"{base_path}/assets/gpx/{ride.slug}.gpx"
+
+    @staticmethod
+    def _geometry_points(geometry) -> list[tuple[float, float]]:
+        points = []
+        for point in geometry or []:
+            if not isinstance(point, (list, tuple)) or len(point) < 2:
+                continue
+            try:
+                lat = float(point[0])
+                lon = float(point[1])
+            except (TypeError, ValueError):
+                continue
+            points.append((lat, lon))
+        return points
+
+    @staticmethod
+    def _format_coordinate(value: float) -> str:
+        return f"{value:.7f}".rstrip("0").rstrip(".")
 
     @staticmethod
     def _ridewithgps_embed_url(ride: Ride) -> str:

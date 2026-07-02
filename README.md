@@ -9,8 +9,7 @@ generates a **static website** you can publish on GitHub Pages.
 - **Filter** by distance and elevation gain
 - **Ride cards** with a baked map thumbnail
 - **Detail page** per ride: RideWithGPS map embed when available, full specs,
-  links to Strava & RideWithGPS
-- _Post-MVP:_ a "Send to Garmin" button (placeholder left in the detail template)
+  links to Strava & RideWithGPS, and a downloadable GPX file for Garmin/manual import
 
 ## How it works
 
@@ -246,6 +245,23 @@ distance/elevation/city stats, open in a popover, and the first image becomes
 a subtle transparent page background. Rides without local photos use
 `rides/static_src/img/default-ride-cover.jpg` as the same transparent
 background.
+
+### GPX / Garmin downloads
+
+`build_site` writes a GPX Track file for every published ride with at least
+two geometry points:
+
+```text
+docs/assets/gpx/<slug>.gpx
+```
+
+The detail page exposes it as the "Télécharger GPX" button beside the Strava
+and RideWithGPS links. The file is generated from the locally stored
+`Ride.geometry` instead of relying on a RideWithGPS export URL: the public
+RideWithGPS API used here is JSON-oriented, while RideWithGPS's richer
+FIT/TCX/GPX exports are primarily a product/UI feature. These generated GPX
+files are breadcrumb tracks (`lat/lng` points), suitable for manual Garmin
+import; they do not include RideWithGPS cue sheets or turn-by-turn metadata.
 
 ### Cross-source matching
 

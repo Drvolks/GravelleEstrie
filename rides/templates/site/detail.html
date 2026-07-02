@@ -78,7 +78,9 @@
     {% if ride.ridewithgps_url %}
       <a class="btn btn-rwgps" href="{{ ride.ridewithgps_url }}" target="_blank" rel="noopener">Voir sur RideWithGPS</a>
     {% endif %}
-    {# Post-MVP: bouton « Envoyer vers Garmin » #}
+    {% if ride.gpx_url %}
+      <a class="btn btn-gpx" href="{{ ride.gpx_url }}" download>Télécharger GPX</a>
+    {% endif %}
   </div>
 </article>
 {% endblock %}

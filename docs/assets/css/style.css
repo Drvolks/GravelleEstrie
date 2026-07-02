@@ -350,6 +350,7 @@ body.has-ride-cover .ride-photo-thumb {
 .btn:hover { text-decoration: none; opacity: .92; }
 .btn-strava { background: #fc4c02; }
 .btn-rwgps { background: var(--orange); color: var(--navy); }
+.btn-gpx { background: var(--navy); color: #fff; }
 
 @media (max-width: 640px) {
   .ride-photos {

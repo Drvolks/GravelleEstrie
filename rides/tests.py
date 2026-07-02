@@ -1,3 +1,4 @@
+import xml.etree.ElementTree as ET
 from io import StringIO
 from pathlib import Path
 from unittest import mock
@@ -628,6 +629,37 @@ class BuildSiteTests(TestCase):
             self.assertIn('width="100%"', html)
             self.assertIn('height="620"', html)
             self.assertIn("/Test/assets/img/default-ride-cover.jpg", html)
+
+    @override_settings(SITE_BASE_PATH="/Test")
+    def test_build_site_writes_gpx_download_for_rides_with_geometry(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(
+            name="Sortie A",
+            geometry=SQUARE,
+            distance_m=1000,
+            start_city="Magog",
+            description="Belle ride.",
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            gpx = Path(tmp) / "assets" / "gpx" / "sortie-a.gpx"
+            detail = Path(tmp) / "rides" / "sortie-a" / "index.html"
+            html = detail.read_text(encoding="utf-8")
+            gpx_exists = gpx.exists()
+            root = ET.parse(gpx).getroot()
+            ns = {"gpx": "http://www.topografix.com/GPX/1/1"}
+            points = root.findall(".//gpx:trkpt", ns)
+
+        self.assertTrue(gpx_exists)
+        self.assertEqual("Sortie A", root.findtext(".//gpx:trk/gpx:name", namespaces=ns))
+        self.assertEqual(len(SQUARE), len(points))
+        self.assertEqual("45", points[0].attrib["lat"])
+        self.assertEqual("-72", points[0].attrib["lon"])
+        self.assertIn('/Test/assets/gpx/sortie-a.gpx', html)
+        self.assertIn("Télécharger GPX", html)
+        self.assertIn("download", html)
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_copies_local_ride_images_to_detail_pages(self):

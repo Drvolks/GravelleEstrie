@@ -89,8 +89,10 @@ python -m http.server 8765 --directory preview
     from `images/<ride id>/` to `assets/ride-images/<slug>/`. Local photo lookup tries
     `rwgps_route_id` first, then Strava/manual ids, pk, and slug. Detail pages use the
     first local photo as a subtle background, falling back to
-    `assets/img/default-ride-cover.jpg`. No runtime API or JS map in the output —
-    thumbnails and the RideWithGPS iframe embed are the only map rendering.
+    `assets/img/default-ride-cover.jpg`. It also writes Garmin-compatible GPX Track
+    files from stored `Ride.geometry` to `assets/gpx/<slug>.gpx` and links them from
+    the detail page. No runtime API or JS map in the output — thumbnails and the
+    RideWithGPS iframe embed are the only map rendering.
   - `strava_auth.py` — one-time local-server OAuth flow that writes
     `STRAVA_REFRESH_TOKEN` into `.env`.
 - `rides/templates/site/` — the static site templates (`index.html`, `detail.html`,
