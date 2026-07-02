@@ -70,13 +70,13 @@ service already exposes 5432 to the host) so local commands see the same data.
 
 ### Previewing the generated static site
 
-An opt-in `preview` profile serves `./docs` under the
-`/GravelleEstrie/` path with nginx, exactly as GitHub Pages would (so it won't
-start with a plain `docker compose up`):
+An opt-in `preview` profile serves `./docs` at the domain root with nginx,
+matching the custom-domain GitHub Pages setup (so it won't start with a plain
+`docker compose up`):
 
 ```bash
 docker compose --profile preview up preview
-# open http://localhost:8080/GravelleEstrie/
+# open http://localhost:8080/
 ```
 
 Re-run `build_site` and refresh the page to see changes — nginx reads
@@ -289,24 +289,24 @@ docker compose run --rm web python manage.py build_site
 (or `docker compose exec web ...` if the stack is already up with `docker
 compose up`).
 
-`SITE_BASE_PATH` defaults to `/GravelleEstrie`, matching the GitHub Pages URL
-for this repository. Override it only if the site is served somewhere else:
-set it to an empty string for a domain root, or another leading-slash path for
-another subdirectory. For Docker runs, pass overrides explicitly, for example
-`docker compose run --rm -e SITE_BASE_PATH= web python manage.py build_site`.
+`SITE_BASE_PATH` defaults to an empty string, matching the custom domain
+`https://www.gravelleestrie.com/`. Set it only if the site is served from a
+subdirectory, for example `/GravelleEstrie` for project-page hosting.
+`SITE_CUSTOM_DOMAIN` defaults to `www.gravelleestrie.com`; `build_site` writes
+that value to `docs/CNAME` so GitHub Pages keeps the custom domain after each
+generated build.
 
 Preview locally:
 
 ```bash
 python -m http.server 8765 --directory .
-# open http://127.0.0.1:8765/GravelleEstrie/
+# open http://127.0.0.1:8765/
 ```
 
-If you want a root-relative throwaway preview, clear `SITE_BASE_PATH` and build
-to `preview/`:
+If you want a throwaway preview in a separate directory:
 
 ```bash
-SITE_BASE_PATH= python manage.py build_site --output preview
+python manage.py build_site --output preview
 python -m http.server 8765 --directory preview
 ```
 
@@ -325,10 +325,11 @@ supports `/ (root)` or `/docs` as the source folder:
 2. Commit the resulting `docs/` changes and push.
 3. In the repo settings, use **Pages → Source → Deploy from a branch** and
    publish `main` from `/docs`. The site is then available under
-   `/GravelleEstrie/`.
+   `https://www.gravelleestrie.com/`.
 
-Thumbnails are copied into `docs/assets/thumbs/` by `build_site`, so
-they are committed with the static HTML/CSS/JS.
+Thumbnails are copied into `docs/assets/thumbs/` and the custom domain is
+written to `docs/CNAME` by `build_site`, so both are committed with the static
+HTML/CSS/JS.
 
 ## Tests
 

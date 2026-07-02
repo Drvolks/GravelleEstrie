@@ -5,7 +5,7 @@
 #   docker compose run --rm web python manage.py import_strava
 #   docker compose run --rm web python manage.py build_site   # writes ./docs
 #
-#   docker compose --profile preview up preview   # serve ./docs at :8080/GravelleEstrie/
+#   docker compose --profile preview up preview   # serve ./docs at :8080/
 #
 services:
   db:
@@ -51,13 +51,15 @@ services:
       RWGPS_USER_ID: ${RWGPS_USER_ID:-4058724}
       RWGPS_EXTRA_ROUTE_IDS: ${RWGPS_EXTRA_ROUTE_IDS:-}
       RWGPS_EXCLUDED_ROUTE_IDS: ${RWGPS_EXCLUDED_ROUTE_IDS-45012570,45178724}
+      SITE_BASE_PATH: ${SITE_BASE_PATH:-}
+      SITE_CUSTOM_DOMAIN: ${SITE_CUSTOM_DOMAIN:-www.gravelleestrie.com}
     ports:
       - "8000:8000"
     volumes:
       - media:/app/media       # persisted uploaded thumbnails
       - ./docs:/app/docs       # committed static site for GitHub Pages
 
-  # Serves the generated static site exactly as GitHub Pages would.
+  # Serves the generated static site at the custom-domain root.
   # Opt-in via --profile preview so it doesn't start with a plain `up`.
   preview:
     image: nginx:alpine
@@ -65,7 +67,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./docs:/usr/share/nginx/html/GravelleEstrie:ro
+      - ./docs:/usr/share/nginx/html:ro
 
 volumes:
   pgdata:

@@ -555,7 +555,7 @@ class ImportCommandTests(TestCase):
 
 
 class BuildSiteTests(TestCase):
-    @override_settings(SITE_BASE_PATH="/Test")
+    @override_settings(SITE_BASE_PATH="/Test", SITE_CUSTOM_DOMAIN="www.example.com")
     def test_build_site_writes_pages(self):
         from django.core.management import call_command
         import tempfile
@@ -565,8 +565,10 @@ class BuildSiteTests(TestCase):
             call_command("build_site", output=tmp)
             index = Path(tmp) / "index.html"
             detail = Path(tmp) / "rides" / "sortie-a" / "index.html"
+            cname = Path(tmp) / "CNAME"
             self.assertTrue(index.exists())
             self.assertTrue(detail.exists())
+            self.assertEqual("www.example.com\n", cname.read_text(encoding="utf-8"))
             html = index.read_text(encoding="utf-8")
             self.assertIn("/Test/assets/css/style.css", html)
             self.assertIn("Sortie A", html)
@@ -583,6 +585,26 @@ class BuildSiteTests(TestCase):
             self.assertIn('id="elevation-min"', html)
             self.assertIn('id="elevation-max"', html)
             self.assertIn('id="elevation-slider"', html)
+
+    @override_settings(SITE_BASE_PATH="", SITE_CUSTOM_DOMAIN="")
+    def test_build_site_supports_custom_domain_root_paths(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(name="Sortie A", geometry=SQUARE, distance_m=1000, start_city="Magog")
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            index_html = (Path(tmp) / "index.html").read_text(encoding="utf-8")
+            detail_html = (
+                Path(tmp) / "rides" / "sortie-a" / "index.html"
+            ).read_text(encoding="utf-8")
+
+        self.assertIn('href="/assets/css/style.css"', index_html)
+        self.assertIn('href="/rides/sortie-a/"', index_html)
+        self.assertIn('href="/assets/gpx/sortie-a.gpx"', detail_html)
+        self.assertIn('<nav class="breadcrumb"><a href="/">', detail_html)
+        self.assertNotIn("/GravelleEstrie/", index_html)
+        self.assertNotIn("//assets/", index_html)
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_skips_rides_that_start_outside_quebec(self):

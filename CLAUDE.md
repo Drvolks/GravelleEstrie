@@ -27,7 +27,7 @@ docker compose run --rm web python manage.py seed_demo            # demo data, n
 docker compose run --rm web python manage.py test rides           # tests
 docker compose run --rm web python manage.py test rides.tests.SomeTestCase.test_thing  # single test
 
-docker compose --profile preview up -d preview   # serve docs/ at :8080/GravelleEstrie/ like GH Pages
+docker compose --profile preview up -d preview   # serve docs/ at :8080/ like the custom domain
 ```
 
 **The `web` image bakes in a `COPY . .` snapshot at build time — it is not a live mount
@@ -42,17 +42,19 @@ with a local `build_site` (SQLite fallback) silently produces a site from the wr
 Postgres via `postgres://gravelle:gravelle@localhost:5432/gravelle_estrie` (the `db`
 service exposes 5432 to the host).
 
-For a throwaway root-relative preview outside Docker:
+For a throwaway preview outside Docker:
 ```bash
-SITE_BASE_PATH= python manage.py build_site --output preview
+.venv/bin/python manage.py build_site --output preview
 python -m http.server 8765 --directory preview
 ```
 
 ## Architecture
 
 - `config/` — Django project (settings, urls, wsgi). Key settings: `SITE_OUTPUT_DIR`
-  (defaults to `docs/`), `SITE_BASE_PATH` (defaults to `/GravelleEstrie`, matching the
-  GitHub Pages subpath — pass `-e SITE_BASE_PATH=` to build for a domain root).
+  (defaults to `docs/`), `SITE_BASE_PATH` (defaults to empty for the
+  `www.gravelleestrie.com` custom-domain root; set `/GravelleEstrie` only for project
+  pages), and `SITE_CUSTOM_DOMAIN` (defaults to `www.gravelleestrie.com` and is written
+  to `docs/CNAME` by `build_site`).
 - `rides/models.py` — single `Ride` model. `source` records provenance only;
   cross-source linking is via independent nullable `strava_activity_id` /
   `rwgps_route_id` fields on the *same row* (a ride can have both). `geometry` is a

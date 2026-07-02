@@ -105,6 +105,11 @@ class Command(BaseCommand):
 
             # Tell GitHub Pages not to run Jekyll (keeps files predictable).
             (out / ".nojekyll").write_text("", encoding="utf-8")
+            if settings.SITE_CUSTOM_DOMAIN:
+                (out / "CNAME").write_text(
+                    f"{settings.SITE_CUSTOM_DOMAIN}\n",
+                    encoding="utf-8",
+                )
 
         self.stdout.write(
             self.style.SUCCESS(

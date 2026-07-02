@@ -140,8 +140,10 @@ SITE_OUTPUT_DIR = BASE_DIR / "docs"
 # images/<rwgps_route_id>/photo.jpg, and copied into the generated site.
 LOCAL_RIDE_IMAGES_DIR = BASE_DIR / "images"
 
-# Sub-path the committed static site is served from (e.g. "/GravelleEstrie").
-SITE_BASE_PATH = os.environ.get("SITE_BASE_PATH", "/GravelleEstrie").rstrip("/")
+# Sub-path the committed static site is served from. Empty for a custom domain
+# root, or a leading-slash path such as "/GravelleEstrie" for project pages.
+SITE_BASE_PATH = os.environ.get("SITE_BASE_PATH", "").rstrip("/")
+SITE_CUSTOM_DOMAIN = os.environ.get("SITE_CUSTOM_DOMAIN", "www.gravelleestrie.com").strip()
 
 SITE_TITLE = "Gravelle Estrie"
 SITE_TAGLINE = "Sorties gravelle du club Gravelle Estrie"
