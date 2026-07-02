@@ -137,13 +137,47 @@ class StravaClient:
         if not self.route_ids:
             logger.info("STRAVA_ROUTE_IDS is empty — nothing to fetch")
             return []
-        skip_route_ids = skip_route_ids or set()
-        logger.info("Fetching %d Strava route(s): %s", len(self.route_ids), self.route_ids)
-        routes: list[StravaRide] = []
+        skip_route_ids = {str(route_id) for route_id in (skip_route_ids or set())}
+        pending_route_ids = []
+        seen_route_ids = set()
+        skipped_existing = 0
+        skipped_duplicates = 0
         for route_id in self.route_ids:
-            if str(route_id) in skip_route_ids:
-                logger.debug("Skipping Strava route %s: already imported", route_id)
+            route_id = str(route_id)
+            if route_id in seen_route_ids:
+                skipped_duplicates += 1
                 continue
+            seen_route_ids.add(route_id)
+            if route_id in skip_route_ids:
+                skipped_existing += 1
+                continue
+            pending_route_ids.append(route_id)
+
+        if skipped_existing:
+            logger.info(
+                "Skipping %d already-imported Strava route(s) before API fetch",
+                skipped_existing,
+            )
+        if skipped_duplicates:
+            logger.info(
+                "Skipping %d duplicate Strava route id(s) before API fetch",
+                skipped_duplicates,
+            )
+        if not pending_route_ids:
+            logger.info(
+                "No Strava route API calls needed (%d configured, %d already imported)",
+                len(self.route_ids),
+                skipped_existing,
+            )
+            return []
+
+        logger.info(
+            "Fetching %d Strava route(s) after skipping imported/duplicate ids: %s",
+            len(pending_route_ids),
+            pending_route_ids,
+        )
+        routes: list[StravaRide] = []
+        for route_id in pending_route_ids:
             try:
                 detail = self._get_route(route_id)
             except StravaRouteFetchError as exc:

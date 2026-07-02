@@ -101,11 +101,31 @@ class StravaRoutesFilterTests(TestCase):
         self.assertEqual(client.fetch_rides(), [])
 
     def test_fetch_rides_skips_existing_route_ids_before_api_fetch(self):
-        client = self._client(route_ids=["42"])
-        with mock.patch.object(StravaClient, "_get_route") as get_route:
+        client = self._client(route_ids=["41", "42", "42"])
+        details = {
+            "41": {"id": 41, "type": 1, "private": False, "name": "A", "distance": 1000,
+                   "elevation_gain": 10, "map": {"polyline": QUEBEC_POLYLINE}},
+        }
+
+        with mock.patch.object(StravaClient, "_get_route", side_effect=lambda rid: details[rid]) as get_route, \
+             self.assertLogs("rides.services.strava", level="INFO") as logs:
             rides = client.fetch_rides(skip_route_ids={"42"})
+
+        self.assertEqual({r.external_id for r in rides}, {"41"})
+        get_route.assert_called_once_with("41")
+        output = "\n".join(logs.output)
+        self.assertIn("Skipping 1 already-imported Strava route(s) before API fetch", output)
+        self.assertIn("Skipping 1 duplicate Strava route id(s) before API fetch", output)
+
+    def test_fetch_rides_returns_empty_when_all_route_ids_already_imported(self):
+        client = self._client(route_ids=["42"])
+        with mock.patch.object(StravaClient, "_get_route") as get_route, \
+             self.assertLogs("rides.services.strava", level="INFO") as logs:
+            rides = client.fetch_rides(skip_route_ids={"42"})
+
         self.assertEqual(rides, [])
         get_route.assert_not_called()
+        self.assertIn("No Strava route API calls needed", "\n".join(logs.output))
 
     def test_fetch_rides_skips_routes_outside_quebec(self):
         client = self._client(route_ids=["1", "2"])
