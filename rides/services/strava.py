@@ -52,6 +52,16 @@ class StravaError(RuntimeError):
     pass
 
 
+class StravaRouteFetchError(StravaError):
+    def __init__(self, route_id, status_code: int, body: str):
+        self.route_id = str(route_id)
+        self.status_code = status_code
+        self.body = body
+        super().__init__(
+            f"Route fetch failed for id {route_id} ({status_code}): {body}"
+        )
+
+
 @dataclass
 class StravaRide:
     external_id: str
@@ -110,8 +120,7 @@ class StravaClient:
             f"{_API}/routes/{route_id}", headers=self._headers(), timeout=_TIMEOUT
         )
         if resp.status_code != 200:
-            logger.error("Strava route fetch failed for id %s (%s): %s", route_id, resp.status_code, resp.text)
-            raise StravaError(f"Route fetch failed for id {route_id} ({resp.status_code}): {resp.text}")
+            raise StravaRouteFetchError(route_id, resp.status_code, resp.text)
         return resp.json()
 
     @staticmethod
@@ -135,7 +144,16 @@ class StravaClient:
             if str(route_id) in skip_route_ids:
                 logger.debug("Skipping Strava route %s: already imported", route_id)
                 continue
-            detail = self._get_route(route_id)
+            try:
+                detail = self._get_route(route_id)
+            except StravaRouteFetchError as exc:
+                logger.error(
+                    "Skipping Strava route %s: fetch failed (%s): %s",
+                    exc.route_id,
+                    exc.status_code,
+                    exc.body,
+                )
+                continue
             if not self._is_public_cycling_route(detail):
                 logger.info(
                     "Skipping Strava route %s: not a public cycling route (type=%r, private=%r)",
@@ -149,6 +167,12 @@ class StravaClient:
                 logger.info("Skipping Strava route %s: start is outside Quebec", route_id)
                 continue
             routes.append(ride)
+            logger.info(
+                "Fetched Strava route %s: %s (%.1f km)",
+                ride.external_id,
+                ride.name,
+                ride.distance_m / 1000.0,
+            )
         return routes
 
     @staticmethod

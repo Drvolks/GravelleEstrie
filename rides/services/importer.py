@@ -165,7 +165,7 @@ def _upsert(
         logger.info("Merged %s route %s into existing ride %r", source, payload.external_id, ride.name)
     else:
         result.updated += 1
-        logger.debug("Updated ride %r (%s: %s)", ride.name, source, payload.external_id)
+        logger.info("Updated ride %r (%s: %s)", ride.name, source, payload.external_id)
 
     if render_thumbnails and (is_new or merged or not ride.thumbnail):
         try:

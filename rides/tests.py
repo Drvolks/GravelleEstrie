@@ -11,7 +11,7 @@ from rides.services import importer
 from rides.services.geometry import bounds, decode_polyline, downsample
 from rides.services.location import administrative_area_is_quebec, geometry_starts_in_quebec
 from rides.services.ridewithgps import RideWithGPSClient, RWGPSRide
-from rides.services.strava import StravaClient, StravaRide
+from rides.services.strava import StravaClient, StravaRide, StravaRouteFetchError
 
 
 SQUARE = [[45.0, -72.0], [45.1, -72.0], [45.1, -71.9], [45.0, -71.9], [45.0, -72.0]]
@@ -118,6 +118,27 @@ class StravaRoutesFilterTests(TestCase):
         with mock.patch.object(StravaClient, "_get_route", side_effect=lambda rid: details[rid]):
             rides = client.fetch_rides()
         self.assertEqual({r.external_id for r in rides}, {"1"})
+
+    def test_fetch_rides_continues_after_route_fetch_error(self):
+        client = self._client(route_ids=["1", "missing", "2"])
+        details = {
+            "1": {"id": 1, "type": 1, "private": False, "name": "A", "distance": 1000,
+                  "elevation_gain": 10, "map": {"polyline": QUEBEC_POLYLINE}},
+            "2": {"id": 2, "type": 1, "private": False, "name": "B", "distance": 2000,
+                  "elevation_gain": 20, "map": {"polyline": QUEBEC_POLYLINE}},
+        }
+
+        def fake_get_route(route_id):
+            if route_id == "missing":
+                raise StravaRouteFetchError(route_id, 404, '{"message":"Resource Not Found"}')
+            return details[route_id]
+
+        with mock.patch.object(StravaClient, "_get_route", side_effect=fake_get_route), \
+             self.assertLogs("rides.services.strava", level="ERROR") as logs:
+            rides = client.fetch_rides()
+
+        self.assertEqual({r.external_id for r in rides}, {"1", "2"})
+        self.assertIn("Skipping Strava route missing: fetch failed (404)", "\n".join(logs.output))
 
 
 @override_settings(RWGPS_EXTRA_ROUTE_IDS=[])

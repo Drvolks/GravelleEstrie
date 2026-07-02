@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/GravelleEstrie/assets/css/style.css">
 </head>
-<body class="has-ride-cover" style="--ride-cover-image: url('/GravelleEstrie/assets/img/default-ride-cover.jpg');">
+<body class="has-ride-cover" style="--ride-cover-image: url('/GravelleEstrie/assets/ride-images/take-a-trip-41km-465md/image-1.jpg');">
   <header class="site-header">
     <div class="wrap header-row">
       <a class="brand" href="/GravelleEstrie/">
@@ -62,10 +62,30 @@
   </dl>
 
   
+  <section class="ride-photos" aria-label="Photos de Take a Trip 41KM / 465MD+" data-photo-gallery>
+    
+      <button
+        class="ride-photo-thumb"
+        type="button"
+        data-full-src="/GravelleEstrie/assets/ride-images/take-a-trip-41km-465md/image-1.jpg"
+        data-full-alt="Photo de la sortie Take a Trip 41KM / 465MD+"
+        aria-label="Agrandir 662004204_2135713797188000_640134088645525605_n.jpg">
+        <img src="/GravelleEstrie/assets/ride-images/take-a-trip-41km-465md/image-1.jpg" alt="Photo de la sortie Take a Trip 41KM / 465MD+" loading="lazy">
+      </button>
+    
+  </section>
+
+  <dialog class="photo-dialog" id="photo-dialog" aria-label="Photo agrandie">
+    <button class="photo-dialog-close" type="button" data-photo-close aria-label="Fermer">×</button>
+    <img class="photo-dialog-image" alt="">
+  </dialog>
+  
 
   
 
   <div class="detail-links">
+    
+      <a class="btn btn-strava" href="https://www.strava.com/routes/3475210103170753816" target="_blank" rel="noopener">Voir sur Strava</a>
     
     
       <a class="btn btn-rwgps" href="https://ridewithgps.com/routes/54504330" target="_blank" rel="noopener">Voir sur RideWithGPS</a>
@@ -82,6 +102,8 @@
     </div>
   </footer>
   
+
+<script src="/GravelleEstrie/assets/js/gallery.js" defer></script>
 
 
 </body>

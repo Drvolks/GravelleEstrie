@@ -100,7 +100,14 @@ class RideWithGPSClient:
         if not rwgps_route_starts_in_quebec(detail):
             logger.info("Skipping RideWithGPS route %s: start is outside Quebec", route_id)
             return None
-        return self._to_ride(detail)
+        ride = self._to_ride(detail)
+        logger.info(
+            "Fetched RideWithGPS route %s: %s (%.1f km)",
+            ride.external_id,
+            ride.name,
+            ride.distance_m / 1000.0,
+        )
+        return ride
 
     def fetch_rides(self, *, skip_route_ids: set[str] | None = None) -> list[RWGPSRide]:
         if not self.is_configured():
