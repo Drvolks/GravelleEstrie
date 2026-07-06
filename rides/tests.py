@@ -10,7 +10,12 @@ from django.urls import reverse
 from rides.models import Ride
 from rides.services import importer
 from rides.services.geometry import bounds, decode_polyline, downsample
-from rides.services.location import administrative_area_is_quebec, geometry_starts_in_quebec
+from rides.services.location import (
+    administrative_area_is_quebec,
+    geometry_starts_in_quebec,
+    infer_start_city,
+)
+from rides.services.ravitos import Ravito, find_nearby_ravitos, parse_ravito_points
 from rides.services.ridewithgps import RideWithGPSClient, RWGPSRide
 from rides.services.strava import StravaClient, StravaRide, StravaRouteFetchError
 
@@ -39,6 +44,104 @@ class GeometryTests(TestCase):
         self.assertIsNone(bounds([]))
 
 
+class RavitoTests(TestCase):
+    def test_parse_ravito_points(self):
+        raw = "Epicerie du Coin|45.1|-72.2; Depanneur Test | 45.2 | -72.3 "
+        ravitos = parse_ravito_points(raw)
+        self.assertEqual([r.name for r in ravitos], ["Epicerie du Coin", "Depanneur Test"])
+        self.assertEqual(ravitos[0].lat, 45.1)
+        self.assertEqual(ravitos[0].lng, -72.2)
+
+    def test_parse_ravito_points_ignores_invalid_entries(self):
+        raw = "Incomplete|45.1;Bad coords|nope|-72;Out|95|-72;Good|45|-72"
+        ravitos = parse_ravito_points(raw)
+        self.assertEqual([r.name for r in ravitos], ["Good"])
+
+    def test_parse_ravito_points_accepts_full_google_maps_urls(self):
+        url = (
+            "https://www.google.com/maps/place/Epicerie+Route/"
+            "@45.0004,-71.995,17z/data=!4m6!3m5!8m2!3d45.0004!4d-71.995"
+        )
+        with mock.patch("rides.services.ravitos._resolve_url") as resolve:
+            ravitos = parse_ravito_points(url)
+
+        resolve.assert_not_called()
+        self.assertEqual(len(ravitos), 1)
+        self.assertEqual(ravitos[0].name, "Epicerie Route")
+        self.assertEqual(ravitos[0].lat, 45.0004)
+        self.assertEqual(ravitos[0].lng, -71.995)
+        self.assertEqual(ravitos[0].url, url)
+
+    def test_parse_ravito_points_resolves_short_google_maps_urls(self):
+        short_url = "https://maps.app.goo.gl/example"
+        resolved_url = (
+            "https://www.google.com/maps/place/Cafe+Test/"
+            "@45.0004,-71.995,17z/data=!4m6!3m5!8m2!3d45.0004!4d-71.995"
+        )
+        with mock.patch("rides.services.ravitos._resolve_url", return_value=resolved_url):
+            ravitos = parse_ravito_points(short_url)
+
+        self.assertEqual(len(ravitos), 1)
+        self.assertEqual(ravitos[0].name, "Cafe Test")
+        self.assertEqual(ravitos[0].url, short_url)
+
+    def test_parse_ravito_points_accepts_comma_separated_urls(self):
+        raw = "Cafe A|https://maps.app.goo.gl/a, Epicerie B|https://maps.app.goo.gl/b"
+        resolved_urls = {
+            "https://maps.app.goo.gl/a": (
+                "https://www.google.com/maps/place/Cafe+A/"
+                "@45.0004,-71.995,17z/data=!4m6!3m5!8m2!3d45.0004!4d-71.995"
+            ),
+            "https://maps.app.goo.gl/b": (
+                "https://www.google.com/maps/place/Epicerie+B/"
+                "@45.002,-71.996,17z/data=!4m6!3m5!8m2!3d45.002!4d-71.996"
+            ),
+        }
+
+        with mock.patch("rides.services.ravitos._resolve_url", side_effect=resolved_urls.get):
+            ravitos = parse_ravito_points(raw)
+
+        self.assertEqual([r.name for r in ravitos], ["Cafe A", "Epicerie B"])
+
+    def test_parse_ravito_points_supports_name_override_for_urls(self):
+        url = "https://www.google.com/maps/place/Long+Google+Name/@45.0004,-71.995,17z"
+        ravitos = parse_ravito_points(f"Ravito court|{url}")
+        self.assertEqual([r.name for r in ravitos], ["Ravito court"])
+
+    def test_find_nearby_ravitos_matches_route_segments_and_sorts_by_distance(self):
+        route = [[45.0, -72.0], [45.0, -71.99]]
+        ravitos = [
+            Ravito("Far", 45.01, -72.0),
+            Ravito("Closer", 45.0004, -71.995),
+            Ravito("Close", 45.001, -71.995),
+        ]
+
+        matches = find_nearby_ravitos(route, ravitos, radius_m=500)
+
+        self.assertEqual([match.ravito.name for match in matches], ["Closer", "Close"])
+        self.assertLess(matches[0].distance_m, matches[1].distance_m)
+        self.assertLess(matches[0].distance_m, 100)
+
+    def test_find_nearby_ravitos_filters_stops_too_close_to_route_ends(self):
+        route = [[45.0, -72.0], [45.0, -71.0]]
+        ravitos = [
+            Ravito("Too early", 45.0, -71.95),
+            Ravito("Relevant", 45.0, -71.5),
+            Ravito("Too late", 45.0, -71.05),
+        ]
+
+        matches = find_nearby_ravitos(
+            route,
+            ravitos,
+            radius_m=500,
+            min_route_distance_m=30_000,
+            endpoint_exclusion_radius_m=5_000,
+        )
+
+        self.assertEqual([match.ravito.name for match in matches], ["Relevant"])
+        self.assertGreaterEqual(matches[0].route_distance_m, 30_000)
+
+
 class QuebecLocationFilterTests(TestCase):
     def test_administrative_area_accepts_quebec_variants(self):
         self.assertTrue(administrative_area_is_quebec("Quebec"))
@@ -50,6 +153,12 @@ class QuebecLocationFilterTests(TestCase):
         self.assertTrue(geometry_starts_in_quebec([[45.4, -71.9], [45.5, -71.8]]))
         self.assertFalse(geometry_starts_in_quebec([[39.1384, -77.7171], [39.2, -77.7]]))
         self.assertFalse(geometry_starts_in_quebec([]))
+
+    def test_infer_start_city_from_known_departure_hubs(self):
+        self.assertEqual(infer_start_city([[45.22231, -72.53192]]), "Lac-Brome")
+        self.assertEqual(infer_start_city([[45.33559, -72.51204]]), "Waterloo")
+        self.assertEqual(infer_start_city([[47.89885, -69.32799]]), "Rivière-du-Loup")
+        self.assertEqual(infer_start_city([[45.0, -72.0]]), "")
 
 
 class RideModelTests(TestCase):
@@ -94,6 +203,17 @@ class StravaRoutesFilterTests(TestCase):
         self.assertEqual(len(rides), 1)
         self.assertEqual(rides[0].strava_url, "https://www.strava.com/routes/42")
         self.assertIsNone(rides[0].ride_date)
+
+    def test_strava_routes_infer_start_city_from_geometry(self):
+        client = self._client(route_ids=["42"])
+        details = {"42": {"id": 42, "type": 1, "private": False, "name": "Boucle",
+                           "distance": 5000, "elevation_gain": 100,
+                           "map": {"polyline": "mn_sGnkuyLAC"}}}
+        with mock.patch.object(StravaClient, "_get_route", side_effect=lambda rid: details[rid]):
+            rides = client.fetch_rides()
+
+        self.assertEqual(rides[0].start_city, "Lac-Brome")
+
 
     def test_fetch_rides_returns_empty_without_route_ids_configured(self):
         # STRAVA_ROUTE_IDS is optional (Strava is a secondary source) — an
@@ -554,6 +674,7 @@ class ImportCommandTests(TestCase):
         )
 
 
+@override_settings(RAVITO_POINTS="")
 class BuildSiteTests(TestCase):
     @override_settings(SITE_BASE_PATH="/Test", SITE_CUSTOM_DOMAIN="www.example.com")
     def test_build_site_writes_pages(self):
@@ -585,6 +706,9 @@ class BuildSiteTests(TestCase):
             self.assertIn('id="elevation-min"', html)
             self.assertIn('id="elevation-max"', html)
             self.assertIn('id="elevation-slider"', html)
+            self.assertIn('id="admin-without-ravito-filter"', html)
+            self.assertIn('id="admin-without-ravito"', html)
+            self.assertIn('data-ravitos="0"', html)
 
     @override_settings(SITE_BASE_PATH="", SITE_CUSTOM_DOMAIN="")
     def test_build_site_supports_custom_domain_root_paths(self):
@@ -648,9 +772,38 @@ class BuildSiteTests(TestCase):
                 html,
             )
             self.assertIn('title="Carte RideWithGPS de Sortie A"', html)
+            self.assertIn('class="rwgps-embed"', html)
             self.assertIn('width="100%"', html)
             self.assertIn('height="620"', html)
             self.assertIn("/Test/assets/img/default-ride-cover.jpg", html)
+
+    @override_settings(SITE_BASE_PATH="/Test")
+    def test_build_site_uses_strava_route_embed_when_no_ridewithgps_embed(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(
+            name="Sortie Strava",
+            geometry=SQUARE,
+            distance_m=65_700,
+            elevation_gain_m=804,
+            strava_activity_id="3279612223036285112",
+            strava_url="https://www.strava.com/routes/3279612223036285112",
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            detail = Path(tmp) / "rides" / "sortie-strava" / "index.html"
+            html = detail.read_text(encoding="utf-8")
+
+        self.assertIn('class="strava-embed-placeholder"', html)
+        self.assertIn('data-embed-type="route"', html)
+        self.assertIn('data-embed-id="3279612223036285112"', html)
+        self.assertIn('data-full-width="true"', html)
+        self.assertIn('data-distance="65700"', html)
+        self.assertIn('data-elevation-gain="804"', html)
+        self.assertIn('src="https://strava-embeds.com/embed.js"', html)
+        self.assertIn("Carte interactive intégrée depuis Strava", html)
+        self.assertNotIn("Carte et profil intégrés depuis RideWithGPS", html)
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_writes_gpx_download_for_rides_with_geometry(self):
@@ -716,6 +869,41 @@ class BuildSiteTests(TestCase):
         self.assertIn("/Test/assets/ride-images/sortie-a/image-1.jpg", html)
         self.assertIn('class="ride-photos"', html)
         self.assertIn("--ride-cover-image", html)
+
+    @override_settings(
+        SITE_BASE_PATH="/Test",
+        RAVITO_POINTS=(
+            "https://www.google.com/maps/place/Epicerie+Route/"
+            "@45,-71.5,17z/data=!4m6!3m5!8m2!3d45!4d-71.5;"
+            "Ravito depart|45|-72;"
+            "Ravito arrivee|45|-71"
+        ),
+        RAVITO_RADIUS_M=500,
+        RAVITO_MIN_ROUTE_DISTANCE_M=30_000,
+    )
+    def test_build_site_shows_nearby_ravitos_on_detail_pages(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(
+            name="Sortie A",
+            geometry=[[45.0, -72.0], [45.0, -71.0]],
+            distance_m=80_000,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            detail = Path(tmp) / "rides" / "sortie-a" / "index.html"
+            html = detail.read_text(encoding="utf-8")
+            index_html = (Path(tmp) / "index.html").read_text(encoding="utf-8")
+
+        self.assertIn("Ravitos", html)
+        self.assertIn("Epicerie Route", html)
+        self.assertIn("après ~", html)
+        self.assertIn("du parcours", html)
+        self.assertIn("https://www.google.com/maps/place/Epicerie+Route/", html)
+        self.assertNotIn("Ravito depart", html)
+        self.assertNotIn("Ravito arrivee", html)
+        self.assertIn('data-ravitos="1"', index_html)
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_preserves_existing_thumbnails_when_media_file_is_missing(self):

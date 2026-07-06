@@ -34,7 +34,7 @@ import requests
 from django.conf import settings
 
 from .geometry import decode_polyline
-from .location import geometry_starts_in_quebec
+from .location import geometry_starts_in_quebec, infer_start_city
 
 logger = logging.getLogger(__name__)
 
@@ -225,7 +225,7 @@ class StravaClient:
             # RideWithGPS (see ridewithgps.py). Set manually in the admin if
             # known.
             ride_date=None,
-            start_city="",
+            start_city=infer_start_city(geometry),
             geometry=geometry,
             strava_url=f"https://www.strava.com/routes/{route.get('id')}",
             raw=route,

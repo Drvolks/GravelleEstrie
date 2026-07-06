@@ -19,6 +19,13 @@ def env_bool(name: str, default: bool = False) -> bool:
     return os.environ.get(name, str(default)).strip().lower() in {"1", "true", "yes", "on"}
 
 
+def env_int(name: str, default: int) -> int:
+    try:
+        return int(os.environ.get(name, str(default)).strip())
+    except ValueError:
+        return default
+
+
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-insecure-key-change-me")
 DEBUG = env_bool("DJANGO_DEBUG", True)
 ALLOWED_HOSTS = [
@@ -147,6 +154,13 @@ SITE_CUSTOM_DOMAIN = os.environ.get("SITE_CUSTOM_DOMAIN", "www.gravelleestrie.co
 
 SITE_TITLE = "Gravelle Estrie"
 SITE_TAGLINE = "Sorties gravelle du club Gravelle Estrie"
+
+# Semicolon-separated ravito points. Entries can be Google Maps URLs,
+# ``Name|Google Maps URL``, or ``Name|latitude|longitude``.
+RAVITO_POINTS = os.environ.get("RAVITO_POINTS", "")
+RAVITO_RADIUS_M = env_int("RAVITO_RADIUS_M", 500)
+RAVITO_MIN_ROUTE_DISTANCE_M = env_int("RAVITO_MIN_ROUTE_DISTANCE_M", 30_000)
+RAVITO_ENDPOINT_EXCLUSION_RADIUS_M = env_int("RAVITO_ENDPOINT_EXCLUSION_RADIUS_M", 3_000)
 
 # Strava API
 STRAVA_CLIENT_ID = os.environ.get("STRAVA_CLIENT_ID", "")

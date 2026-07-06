@@ -25,7 +25,7 @@
   </header>
 
   <main class="wrap">
-    
+
 <section class="controls" aria-label="Recherche et filtres">
   <div class="search-row">
     <input type="search" id="search" placeholder="Rechercher par nom ou ville de départ…"
@@ -43,7 +43,7 @@
             aria-label="Tri ascendant" title="Tri ascendant">
       <span class="sort-direction-icon" aria-hidden="true">&#8593;</span>
     </button>
-    <span class="result-count"><span id="result-count">133</span> sortie(s)</span>
+    <span class="result-count"><span id="result-count">132</span> sortie(s)</span>
   </div>
 
   <div class="filters">
@@ -55,31 +55,36 @@
       </div>
     </div>
     <div class="filter">
-      <span>Dénivelé : <output id="elevation-min-out">0</output> – <output id="elevation-max-out">2200</output> m</span>
+      <span>Dénivelé : <output id="elevation-min-out">0</output> – <output id="elevation-max-out">1800</output> m</span>
       <div class="range-slider" id="elevation-slider">
-        <input type="range" id="elevation-min" min="0" max="2200" value="0" step="10" aria-label="Dénivelé minimal">
-        <input type="range" id="elevation-max" min="0" max="2200" value="2200" step="10" aria-label="Dénivelé maximal">
+        <input type="range" id="elevation-min" min="0" max="1800" value="0" step="10" aria-label="Dénivelé minimal">
+        <input type="range" id="elevation-max" min="0" max="1800" value="1800" step="10" aria-label="Dénivelé maximal">
       </div>
     </div>
+    <label class="admin-filter" id="admin-without-ravito-filter" hidden>
+      <input type="checkbox" id="admin-without-ravito">
+      <span>Sans ravito</span>
+    </label>
     <button type="button" id="reset" class="reset">Réinitialiser</button>
   </div>
 </section>
 
 <section class="grid" id="rides">
-  
+
   <article class="card" data-name="1234" data-city="lac-brome"
-           data-distance="31.8" data-elevation="469">
+           data-distance="31.8" data-elevation="469"
+           data-ravitos="0">
     <a class="card-link" href="/rides/1234/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/1234.png" alt="Carte de la sortie 1234" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>1234</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">31.8 km</span>
@@ -88,20 +93,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="16/08/21" data-city="orford"
-           data-distance="63.3" data-elevation="695">
+           data-distance="63.3" data-elevation="695"
+           data-ravitos="0">
     <a class="card-link" href="/rides/160821-copier/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/160821-copier.png" alt="Carte de la sortie 16/08/21" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>16/08/21</h2>
         <p class="card-meta">
           <span>📍 Orford</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">63.3 km</span>
@@ -110,20 +116,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="3 circuits en 1" data-city="bromont"
-           data-distance="69.7" data-elevation="776">
+           data-distance="69.7" data-elevation="776"
+           data-ravitos="0">
     <a class="card-link" href="/rides/3-circuits-en-1/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/3-circuits-en-1.png" alt="Carte de la sortie 3 circuits en 1" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>3 circuits en 1</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">69.7 km</span>
@@ -132,42 +139,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="54km en montérégie" data-city=""
-           data-distance="54.3" data-elevation="277">
-    <a class="card-link" href="/rides/54km-en-monteregie/">
-      <div class="card-thumb">
-        
-          <img src="/assets/thumbs/54km-en-monteregie.png" alt="Carte de la sortie 54km en Montérégie" loading="lazy">
-        
-      </div>
-      <div class="card-body">
-        <h2>54km en Montérégie</h2>
-        <p class="card-meta">
-          
-          
-        </p>
-        <p class="card-stats">
-          <span class="stat">54.3 km</span>
-          <span class="stat">↗ 277 m</span>
-        </p>
-      </div>
-    </a>
-  </article>
-  
+
   <article class="card" data-name="autumn leaves" data-city="bromont"
-           data-distance="69.4" data-elevation="1103">
+           data-distance="69.4" data-elevation="1103"
+           data-ravitos="1">
     <a class="card-link" href="/rides/autumn-leaves/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/autumn-leaves.png" alt="Carte de la sortie Autumn Leaves" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Autumn Leaves</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">69.4 km</span>
@@ -176,20 +162,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="back on track" data-city="lac-brome"
-           data-distance="44.9" data-elevation="502">
+           data-distance="44.9" data-elevation="502"
+           data-ravitos="0">
     <a class="card-link" href="/rides/back-on-track/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/back-on-track.png" alt="Carte de la sortie Back on Track" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Back on Track</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">44.9 km</span>
@@ -198,20 +185,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="back on track, un autre essai ....." data-city="lac-brome"
-           data-distance="42.8" data-elevation="409">
+           data-distance="42.8" data-elevation="409"
+           data-ravitos="0">
     <a class="card-link" href="/rides/back-on-track-un-autre-essai/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/back-on-track-un-autre-essai.png" alt="Carte de la sortie Back on Track, un autre essai ....." loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Back on Track, un autre essai .....</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">42.8 km</span>
@@ -220,20 +208,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="bad to the bone" data-city=""
-           data-distance="58.5" data-elevation="1011">
+
+  <article class="card" data-name="bad to the bone" data-city="lac-brome"
+           data-distance="58.5" data-elevation="1011"
+           data-ravitos="0">
     <a class="card-link" href="/rides/bad-to-the-bone/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/bad-to-the-bone.png" alt="Carte de la sortie Bad To The Bone" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Bad To The Bone</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Lac-Brome</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">58.5 km</span>
@@ -242,20 +231,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="best day of my life" data-city="lac-brome"
-           data-distance="73.8" data-elevation="1125">
+           data-distance="73.8" data-elevation="1125"
+           data-ravitos="0">
     <a class="card-link" href="/rides/best-day-of-my-life/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/best-day-of-my-life.png" alt="Carte de la sortie Best Day Of My Life" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Best Day Of My Life</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">73.8 km</span>
@@ -264,20 +254,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="bigger heart" data-city="lac-brome"
-           data-distance="46.8" data-elevation="563">
+           data-distance="46.8" data-elevation="563"
+           data-ravitos="1">
     <a class="card-link" href="/rides/bigger-heart/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/bigger-heart.png" alt="Carte de la sortie Bigger Heart" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Bigger Heart</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">46.8 km</span>
@@ -286,20 +277,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="birthday ride 82km / 1281md+" data-city="dunham"
-           data-distance="82.1" data-elevation="1116">
+           data-distance="82.1" data-elevation="1116"
+           data-ravitos="7">
     <a class="card-link" href="/rides/birthday-ride-82km-1281md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/birthday-ride-82km-1281md.png" alt="Carte de la sortie Birthday Ride 82KM / 1281MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Birthday Ride 82KM / 1281MD+</h2>
         <p class="card-meta">
           <span>📍 Dunham</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">82.1 km</span>
@@ -308,20 +300,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="brown eyed girl" data-city="lac-brome"
-           data-distance="55.0" data-elevation="747">
+           data-distance="55.0" data-elevation="747"
+           data-ravitos="0">
     <a class="card-link" href="/rides/brown-eyed-girl/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/brown-eyed-girl.png" alt="Carte de la sortie Brown Eyed Girl" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Brown Eyed Girl</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">55.0 km</span>
@@ -330,20 +323,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="brown eyed girl 2025" data-city="lac-brome"
-           data-distance="67.3" data-elevation="818">
+           data-distance="67.3" data-elevation="818"
+           data-ravitos="1">
     <a class="card-link" href="/rides/brown-eyed-girl-2025/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/brown-eyed-girl-2025.png" alt="Carte de la sortie Brown Eyed Girl 2025" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Brown Eyed Girl 2025</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">67.3 km</span>
@@ -352,20 +346,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="ça ne sera pas la dernière ..... 66km/800md+" data-city=""
-           data-distance="65.7" data-elevation="804">
+
+  <article class="card" data-name="ça ne sera pas la dernière ..... 66km/800md+" data-city="waterloo"
+           data-distance="65.7" data-elevation="804"
+           data-ravitos="1">
     <a class="card-link" href="/rides/ca-ne-sera-pas-la-derniere-66km800md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/ca-ne-sera-pas-la-derniere-66km800md.png" alt="Carte de la sortie Ça ne sera pas la dernière ..... 66KM/800MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Ça ne sera pas la dernière ..... 66KM/800MD+</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Waterloo</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">65.7 km</span>
@@ -374,20 +369,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="check it out 90km/1500md+" data-city=""
-           data-distance="89.2" data-elevation="1490">
+
+  <article class="card" data-name="check it out 90km/1500md+" data-city="lac-brome"
+           data-distance="89.2" data-elevation="1490"
+           data-ravitos="1">
     <a class="card-link" href="/rides/check-it-out-90km1500md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/check-it-out-90km1500md.png" alt="Carte de la sortie Check it Out 90km/1500MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Check it Out 90km/1500MD+</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Lac-Brome</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">89.2 km</span>
@@ -396,20 +392,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="ciao bye" data-city="ayer&#x27;s cliff"
-           data-distance="86.9" data-elevation="1267">
+           data-distance="86.9" data-elevation="1267"
+           data-ravitos="1">
     <a class="card-link" href="/rides/ciao-bye/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/ciao-bye.png" alt="Carte de la sortie Ciao Bye" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Ciao Bye</h2>
         <p class="card-meta">
           <span>📍 Ayer&#x27;s Cliff</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">86.9 km</span>
@@ -418,20 +415,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="circuit #1     30km/400md+" data-city="bromont"
-           data-distance="29.7" data-elevation="332">
+           data-distance="29.7" data-elevation="332"
+           data-ravitos="0">
     <a class="card-link" href="/rides/circuit-1-30km400md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/circuit-1-30km400md.png" alt="Carte de la sortie circuit #1     30km/400MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>circuit #1     30km/400MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">29.7 km</span>
@@ -440,20 +438,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="circuit #2     51km/750md+" data-city="bromont"
-           data-distance="51.1" data-elevation="640">
+           data-distance="51.1" data-elevation="640"
+           data-ravitos="0">
     <a class="card-link" href="/rides/circuit-2-51km750md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/circuit-2-51km750md.png" alt="Carte de la sortie circuit #2     51km/750MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>circuit #2     51km/750MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">51.1 km</span>
@@ -462,20 +461,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="circuit #3     70km/1100md+" data-city="bromont"
-           data-distance="69.5" data-elevation="901">
+           data-distance="69.5" data-elevation="901"
+           data-ravitos="0">
     <a class="card-link" href="/rides/circuit-3-70km1100md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/circuit-3-70km1100md.png" alt="Carte de la sortie circuit #3     70km/1100MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>circuit #3     70km/1100MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">69.5 km</span>
@@ -484,20 +484,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="collapse" data-city="shefford"
-           data-distance="84.1" data-elevation="825">
+           data-distance="84.1" data-elevation="825"
+           data-ravitos="1">
     <a class="card-link" href="/rides/collapse/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/collapse.png" alt="Carte de la sortie Collapse" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Collapse</h2>
         <p class="card-meta">
           <span>📍 Shefford</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">84.1 km</span>
@@ -506,20 +507,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="complete level 1 ---- 87km / 1350md+" data-city="lac-brome"
-           data-distance="86.8" data-elevation="1136">
+           data-distance="86.8" data-elevation="1136"
+           data-ravitos="0">
     <a class="card-link" href="/rides/complete-level-1-87km-1350md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/complete-level-1-87km-1350md.png" alt="Carte de la sortie Complete Level 1 ---- 87KM / 1350MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Complete Level 1 ---- 87KM / 1350MD+</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">86.8 km</span>
@@ -528,20 +530,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="complete level 2 ---- 64km / 1100md+" data-city="lac-brome"
-           data-distance="63.7" data-elevation="905">
+           data-distance="63.7" data-elevation="905"
+           data-ravitos="0">
     <a class="card-link" href="/rides/complete-level-2-64km-1100md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/complete-level-2-64km-1100md.png" alt="Carte de la sortie Complete Level 2 ---- 64KM / 1100MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Complete Level 2 ---- 64KM / 1100MD+</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">63.7 km</span>
@@ -550,20 +553,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="costaude / grange pardue 91km / 1900md+" data-city="ham-nord"
-           data-distance="91.6" data-elevation="1709">
+           data-distance="91.6" data-elevation="1709"
+           data-ravitos="0">
     <a class="card-link" href="/rides/costaude-grange-pardue-91km-1900md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/costaude-grange-pardue-91km-1900md.png" alt="Carte de la sortie Costaude / Grange Pardue 91KM / 1900MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Costaude / Grange Pardue 91KM / 1900MD+</h2>
         <p class="card-meta">
           <span>📍 Ham-Nord</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">91.6 km</span>
@@ -572,20 +576,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="départ parc de la yamaska et saucette" data-city="roxton pond"
-           data-distance="73.6" data-elevation="435">
+           data-distance="73.6" data-elevation="435"
+           data-ravitos="0">
     <a class="card-link" href="/rides/depart-parc-de-la-yamaska-et-saucette/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/depart-parc-de-la-yamaska-et-saucette.png" alt="Carte de la sortie Départ parc de la Yamaska et saucette" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Départ parc de la Yamaska et saucette</h2>
         <p class="card-meta">
           <span>📍 Roxton Pond</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">73.6 km</span>
@@ -594,20 +599,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="douglas fir" data-city="lac-brome"
-           data-distance="67.9" data-elevation="911">
+           data-distance="67.9" data-elevation="911"
+           data-ravitos="0">
     <a class="card-link" href="/rides/douglas-fir/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/douglas-fir.png" alt="Carte de la sortie Douglas Fir" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Douglas Fir</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">67.9 km</span>
@@ -616,20 +622,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="dreamworld" data-city=""
-           data-distance="80.3" data-elevation="1356">
+
+  <article class="card" data-name="dreamworld" data-city="bromont"
+           data-distance="80.3" data-elevation="1356"
+           data-ravitos="6">
     <a class="card-link" href="/rides/dreamworld/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/dreamworld.png" alt="Carte de la sortie DreamWorld" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>DreamWorld</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Bromont</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">80.3 km</span>
@@ -638,20 +645,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="drive all night" data-city="bromont"
-           data-distance="59.5" data-elevation="826">
+           data-distance="59.5" data-elevation="826"
+           data-ravitos="1">
     <a class="card-link" href="/rides/drive-all-night/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/drive-all-night.png" alt="Carte de la sortie Drive All Night" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Drive All Night</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">59.5 km</span>
@@ -660,20 +668,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="envoye a maison 58km/965md+" data-city=""
-           data-distance="58.1" data-elevation="965">
+
+  <article class="card" data-name="envoye a maison 58km/965md+" data-city="dunham"
+           data-distance="58.1" data-elevation="965"
+           data-ravitos="4">
     <a class="card-link" href="/rides/envoye-a-maison-58km965md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/envoye-a-maison-58km965md.png" alt="Carte de la sortie Envoye a maison 58km/965MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Envoye a maison 58km/965MD+</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Dunham</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">58.1 km</span>
@@ -682,20 +691,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="fête nationale du québec. 74km / 12300md+" data-city="lac-brome"
-           data-distance="73.7" data-elevation="1031">
+           data-distance="73.7" data-elevation="1031"
+           data-ravitos="0">
     <a class="card-link" href="/rides/fete-nationale-du-quebec-74km-12300md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/fete-nationale-du-quebec-74km-12300md.png" alt="Carte de la sortie Fête Nationale du Québec. 74KM / 12300MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Fête Nationale du Québec. 74KM / 12300MD+</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">73.7 km</span>
@@ -704,20 +714,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="free bird 59km / 562md+" data-city="bromont"
-           data-distance="59.2" data-elevation="510">
+           data-distance="59.2" data-elevation="510"
+           data-ravitos="1">
     <a class="card-link" href="/rides/free-bird-59km-562md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/free-bird-59km-562md.png" alt="Carte de la sortie Free Bird 59KM / 562MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Free Bird 59KM / 562MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">59.2 km</span>
@@ -726,20 +737,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="full classique" data-city="bromont"
-           data-distance="69.2" data-elevation="974">
+           data-distance="69.2" data-elevation="974"
+           data-ravitos="1">
     <a class="card-link" href="/rides/full-classique/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/full-classique.png" alt="Carte de la sortie Full Classique" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Full Classique</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">69.2 km</span>
@@ -748,20 +760,44 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="gab longue 2026 #1" data-city=""
-           data-distance="41.9" data-elevation="613">
+
+  <article class="card" data-name="g093 - gravelle - ayer&#x27;s cliff / ogden" data-city="ayer&#x27;s cliff"
+           data-distance="81.6" data-elevation="1027"
+           data-ravitos="0">
+    <a class="card-link" href="/rides/g093-gravelle-ayers-cliff-ogden/">
+      <div class="card-thumb">
+
+          <img src="/assets/thumbs/g093-gravelle-ayers-cliff-ogden.png" alt="Carte de la sortie G093 - Gravelle - Ayer&#x27;s Cliff / Ogden" loading="lazy">
+
+      </div>
+      <div class="card-body">
+        <h2>G093 - Gravelle - Ayer&#x27;s Cliff / Ogden</h2>
+        <p class="card-meta">
+          <span>📍 Ayer&#x27;s Cliff</span>
+
+        </p>
+        <p class="card-stats">
+          <span class="stat">81.6 km</span>
+          <span class="stat">↗ 1027 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+
+  <article class="card" data-name="gab longue 2026 #1" data-city="bromont"
+           data-distance="41.9" data-elevation="613"
+           data-ravitos="0">
     <a class="card-link" href="/rides/gab-longue-2026-1/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/gab-longue-2026-1.png" alt="Carte de la sortie GAB LONGUE 2026 #1" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>GAB LONGUE 2026 #1</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Bromont</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">41.9 km</span>
@@ -770,20 +806,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="glory days" data-city="lac-brome"
-           data-distance="74.9" data-elevation="836">
+           data-distance="74.9" data-elevation="836"
+           data-ravitos="0">
     <a class="card-link" href="/rides/glory-days/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/glory-days.png" alt="Carte de la sortie Glory Days" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Glory Days</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">74.9 km</span>
@@ -792,20 +829,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="grand hippopotame 66km/900md+" data-city="shefford"
-           data-distance="65.7" data-elevation="743">
+           data-distance="65.7" data-elevation="743"
+           data-ravitos="1">
     <a class="card-link" href="/rides/grand-hippopotame-66km900md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/grand-hippopotame-66km900md.png" alt="Carte de la sortie Grand Hippopotame 66KM/900MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Grand Hippopotame 66KM/900MD+</h2>
         <p class="card-meta">
           <span>📍 Shefford</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">65.7 km</span>
@@ -814,20 +852,44 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="grand lumberjack" data-city="lac-brome"
-           data-distance="90.2" data-elevation="1408">
-    <a class="card-link" href="/rides/grand-lumberjack/">
+           data-distance="90.4" data-elevation="1408"
+           data-ravitos="0">
+    <a class="card-link" href="/rides/grand-lumberjack-2/">
       <div class="card-thumb">
-        
-          <img src="/assets/thumbs/grand-lumberjack.png" alt="Carte de la sortie Grand Lumberjack" loading="lazy">
-        
+
+          <img src="/assets/thumbs/grand-lumberjack-2.png" alt="Carte de la sortie Grand Lumberjack" loading="lazy">
+
       </div>
       <div class="card-body">
         <h2>Grand Lumberjack</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
+        </p>
+        <p class="card-stats">
+          <span class="stat">90.4 km</span>
+          <span class="stat">↗ 1408 m</span>
+        </p>
+      </div>
+    </a>
+  </article>
+
+  <article class="card" data-name="grand lumberjack" data-city="lac-brome"
+           data-distance="90.2" data-elevation="1408"
+           data-ravitos="0">
+    <a class="card-link" href="/rides/grand-lumberjack/">
+      <div class="card-thumb">
+
+          <img src="/assets/thumbs/grand-lumberjack.png" alt="Carte de la sortie Grand Lumberjack" loading="lazy">
+
+      </div>
+      <div class="card-body">
+        <h2>Grand Lumberjack</h2>
+        <p class="card-meta">
+          <span>📍 Lac-Brome</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">90.2 km</span>
@@ -836,42 +898,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="grand lumberjack" data-city="lac-brome"
-           data-distance="90.4" data-elevation="1408">
-    <a class="card-link" href="/rides/grand-lumberjack-2/">
-      <div class="card-thumb">
-        
-          <img src="/assets/thumbs/grand-lumberjack-2.png" alt="Carte de la sortie Grand Lumberjack" loading="lazy">
-        
-      </div>
-      <div class="card-body">
-        <h2>Grand Lumberjack</h2>
-        <p class="card-meta">
-          <span>📍 Lac-Brome</span>
-          
-        </p>
-        <p class="card-stats">
-          <span class="stat">90.4 km</span>
-          <span class="stat">↗ 1408 m</span>
-        </p>
-      </div>
-    </a>
-  </article>
-  
-  <article class="card" data-name="grand lumberjack" data-city="lac-brome"
-           data-distance="90.4" data-elevation="1408">
+           data-distance="90.4" data-elevation="1408"
+           data-ravitos="0">
     <a class="card-link" href="/rides/grand-lumberjack-3/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/grand-lumberjack-3.png" alt="Carte de la sortie Grand Lumberjack" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Grand Lumberjack</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">90.4 km</span>
@@ -880,20 +921,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="gravel &amp; bike 68km / 1068md+" data-city="bromont"
-           data-distance="67.9" data-elevation="918">
+           data-distance="67.9" data-elevation="918"
+           data-ravitos="1">
     <a class="card-link" href="/rides/gravel-bike-68km-1068md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/gravel-bike-68km-1068md.png" alt="Carte de la sortie Gravel &amp; Bike 68km / 1068MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Gravel &amp; Bike 68km / 1068MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">67.9 km</span>
@@ -902,20 +944,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="gravel du loup - 50km" data-city=""
-           data-distance="48.0" data-elevation="428">
+
+  <article class="card" data-name="gravel du loup - 50km" data-city="rivière-du-loup"
+           data-distance="48.0" data-elevation="428"
+           data-ravitos="0">
     <a class="card-link" href="/rides/gravel-du-loup-50km/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/gravel-du-loup-50km.png" alt="Carte de la sortie Gravel du Loup - 50km" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Gravel du Loup - 50km</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Rivière-du-Loup</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">48.0 km</span>
@@ -924,20 +967,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="gr-ayc-016b ayer&#x27;s cliff 62k-611m" data-city="ayer&#x27;s cliff"
-           data-distance="61.6" data-elevation="611">
+           data-distance="61.6" data-elevation="611"
+           data-ravitos="0">
     <a class="card-link" href="/rides/gr-ayc-016b-ayers-cliff-62k-611m/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/gr-ayc-016b-ayers-cliff-62k-611m.png" alt="Carte de la sortie GR-AYC-016B Ayer&#x27;s Cliff 62k-611m" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>GR-AYC-016B Ayer&#x27;s Cliff 62k-611m</h2>
         <p class="card-meta">
           <span>📍 Ayer&#x27;s Cliff</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">61.6 km</span>
@@ -946,20 +990,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="great balls of fire" data-city="lac-brome"
-           data-distance="82.3" data-elevation="1125">
+           data-distance="82.3" data-elevation="1125"
+           data-ravitos="2">
     <a class="card-link" href="/rides/great-balls-of-fire/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/great-balls-of-fire.png" alt="Carte de la sortie Great Balls of Fire" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Great Balls of Fire</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">82.3 km</span>
@@ -968,20 +1013,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="guiding light" data-city=""
-           data-distance="75.2" data-elevation="1113">
+
+  <article class="card" data-name="guiding light" data-city="bromont"
+           data-distance="75.2" data-elevation="1113"
+           data-ravitos="1">
     <a class="card-link" href="/rides/guiding-light/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/guiding-light.png" alt="Carte de la sortie Guiding Light" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Guiding Light</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Bromont</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">75.2 km</span>
@@ -990,20 +1036,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="happy mother day" data-city="bromont"
-           data-distance="61.5" data-elevation="672">
+           data-distance="61.5" data-elevation="672"
+           data-ravitos="0">
     <a class="card-link" href="/rides/happy-mother-day/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/happy-mother-day.png" alt="Carte de la sortie Happy Mother Day" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Happy Mother Day</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">61.5 km</span>
@@ -1012,20 +1059,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="hard sun" data-city="bromont"
-           data-distance="73.1" data-elevation="872">
+           data-distance="73.1" data-elevation="872"
+           data-ravitos="0">
     <a class="card-link" href="/rides/hard-sun/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/hard-sun.png" alt="Carte de la sortie Hard Sun" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Hard Sun</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">73.1 km</span>
@@ -1034,20 +1082,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="hard to tell" data-city="waterloo"
-           data-distance="81.6" data-elevation="883">
+           data-distance="81.6" data-elevation="883"
+           data-ravitos="0">
     <a class="card-link" href="/rides/hard-to-tell/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/hard-to-tell.png" alt="Carte de la sortie Hard To Tell" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Hard To Tell</h2>
         <p class="card-meta">
           <span>📍 Waterloo</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">81.6 km</span>
@@ -1056,20 +1105,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="heureux d&#x27;un printemps" data-city="bromont"
-           data-distance="61.4" data-elevation="571">
+           data-distance="61.4" data-elevation="571"
+           data-ravitos="1">
     <a class="card-link" href="/rides/heureux-dun-printemps/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/heureux-dun-printemps.png" alt="Carte de la sortie Heureux d&#x27;un Printemps" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Heureux d&#x27;un Printemps</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">61.4 km</span>
@@ -1078,20 +1128,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="heureux d&#x27;un printemps mod" data-city="bromont"
-           data-distance="56.6" data-elevation="486">
+           data-distance="56.6" data-elevation="486"
+           data-ravitos="1">
     <a class="card-link" href="/rides/heureux-dun-printemps-mod/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/heureux-dun-printemps-mod.png" alt="Carte de la sortie Heureux d&#x27;un Printemps MOD" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Heureux d&#x27;un Printemps MOD</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">56.6 km</span>
@@ -1100,20 +1151,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="hippotame à isabelle (mon stef)" data-city="shefford"
-           data-distance="65.3" data-elevation="770">
+           data-distance="65.3" data-elevation="770"
+           data-ravitos="0">
     <a class="card-link" href="/rides/hippotame-a-isabelle-mon-stef/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/hippotame-a-isabelle-mon-stef.png" alt="Carte de la sortie Hippotame à Isabelle (Mon Stef)" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Hippotame à Isabelle (Mon Stef)</h2>
         <p class="card-meta">
           <span>📍 Shefford</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">65.3 km</span>
@@ -1122,20 +1174,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="home" data-city="frelighsburg"
-           data-distance="73.1" data-elevation="997">
+           data-distance="73.1" data-elevation="997"
+           data-ravitos="4">
     <a class="card-link" href="/rides/home/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/home.png" alt="Carte de la sortie HOME" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>HOME</h2>
         <p class="card-meta">
           <span>📍 Frelighsburg</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">73.1 km</span>
@@ -1144,20 +1197,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="homeland (classique) 64km / 892md+" data-city="bromont"
-           data-distance="63.7" data-elevation="773">
+           data-distance="63.7" data-elevation="773"
+           data-ravitos="1">
     <a class="card-link" href="/rides/homeland-classique-64km-892md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/homeland-classique-64km-892md.png" alt="Carte de la sortie Homeland (Classique) 64km / 892MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Homeland (Classique) 64km / 892MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">63.7 km</span>
@@ -1166,20 +1220,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="i like it, i love it     60km/1100md+" data-city="lac-brome"
-           data-distance="60.4" data-elevation="918">
+           data-distance="60.4" data-elevation="918"
+           data-ravitos="0">
     <a class="card-link" href="/rides/i-like-it-i-love-it-60km1100md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/i-like-it-i-love-it-60km1100md.png" alt="Carte de la sortie I Like It, I Love It     60KM/1100MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>I Like It, I Love It     60KM/1100MD+</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">60.4 km</span>
@@ -1188,20 +1243,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="it won&#x27;t be long" data-city=""
-           data-distance="72.8" data-elevation="1091">
+
+  <article class="card" data-name="it won&#x27;t be long" data-city="lac-brome"
+           data-distance="72.8" data-elevation="1091"
+           data-ravitos="1">
     <a class="card-link" href="/rides/it-wont-be-long/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/it-wont-be-long.png" alt="Carte de la sortie It Won&#x27;t Be Long" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>It Won&#x27;t Be Long</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Lac-Brome</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">72.8 km</span>
@@ -1210,20 +1266,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="lac bromont 01" data-city=""
-           data-distance="59.7" data-elevation="978">
+
+  <article class="card" data-name="lac bromont 01" data-city="bromont"
+           data-distance="59.7" data-elevation="978"
+           data-ravitos="0">
     <a class="card-link" href="/rides/lac-bromont-01/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/lac-bromont-01.png" alt="Carte de la sortie Lac Bromont 01" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Lac Bromont 01</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Bromont</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">59.7 km</span>
@@ -1232,20 +1289,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="la classique 59km/826md+" data-city="bromont"
-           data-distance="59.0" data-elevation="726">
+           data-distance="59.0" data-elevation="726"
+           data-ravitos="1">
     <a class="card-link" href="/rides/la-classique-59km826md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/la-classique-59km826md.png" alt="Carte de la sortie La Classique 59KM/826MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>La Classique 59KM/826MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">59.0 km</span>
@@ -1254,20 +1312,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="la classique (modifiée)" data-city="bromont"
-           data-distance="66.3" data-elevation="786">
+           data-distance="66.3" data-elevation="786"
+           data-ravitos="1">
     <a class="card-link" href="/rides/la-classique-modifiee/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/la-classique-modifiee.png" alt="Carte de la sortie La Classique (modifiée)" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>La Classique (modifiée)</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">66.3 km</span>
@@ -1276,20 +1335,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="la costaude de dixiville" data-city="ayer&#x27;s cliff"
-           data-distance="86.9" data-elevation="1267">
+           data-distance="86.9" data-elevation="1267"
+           data-ravitos="1">
     <a class="card-link" href="/rides/la-costaude-de-dixiville/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/la-costaude-de-dixiville.png" alt="Carte de la sortie La costaude de DixiVille" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>La costaude de DixiVille</h2>
         <p class="card-meta">
           <span>📍 Ayer&#x27;s Cliff</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">86.9 km</span>
@@ -1298,20 +1358,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="la costaude (gravel bike)" data-city="victoriaville"
-           data-distance="84.4" data-elevation="1400">
+           data-distance="84.4" data-elevation="1400"
+           data-ravitos="0">
     <a class="card-link" href="/rides/la-costaude-gravel-bike-copier/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/la-costaude-gravel-bike-copier.png" alt="Carte de la sortie La Costaude (Gravel Bike)" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>La Costaude (Gravel Bike)</h2>
         <p class="card-meta">
           <span>📍 Victoriaville</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">84.4 km</span>
@@ -1320,20 +1381,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="laisse les bons temps rouler (kain) 51km" data-city=""
-           data-distance="51.2" data-elevation="898">
+
+  <article class="card" data-name="laisse les bons temps rouler (kain) 51km" data-city="bromont"
+           data-distance="51.2" data-elevation="898"
+           data-ravitos="0">
     <a class="card-link" href="/rides/laisse-les-bons-temps-rouler-kain-51km/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/laisse-les-bons-temps-rouler-kain-51km.png" alt="Carte de la sortie Laisse les bons temps rouler (Kain) 51KM" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Laisse les bons temps rouler (Kain) 51KM</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Bromont</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">51.2 km</span>
@@ -1342,20 +1404,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="le p&#x27;tit bonheur 80km/1200md+" data-city=""
-           data-distance="79.9" data-elevation="1168">
+
+  <article class="card" data-name="le p&#x27;tit bonheur 80km/1200md+" data-city="ayer&#x27;s cliff"
+           data-distance="79.9" data-elevation="1168"
+           data-ravitos="1">
     <a class="card-link" href="/rides/le-ptit-bonheur-80km1200md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/le-ptit-bonheur-80km1200md.png" alt="Carte de la sortie Le p&#x27;tit bonheur 80km/1200MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Le p&#x27;tit bonheur 80km/1200MD+</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Ayer&#x27;s Cliff</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">79.9 km</span>
@@ -1364,20 +1427,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="les mollets rouges (gravel bike)" data-city="ham-nord"
-           data-distance="60.0" data-elevation="1049">
+           data-distance="60.0" data-elevation="1049"
+           data-ravitos="0">
     <a class="card-link" href="/rides/les-mollets-rouges-gravel-bike-copier/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/les-mollets-rouges-gravel-bike-copier.png" alt="Carte de la sortie Les mollets rouges (Gravel Bike)" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Les mollets rouges (Gravel Bike)</h2>
         <p class="card-meta">
           <span>📍 Ham-Nord</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">60.0 km</span>
@@ -1386,20 +1450,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="little more time cw" data-city=""
-           data-distance="55.0" data-elevation="859">
+
+  <article class="card" data-name="little more time cw" data-city="lac-brome"
+           data-distance="55.0" data-elevation="859"
+           data-ravitos="0">
     <a class="card-link" href="/rides/little-more-time-cw/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/little-more-time-cw.png" alt="Carte de la sortie Little More Time CW" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Little More Time CW</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Lac-Brome</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">55.0 km</span>
@@ -1408,20 +1473,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="loin d&#x27;ici ......" data-city="lac-brome"
-           data-distance="43.1" data-elevation="458">
+           data-distance="43.1" data-elevation="458"
+           data-ravitos="0">
     <a class="card-link" href="/rides/loin-dici/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/loin-dici.png" alt="Carte de la sortie Loin d&#x27;ici ......" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Loin d&#x27;ici ......</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">43.1 km</span>
@@ -1430,20 +1496,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="lumberjack 122km/2000md+" data-city="lac-brome"
-           data-distance="122.4" data-elevation="1700">
+           data-distance="122.4" data-elevation="1700"
+           data-ravitos="2">
     <a class="card-link" href="/rides/lumberjack-122km2000md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/lumberjack-122km2000md.png" alt="Carte de la sortie Lumberjack 122KM/2000MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Lumberjack 122KM/2000MD+</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">122.4 km</span>
@@ -1452,20 +1519,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="lumberjack 62km/1050md+" data-city="lac-brome"
-           data-distance="61.7" data-elevation="904">
+           data-distance="61.7" data-elevation="904"
+           data-ravitos="0">
     <a class="card-link" href="/rides/lumberjack-62km1050md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/lumberjack-62km1050md.png" alt="Carte de la sortie Lumberjack 62KM/1050MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Lumberjack 62KM/1050MD+</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">61.7 km</span>
@@ -1474,20 +1542,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="lumberjack 75km/1300md+" data-city="lac-brome"
-           data-distance="75.3" data-elevation="1126">
+           data-distance="75.3" data-elevation="1126"
+           data-ravitos="1">
     <a class="card-link" href="/rides/lumberjack-75km1300md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/lumberjack-75km1300md.png" alt="Carte de la sortie Lumberjack 75KM/1300MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Lumberjack 75KM/1300MD+</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">75.3 km</span>
@@ -1496,20 +1565,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="lumberjack 90km/1600md+" data-city="lac-brome"
-           data-distance="90.1" data-elevation="1317">
+           data-distance="90.1" data-elevation="1317"
+           data-ravitos="1">
     <a class="card-link" href="/rides/lumberjack-90km1600md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/lumberjack-90km1600md.png" alt="Carte de la sortie Lumberjack 90KM/1600MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Lumberjack 90KM/1600MD+</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">90.1 km</span>
@@ -1518,20 +1588,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="lumberjack classic" data-city=""
-           data-distance="62.5" data-elevation="830">
+
+  <article class="card" data-name="lumberjack classic" data-city="bromont"
+           data-distance="62.5" data-elevation="830"
+           data-ravitos="1">
     <a class="card-link" href="/rides/lumberjack-classic/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/lumberjack-classic.png" alt="Carte de la sortie LumberJack Classic" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>LumberJack Classic</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Bromont</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">62.5 km</span>
@@ -1540,20 +1611,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="lumberjack gravel ride tour #1" data-city=""
-           data-distance="76.6" data-elevation="1431">
+
+  <article class="card" data-name="lumberjack gravel ride tour #1" data-city="frelighsburg"
+           data-distance="76.6" data-elevation="1431"
+           data-ravitos="4">
     <a class="card-link" href="/rides/lumberjack-gravel-ride-tour-1/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/lumberjack-gravel-ride-tour-1.png" alt="Carte de la sortie LumberJack Gravel Ride Tour #1" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>LumberJack Gravel Ride Tour #1</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Frelighsburg</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">76.6 km</span>
@@ -1562,20 +1634,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="lumberjack gravel road ride #3" data-city=""
-           data-distance="51.8" data-elevation="946">
+
+  <article class="card" data-name="lumberjack gravel road ride #3" data-city="lac-brome"
+           data-distance="51.8" data-elevation="946"
+           data-ravitos="0">
     <a class="card-link" href="/rides/lumberjack-gravel-road-ride-3/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/lumberjack-gravel-road-ride-3.png" alt="Carte de la sortie LumberJack Gravel Road Ride #3" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>LumberJack Gravel Road Ride #3</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Lac-Brome</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">51.8 km</span>
@@ -1584,20 +1657,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="mollets rouges / grange pardue 68km / 1400md+" data-city="ham-nord"
-           data-distance="67.7" data-elevation="1298">
+           data-distance="67.7" data-elevation="1298"
+           data-ravitos="0">
     <a class="card-link" href="/rides/mollets-rouges-grange-pardue-68km-1400md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/mollets-rouges-grange-pardue-68km-1400md.png" alt="Carte de la sortie Mollets Rouges / Grange Pardue 68KM / 1400MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Mollets Rouges / Grange Pardue 68KM / 1400MD+</h2>
         <p class="card-meta">
           <span>📍 Ham-Nord</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">67.7 km</span>
@@ -1606,20 +1680,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="moyen lumberjack" data-city="lac-brome"
-           data-distance="69.2" data-elevation="1061">
+           data-distance="69.2" data-elevation="1061"
+           data-ravitos="0">
     <a class="card-link" href="/rides/moyen-lumberjack/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/moyen-lumberjack.png" alt="Carte de la sortie Moyen Lumberjack" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Moyen Lumberjack</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">69.2 km</span>
@@ -1628,20 +1703,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="moyen lumberjack" data-city="lac-brome"
-           data-distance="69.4" data-elevation="1062">
+           data-distance="69.4" data-elevation="1062"
+           data-ravitos="0">
     <a class="card-link" href="/rides/moyen-lumberjack-2/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/moyen-lumberjack-2.png" alt="Carte de la sortie Moyen Lumberjack" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Moyen Lumberjack</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">69.4 km</span>
@@ -1650,20 +1726,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="moyen lumberjack" data-city="lac-brome"
-           data-distance="69.4" data-elevation="1062">
+           data-distance="69.4" data-elevation="1062"
+           data-ravitos="0">
     <a class="card-link" href="/rides/moyen-lumberjack-3/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/moyen-lumberjack-3.png" alt="Carte de la sortie Moyen Lumberjack" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Moyen Lumberjack</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">69.4 km</span>
@@ -1672,20 +1749,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="old guitar" data-city="bromont"
-           data-distance="112.8" data-elevation="1600">
+           data-distance="112.8" data-elevation="1600"
+           data-ravitos="5">
     <a class="card-link" href="/rides/old-guitar/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/old-guitar.png" alt="Carte de la sortie Old Guitar" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Old Guitar</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">112.8 km</span>
@@ -1694,20 +1772,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="paradise city 80km / 930md+" data-city="waterloo"
-           data-distance="79.5" data-elevation="780">
+           data-distance="79.5" data-elevation="780"
+           data-ravitos="1">
     <a class="card-link" href="/rides/paradise-city-80km-930md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/paradise-city-80km-930md.png" alt="Carte de la sortie Paradise City 80km / 930MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Paradise City 80km / 930MD+</h2>
         <p class="card-meta">
           <span>📍 Waterloo</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">79.5 km</span>
@@ -1716,42 +1795,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="parc de la mauricie 114km / 2300md+" data-city="shawinigan"
-           data-distance="113.7" data-elevation="2124">
-    <a class="card-link" href="/rides/parc-de-la-mauricie-114km-2300md/">
-      <div class="card-thumb">
-        
-          <img src="/assets/thumbs/parc-de-la-mauricie-114km-2300md.png" alt="Carte de la sortie Parc de la Mauricie 114km / 2300MD+" loading="lazy">
-        
-      </div>
-      <div class="card-body">
-        <h2>Parc de la Mauricie 114km / 2300MD+</h2>
-        <p class="card-meta">
-          <span>📍 Shawinigan</span>
-          
-        </p>
-        <p class="card-stats">
-          <span class="stat">113.7 km</span>
-          <span class="stat">↗ 2124 m</span>
-        </p>
-      </div>
-    </a>
-  </article>
-  
+
   <article class="card" data-name="petite suisse" data-city="bolton-ouest"
-           data-distance="70.9" data-elevation="1099">
+           data-distance="70.9" data-elevation="1099"
+           data-ravitos="0">
     <a class="card-link" href="/rides/petite-suisse/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/petite-suisse.png" alt="Carte de la sortie Petite Suisse" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Petite Suisse</h2>
         <p class="card-meta">
           <span>📍 Bolton-Ouest</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">70.9 km</span>
@@ -1760,20 +1818,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="petit hippopotame 55km/780md+" data-city="shefford"
-           data-distance="55.9" data-elevation="659">
+           data-distance="55.9" data-elevation="659"
+           data-ravitos="1">
     <a class="card-link" href="/rides/petit-hippopotame-55km780md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/petit-hippopotame-55km780md.png" alt="Carte de la sortie Petit Hippopotame 55KM/780MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Petit Hippopotame 55KM/780MD+</h2>
         <p class="card-meta">
           <span>📍 Shefford</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">55.9 km</span>
@@ -1782,20 +1841,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="petit lumberjack" data-city="lac-brome"
-           data-distance="51.2" data-elevation="766">
+           data-distance="51.2" data-elevation="766"
+           data-ravitos="0">
     <a class="card-link" href="/rides/petit-lumberjack/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/petit-lumberjack.png" alt="Carte de la sortie Petit Lumberjack" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Petit Lumberjack</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">51.2 km</span>
@@ -1804,20 +1864,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="petit lumberjack" data-city="lac-brome"
-           data-distance="51.3" data-elevation="765">
+           data-distance="51.3" data-elevation="765"
+           data-ravitos="0">
     <a class="card-link" href="/rides/petit-lumberjack-2/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/petit-lumberjack-2.png" alt="Carte de la sortie Petit Lumberjack" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Petit Lumberjack</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">51.3 km</span>
@@ -1826,20 +1887,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="polar bear" data-city=""
-           data-distance="75.4" data-elevation="1263">
+
+  <article class="card" data-name="polar bear" data-city="lac-brome"
+           data-distance="75.4" data-elevation="1263"
+           data-ravitos="0">
     <a class="card-link" href="/rides/polar-bear/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/polar-bear.png" alt="Carte de la sortie Polar Bear" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Polar Bear</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Lac-Brome</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">75.4 km</span>
@@ -1848,20 +1910,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="porc épic" data-city="potton"
-           data-distance="43.7" data-elevation="623">
+           data-distance="43.7" data-elevation="623"
+           data-ravitos="0">
     <a class="card-link" href="/rides/porc-epic/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/porc-epic.png" alt="Carte de la sortie Porc Épic" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Porc Épic</h2>
         <p class="card-meta">
           <span>📍 Potton</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">43.7 km</span>
@@ -1870,20 +1933,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="porc épic coup de coeur" data-city="potton"
-           data-distance="52.8" data-elevation="800">
+           data-distance="52.8" data-elevation="800"
+           data-ravitos="0">
     <a class="card-link" href="/rides/porc-epic-coup-de-coeur/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/porc-epic-coup-de-coeur.png" alt="Carte de la sortie Porc Épic coup de coeur" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Porc Épic coup de coeur</h2>
         <p class="card-meta">
           <span>📍 Potton</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">52.8 km</span>
@@ -1892,20 +1956,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="porc épic long" data-city="potton"
-           data-distance="68.0" data-elevation="1027">
+           data-distance="68.0" data-elevation="1027"
+           data-ravitos="1">
     <a class="card-link" href="/rides/porc-epic-long/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/porc-epic-long.png" alt="Carte de la sortie Porc Épic Long" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Porc Épic Long</h2>
         <p class="card-meta">
           <span>📍 Potton</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">68.0 km</span>
@@ -1914,20 +1979,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="pork épic 59km" data-city="potton"
-           data-distance="58.9" data-elevation="908">
+           data-distance="58.9" data-elevation="908"
+           data-ravitos="0">
     <a class="card-link" href="/rides/pork-epic-59km/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/pork-epic-59km.png" alt="Carte de la sortie Pork Épic 59km" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Pork Épic 59km</h2>
         <p class="card-meta">
           <span>📍 Potton</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">58.9 km</span>
@@ -1936,20 +2002,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="pork épic 75km" data-city="potton"
-           data-distance="74.5" data-elevation="1147">
+           data-distance="74.5" data-elevation="1147"
+           data-ravitos="1">
     <a class="card-link" href="/rides/pork-epic-75km/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/pork-epic-75km.png" alt="Carte de la sortie Pork Épic 75km" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Pork Épic 75km</h2>
         <p class="card-meta">
           <span>📍 Potton</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">74.5 km</span>
@@ -1958,20 +2025,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="pork épic 78km / 1300md+" data-city="potton"
-           data-distance="77.9" data-elevation="1178">
+           data-distance="77.9" data-elevation="1178"
+           data-ravitos="1">
     <a class="card-link" href="/rides/pork-epic-78km-1300md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/pork-epic-78km-1300md.png" alt="Carte de la sortie Pork Épic 78km / 1300MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Pork Épic 78km / 1300MD+</h2>
         <p class="card-meta">
           <span>📍 Potton</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">77.9 km</span>
@@ -1980,20 +2048,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="quittin time 70km/900md+" data-city="bromont"
-           data-distance="70.5" data-elevation="779">
+           data-distance="70.5" data-elevation="779"
+           data-ravitos="1">
     <a class="card-link" href="/rides/quittin-time-70km900md-2/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/quittin-time-70km900md-2.png" alt="Carte de la sortie Quittin Time 70km/900MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Quittin Time 70km/900MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">70.5 km</span>
@@ -2002,20 +2071,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="quittin time 70km/900md+" data-city="bromont"
-           data-distance="70.5" data-elevation="779">
+           data-distance="70.5" data-elevation="779"
+           data-ravitos="1">
     <a class="card-link" href="/rides/quittin-time-70km900md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/quittin-time-70km900md.png" alt="Carte de la sortie Quittin Time 70km/900MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Quittin Time 70km/900MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">70.5 km</span>
@@ -2024,20 +2094,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="quittin time 86km/1220md+" data-city="bromont"
-           data-distance="86.0" data-elevation="1062">
+           data-distance="86.0" data-elevation="1062"
+           data-ravitos="1">
     <a class="card-link" href="/rides/quittin-time-86km1220md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/quittin-time-86km1220md.png" alt="Carte de la sortie Quittin Time 86km/1220MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Quittin Time 86km/1220MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">86.0 km</span>
@@ -2046,20 +2117,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="rad courte 2025" data-city="tingwick"
-           data-distance="46.0" data-elevation="648">
+           data-distance="46.0" data-elevation="648"
+           data-ravitos="0">
     <a class="card-link" href="/rides/rad-courte-2025/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/rad-courte-2025.png" alt="Carte de la sortie RAD courte 2025" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>RAD courte 2025</h2>
         <p class="card-meta">
           <span>📍 Tingwick</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">46.0 km</span>
@@ -2068,20 +2140,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="rad longue 2025" data-city="tingwick"
-           data-distance="100.5" data-elevation="1368">
+           data-distance="100.5" data-elevation="1368"
+           data-ravitos="0">
     <a class="card-link" href="/rides/rad-longue-2025/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/rad-longue-2025.png" alt="Carte de la sortie RAD longue 2025" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>RAD longue 2025</h2>
         <p class="card-meta">
           <span>📍 Tingwick</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">100.5 km</span>
@@ -2090,20 +2163,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="ride before the sunset" data-city="lac-brome"
-           data-distance="58.1" data-elevation="884">
+           data-distance="58.1" data-elevation="884"
+           data-ravitos="4">
     <a class="card-link" href="/rides/ride-before-the-sunset/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/ride-before-the-sunset.png" alt="Carte de la sortie Ride Before the Sunset" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Ride Before the Sunset</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">58.1 km</span>
@@ -2112,20 +2186,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="ride on julie" data-city="dunham"
-           data-distance="52.1" data-elevation="723">
+           data-distance="52.1" data-elevation="723"
+           data-ravitos="4">
     <a class="card-link" href="/rides/ride-on-julie/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/ride-on-julie.png" alt="Carte de la sortie Ride On Julie" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Ride On Julie</h2>
         <p class="card-meta">
           <span>📍 Dunham</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">52.1 km</span>
@@ -2134,20 +2209,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="ride on julie#2" data-city="lac-brome"
-           data-distance="49.8" data-elevation="525">
+           data-distance="49.8" data-elevation="525"
+           data-ravitos="0">
     <a class="card-link" href="/rides/ride-on-julie2/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/ride-on-julie2.png" alt="Carte de la sortie Ride On Julie#2" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Ride On Julie#2</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">49.8 km</span>
@@ -2156,20 +2232,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="road before return to work" data-city="bromont"
-           data-distance="70.2" data-elevation="658">
+           data-distance="70.2" data-elevation="658"
+           data-ravitos="2">
     <a class="card-link" href="/rides/road-before-return-to-work/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/road-before-return-to-work.png" alt="Carte de la sortie Road Before Return To Work" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Road Before Return To Work</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">70.2 km</span>
@@ -2178,20 +2255,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="rock bottom" data-city=""
-           data-distance="72.1" data-elevation="1314">
+
+  <article class="card" data-name="rock bottom" data-city="lac-brome"
+           data-distance="72.1" data-elevation="1314"
+           data-ravitos="4">
     <a class="card-link" href="/rides/rock-bottom/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/rock-bottom.png" alt="Carte de la sortie Rock Bottom" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Rock Bottom</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Lac-Brome</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">72.1 km</span>
@@ -2200,20 +2278,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="rookie ride" data-city="lac-brome"
-           data-distance="72.2" data-elevation="1074">
+           data-distance="72.2" data-elevation="1074"
+           data-ravitos="0">
     <a class="card-link" href="/rides/rookie-ride/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/rookie-ride.png" alt="Carte de la sortie Rookie Ride" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Rookie Ride</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">72.2 km</span>
@@ -2222,20 +2301,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="rookie ride 70,5km / 1258md+" data-city="lac-brome"
-           data-distance="70.5" data-elevation="1050">
+           data-distance="70.5" data-elevation="1050"
+           data-ravitos="0">
     <a class="card-link" href="/rides/rookie-ride-705km-1258md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/rookie-ride-705km-1258md.png" alt="Carte de la sortie Rookie Ride 70,5KM / 1258MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Rookie Ride 70,5KM / 1258MD+</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">70.5 km</span>
@@ -2244,20 +2324,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="roses 85km/1400md+" data-city=""
-           data-distance="84.7" data-elevation="1411">
+
+  <article class="card" data-name="roses 85km/1400md+" data-city="dunham"
+           data-distance="84.7" data-elevation="1411"
+           data-ravitos="4">
     <a class="card-link" href="/rides/roses-85km1400md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/roses-85km1400md.png" alt="Carte de la sortie Roses 85km/1400MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Roses 85km/1400MD+</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Dunham</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">84.7 km</span>
@@ -2266,20 +2347,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="runnin&#x27; wild 59km / 875md+" data-city="dunham"
-           data-distance="58.5" data-elevation="748">
+           data-distance="58.5" data-elevation="748"
+           data-ravitos="4">
     <a class="card-link" href="/rides/runnin-wild-59km-875md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/runnin-wild-59km-875md.png" alt="Carte de la sortie Runnin&#x27; Wild 59KM / 875MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Runnin&#x27; Wild 59KM / 875MD+</h2>
         <p class="card-meta">
           <span>📍 Dunham</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">58.5 km</span>
@@ -2288,20 +2370,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="saturday coffee ride" data-city=""
-           data-distance="50.5" data-elevation="722">
+
+  <article class="card" data-name="saturday coffee ride" data-city="lac-brome"
+           data-distance="50.5" data-elevation="722"
+           data-ravitos="1">
     <a class="card-link" href="/rides/saturday-coffee-ride/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/saturday-coffee-ride.png" alt="Carte de la sortie Saturday Coffee Ride" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Saturday Coffee Ride</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Lac-Brome</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">50.5 km</span>
@@ -2310,20 +2393,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="saturday sunset" data-city="lac-brome"
-           data-distance="29.7" data-elevation="269">
+           data-distance="29.7" data-elevation="269"
+           data-ravitos="0">
     <a class="card-link" href="/rides/saturday-sunset/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/saturday-sunset.png" alt="Carte de la sortie Saturday Sunset" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Saturday Sunset</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">29.7 km</span>
@@ -2332,20 +2416,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="semi-route semi-trail" data-city="lac-brome"
-           data-distance="86.5" data-elevation="1206">
+           data-distance="86.5" data-elevation="1206"
+           data-ravitos="4">
     <a class="card-link" href="/rides/semi-route-semi-trail/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/semi-route-semi-trail.png" alt="Carte de la sortie Semi-Route Semi-Trail" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Semi-Route Semi-Trail</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">86.5 km</span>
@@ -2354,20 +2439,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="sloom" data-city=""
-           data-distance="76.7" data-elevation="1187">
+
+  <article class="card" data-name="sloom" data-city="ayer&#x27;s cliff"
+           data-distance="76.7" data-elevation="1187"
+           data-ravitos="0">
     <a class="card-link" href="/rides/sloom/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/sloom.png" alt="Carte de la sortie Sloom" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Sloom</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Ayer&#x27;s Cliff</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">76.7 km</span>
@@ -2376,20 +2462,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="slow ride avec arrêt virgin hill coffee" data-city=""
-           data-distance="40.2" data-elevation="411">
+
+  <article class="card" data-name="slow ride avec arrêt virgin hill coffee" data-city="lac-brome"
+           data-distance="40.2" data-elevation="411"
+           data-ravitos="0">
     <a class="card-link" href="/rides/slow-ride-avec-arret-virgin-hill-coffee/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/slow-ride-avec-arret-virgin-hill-coffee.png" alt="Carte de la sortie Slow Ride avec arrêt Virgin Hill Coffee" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Slow Ride avec arrêt Virgin Hill Coffee</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Lac-Brome</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">40.2 km</span>
@@ -2398,20 +2485,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="snow" data-city="lac-brome"
-           data-distance="46.2" data-elevation="394">
+           data-distance="46.2" data-elevation="394"
+           data-ravitos="1">
     <a class="card-link" href="/rides/snow-2/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/snow-2.png" alt="Carte de la sortie Snow" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Snow</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">46.2 km</span>
@@ -2420,20 +2508,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="soirée nocturne 64km / 1000md+" data-city="bromont"
-           data-distance="63.8" data-elevation="866">
+           data-distance="63.8" data-elevation="866"
+           data-ravitos="1">
     <a class="card-link" href="/rides/soiree-nocturne-64km-1000md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/soiree-nocturne-64km-1000md.png" alt="Carte de la sortie Soirée Nocturne 64km / 1000MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Soirée Nocturne 64km / 1000MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">63.8 km</span>
@@ -2442,20 +2531,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="soleil 75km/650md+" data-city=""
-           data-distance="75.2" data-elevation="649">
+
+  <article class="card" data-name="soleil 75km/650md+" data-city="waterloo"
+           data-distance="75.2" data-elevation="649"
+           data-ravitos="1">
     <a class="card-link" href="/rides/soleil-75km650md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/soleil-75km650md.png" alt="Carte de la sortie Soleil 75KM/650MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Soleil 75KM/650MD+</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Waterloo</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">75.2 km</span>
@@ -2464,20 +2554,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="soleil bleu" data-city="bromont"
-           data-distance="98.9" data-elevation="706">
+           data-distance="98.9" data-elevation="706"
+           data-ravitos="4">
     <a class="card-link" href="/rides/soleil-bleu/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/soleil-bleu.png" alt="Carte de la sortie Soleil Bleu" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Soleil Bleu</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">98.9 km</span>
@@ -2486,20 +2577,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="spirit bird" data-city=""
-           data-distance="59.9" data-elevation="979">
+
+  <article class="card" data-name="spirit bird" data-city="lac-brome"
+           data-distance="59.9" data-elevation="979"
+           data-ravitos="0">
     <a class="card-link" href="/rides/spirit-bird/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/spirit-bird.png" alt="Carte de la sortie Spirit Bird" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Spirit Bird</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Lac-Brome</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">59.9 km</span>
@@ -2508,20 +2600,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="stayin&#x27; alive 76km / 1375md+" data-city="ayer&#x27;s cliff"
-           data-distance="76.3" data-elevation="1210">
+           data-distance="76.3" data-elevation="1210"
+           data-ravitos="0">
     <a class="card-link" href="/rides/stayin-alive-76km-1375md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/stayin-alive-76km-1375md.png" alt="Carte de la sortie Stayin&#x27; Alive 76km / 1375MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Stayin&#x27; Alive 76km / 1375MD+</h2>
         <p class="card-meta">
           <span>📍 Ayer&#x27;s Cliff</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">76.3 km</span>
@@ -2530,20 +2623,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="storm boy 50km/742md+" data-city="bromont"
-           data-distance="49.8" data-elevation="640">
+           data-distance="49.8" data-elevation="640"
+           data-ravitos="1">
     <a class="card-link" href="/rides/storm-boy-50km742md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/storm-boy-50km742md.png" alt="Carte de la sortie Storm Boy 50KM/742MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Storm Boy 50KM/742MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">49.8 km</span>
@@ -2552,20 +2646,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="storm boy 68km/983md+" data-city="bromont"
-           data-distance="68.2" data-elevation="849">
+           data-distance="68.2" data-elevation="849"
+           data-ravitos="3">
     <a class="card-link" href="/rides/storm-boy-68km983md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/storm-boy-68km983md.png" alt="Carte de la sortie Storm Boy 68KM/983MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Storm Boy 68KM/983MD+</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">68.2 km</span>
@@ -2574,20 +2669,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="sunrise 61km" data-city="ayer&#x27;s cliff"
-           data-distance="60.7" data-elevation="820">
+           data-distance="60.7" data-elevation="820"
+           data-ravitos="0">
     <a class="card-link" href="/rides/sunrise-61km/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/sunrise-61km.png" alt="Carte de la sortie Sunrise 61KM" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Sunrise 61KM</h2>
         <p class="card-meta">
           <span>📍 Ayer&#x27;s Cliff</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">60.7 km</span>
@@ -2596,20 +2692,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="sunrise 76km" data-city="ayer&#x27;s cliff"
-           data-distance="75.8" data-elevation="1165">
+           data-distance="75.8" data-elevation="1165"
+           data-ravitos="0">
     <a class="card-link" href="/rides/sunrise-76km/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/sunrise-76km.png" alt="Carte de la sortie Sunrise 76KM" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Sunrise 76KM</h2>
         <p class="card-meta">
           <span>📍 Ayer&#x27;s Cliff</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">75.8 km</span>
@@ -2618,20 +2715,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="sun to me 57km / 666md+" data-city="dunham"
-           data-distance="56.5" data-elevation="655">
+           data-distance="56.5" data-elevation="655"
+           data-ravitos="1">
     <a class="card-link" href="/rides/sun-to-me-57km-666md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/sun-to-me-57km-666md.png" alt="Carte de la sortie Sun To Me 57km / 666MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Sun To Me 57km / 666MD+</h2>
         <p class="card-meta">
           <span>📍 Dunham</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">56.5 km</span>
@@ -2640,20 +2738,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="suspicious mind" data-city=""
-           data-distance="84.8" data-elevation="1246">
+
+  <article class="card" data-name="suspicious mind" data-city="bromont"
+           data-distance="84.8" data-elevation="1246"
+           data-ravitos="2">
     <a class="card-link" href="/rides/suspicious-mind/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/suspicious-mind.png" alt="Carte de la sortie Suspicious Mind" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Suspicious Mind</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Bromont</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">84.8 km</span>
@@ -2662,20 +2761,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="sutton" data-city="sutton"
-           data-distance="68.2" data-elevation="1104">
+           data-distance="68.2" data-elevation="1104"
+           data-ravitos="2">
     <a class="card-link" href="/rides/sutton/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/sutton.png" alt="Carte de la sortie Sutton" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Sutton</h2>
         <p class="card-meta">
           <span>📍 Sutton</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">68.2 km</span>
@@ -2684,20 +2784,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="take a back road 63km" data-city="lac-brome"
-           data-distance="62.7" data-elevation="889">
+           data-distance="62.7" data-elevation="889"
+           data-ravitos="0">
     <a class="card-link" href="/rides/take-a-back-road-63km/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/take-a-back-road-63km.png" alt="Carte de la sortie Take a Back Road 63KM" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Take a Back Road 63KM</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">62.7 km</span>
@@ -2706,20 +2807,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="take a back road 80km" data-city="lac-brome"
-           data-distance="79.9" data-elevation="1170">
+           data-distance="79.9" data-elevation="1170"
+           data-ravitos="0">
     <a class="card-link" href="/rides/take-a-back-road-80km/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/take-a-back-road-80km.png" alt="Carte de la sortie Take a Back Road 80KM" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Take a Back Road 80KM</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">79.9 km</span>
@@ -2728,20 +2830,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="take a trip 41km / 465md+" data-city="lac-brome"
-           data-distance="41.1" data-elevation="406">
+           data-distance="41.1" data-elevation="406"
+           data-ravitos="0">
     <a class="card-link" href="/rides/take-a-trip-41km-465md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/take-a-trip-41km-465md.png" alt="Carte de la sortie Take a Trip 41KM / 465MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Take a Trip 41KM / 465MD+</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">41.1 km</span>
@@ -2750,20 +2853,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="take yours, i&#x27;ll take mine" data-city="potton"
-           data-distance="65.0" data-elevation="1017">
+           data-distance="65.0" data-elevation="1017"
+           data-ravitos="0">
     <a class="card-link" href="/rides/take-yours-ill-take-mine/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/take-yours-ill-take-mine.png" alt="Carte de la sortie Take Yours, I&#x27;ll Take Mine" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Take Yours, I&#x27;ll Take Mine</h2>
         <p class="card-meta">
           <span>📍 Potton</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">65.0 km</span>
@@ -2772,20 +2876,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="the farmer" data-city="ayer&#x27;s cliff"
-           data-distance="81.8" data-elevation="1018">
+           data-distance="81.8" data-elevation="1018"
+           data-ravitos="1">
     <a class="card-link" href="/rides/the-farmer/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/the-farmer.png" alt="Carte de la sortie The Farmer" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>The Farmer</h2>
         <p class="card-meta">
           <span>📍 Ayer&#x27;s Cliff</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">81.8 km</span>
@@ -2794,20 +2899,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="the places we&#x27;ll go" data-city="coaticook"
-           data-distance="62.1" data-elevation="861">
+           data-distance="62.1" data-elevation="861"
+           data-ravitos="0">
     <a class="card-link" href="/rides/the-places-well-go/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/the-places-well-go.png" alt="Carte de la sortie The Places We&#x27;ll Go" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>The Places We&#x27;ll Go</h2>
         <p class="card-meta">
           <span>📍 Coaticook</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">62.1 km</span>
@@ -2816,20 +2922,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="till the sun comes up" data-city="lac-brome"
-           data-distance="69.6" data-elevation="989">
+           data-distance="69.6" data-elevation="989"
+           data-ravitos="1">
     <a class="card-link" href="/rides/till-the-sun-comes-up/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/till-the-sun-comes-up.png" alt="Carte de la sortie Till The Sun Comes UP" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Till The Sun Comes UP</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">69.6 km</span>
@@ -2838,20 +2945,21 @@
       </div>
     </a>
   </article>
-  
-  <article class="card" data-name="too much, too young, too fast." data-city=""
-           data-distance="49.4" data-elevation="568">
+
+  <article class="card" data-name="too much, too young, too fast." data-city="bromont"
+           data-distance="49.4" data-elevation="568"
+           data-ravitos="0">
     <a class="card-link" href="/rides/too-much-too-young-too-fast/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/too-much-too-young-too-fast.png" alt="Carte de la sortie Too much, Too Young, Too fast." loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Too much, Too Young, Too fast.</h2>
         <p class="card-meta">
-          
-          
+          <span>📍 Bromont</span>
+
         </p>
         <p class="card-stats">
           <span class="stat">49.4 km</span>
@@ -2860,20 +2968,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="ulverton #5" data-city="l&#x27;avenir"
-           data-distance="54.0" data-elevation="532">
+           data-distance="54.0" data-elevation="532"
+           data-ravitos="0">
     <a class="card-link" href="/rides/ulverton-5/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/ulverton-5.png" alt="Carte de la sortie Ulverton #5" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Ulverton #5</h2>
         <p class="card-meta">
           <span>📍 L&#x27;Avenir</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">54.0 km</span>
@@ -2882,20 +2991,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="une belle ride avant de partir" data-city="bromont"
-           data-distance="71.6" data-elevation="761">
+           data-distance="71.6" data-elevation="761"
+           data-ravitos="2">
     <a class="card-link" href="/rides/une-belle-ride-avant-de-partir/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/une-belle-ride-avant-de-partir.png" alt="Carte de la sortie une belle ride avant de partir" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>une belle ride avant de partir</h2>
         <p class="card-meta">
           <span>📍 Bromont</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">71.6 km</span>
@@ -2904,20 +3014,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="up around the bend" data-city="waterloo"
-           data-distance="73.8" data-elevation="611">
+           data-distance="73.8" data-elevation="611"
+           data-ravitos="1">
     <a class="card-link" href="/rides/up-around-the-bend/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/up-around-the-bend.png" alt="Carte de la sortie Up Around the Bend" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Up Around the Bend</h2>
         <p class="card-meta">
           <span>📍 Waterloo</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">73.8 km</span>
@@ -2926,20 +3037,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="vacation" data-city="potton"
-           data-distance="78.6" data-elevation="1109">
+           data-distance="78.6" data-elevation="1109"
+           data-ravitos="1">
     <a class="card-link" href="/rides/vacation/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/vacation.png" alt="Carte de la sortie Vacation" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>Vacation</h2>
         <p class="card-meta">
           <span>📍 Potton</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">78.6 km</span>
@@ -2948,20 +3060,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="we were young" data-city="ayer&#x27;s cliff"
-           data-distance="79.3" data-elevation="985">
+           data-distance="79.3" data-elevation="985"
+           data-ravitos="1">
     <a class="card-link" href="/rides/we-were-young/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/we-were-young.png" alt="Carte de la sortie We Were Young" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>We Were Young</h2>
         <p class="card-meta">
           <span>📍 Ayer&#x27;s Cliff</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">79.3 km</span>
@@ -2970,20 +3083,21 @@
       </div>
     </a>
   </article>
-  
+
   <article class="card" data-name="when i get to heaven 53km/500md+" data-city="lac-brome"
-           data-distance="53.3" data-elevation="443">
+           data-distance="53.3" data-elevation="443"
+           data-ravitos="0">
     <a class="card-link" href="/rides/when-i-get-to-heaven-53km500md/">
       <div class="card-thumb">
-        
+
           <img src="/assets/thumbs/when-i-get-to-heaven-53km500md.png" alt="Carte de la sortie When I Get To Heaven 53KM/500MD+" loading="lazy">
-        
+
       </div>
       <div class="card-body">
         <h2>When I Get To Heaven 53KM/500MD+</h2>
         <p class="card-meta">
           <span>📍 Lac-Brome</span>
-          
+
         </p>
         <p class="card-stats">
           <span class="stat">53.3 km</span>
@@ -2992,7 +3106,7 @@
       </div>
     </a>
   </article>
-  
+
 </section>
 
 <p class="empty" id="empty" hidden>Aucune sortie ne correspond à votre recherche.</p>
@@ -3004,7 +3118,7 @@
       <p>Sorties consolidées depuis Strava et RideWithGPS · Cartes © OpenStreetMap</p>
     </div>
   </footer>
-  
+
 <script src="/assets/js/search.js" defer></script>
 
 </body>

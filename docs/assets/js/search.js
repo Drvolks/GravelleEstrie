@@ -17,13 +17,20 @@
   const distanceMaxOut = document.getElementById("distance-max-out");
   const elevationMinOut = document.getElementById("elevation-min-out");
   const elevationMaxOut = document.getElementById("elevation-max-out");
+  const adminWithoutRavitoFilter = document.getElementById("admin-without-ravito-filter");
+  const adminWithoutRavito = document.getElementById("admin-without-ravito");
   const reset = document.getElementById("reset");
   const countEl = document.getElementById("result-count");
   const emptyEl = document.getElementById("empty");
   const grid = document.getElementById("rides");
   const cards = Array.from(document.querySelectorAll(".card"));
+  const isAdmin = new URLSearchParams(window.location.search).get("admin") === "true";
 
   if (!cards.length) return;
+
+  if (isAdmin && adminWithoutRavitoFilter) {
+    adminWithoutRavitoFilter.hidden = false;
+  }
 
   function normalize(s) {
     return (s || "")
@@ -119,6 +126,7 @@
     const q = normalize(search.value.trim());
     const [minDist, maxDist] = normalizeRange(distanceMin, distanceMax, activeInput);
     const [minElev, maxElev] = normalizeRange(elevationMin, elevationMax, activeInput);
+    const onlyWithoutRavito = Boolean(isAdmin && adminWithoutRavito && adminWithoutRavito.checked);
 
     updateRangeSlider(distanceSlider, distanceMin, distanceMax);
     updateRangeSlider(elevationSlider, elevationMin, elevationMax);
@@ -134,11 +142,13 @@
       const city = normalize(card.dataset.city);
       const d = Number(card.dataset.distance);
       const e = Number(card.dataset.elevation);
+      const ravitoCount = Number(card.dataset.ravitos || 0);
 
       const matchesText = !q || name.includes(q) || city.includes(q);
       const matchesDist = d >= minDist && d <= maxDist;
       const matchesElev = e >= minElev && e <= maxElev;
-      const show = matchesText && matchesDist && matchesElev;
+      const matchesRavito = !onlyWithoutRavito || ravitoCount === 0;
+      const show = matchesText && matchesDist && matchesElev && matchesRavito;
 
       card.hidden = !show;
       if (show) visible++;
@@ -157,6 +167,9 @@
   distanceMax.addEventListener("input", function (event) { apply(event.currentTarget); });
   elevationMin.addEventListener("input", function (event) { apply(event.currentTarget); });
   elevationMax.addEventListener("input", function (event) { apply(event.currentTarget); });
+  if (adminWithoutRavito) {
+    adminWithoutRavito.addEventListener("change", function () { apply(); });
+  }
   reset.addEventListener("click", function () {
     search.value = "";
     sortBy.value = "name";
@@ -165,6 +178,9 @@
     distanceMax.value = distanceMax.max;
     elevationMin.value = elevationMin.min;
     elevationMax.value = elevationMax.max;
+    if (adminWithoutRavito) {
+      adminWithoutRavito.checked = false;
+    }
     apply();
   });
 

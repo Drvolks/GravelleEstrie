@@ -19,6 +19,7 @@
   {% if ride.ridewithgps_embed_url %}
   <div class="detail-map">
     <iframe
+      class="rwgps-embed"
       src="{{ ride.ridewithgps_embed_url }}"
       title="Carte RideWithGPS de {{ ride.name }}"
       width="100%"
@@ -28,14 +29,30 @@
       referrerpolicy="strict-origin-when-cross-origin"
       scrolling="no"></iframe>
   </div>
+  {% elif ride.strava_embed_id %}
+  <div class="detail-map detail-map-strava">
+    <div
+      class="strava-embed-placeholder"
+      data-embed-type="route"
+      data-embed-id="{{ ride.strava_embed_id }}"
+      data-style="standard"
+      data-full-width="true"
+      data-distance="{{ ride.distance_m }}"
+      data-elevation-gain="{{ ride.elevation_m }}"
+      data-slippy="true"></div>
+  </div>
   {% elif ride.thumb_url %}
     <div class="detail-map">
       <img src="{{ ride.thumb_url }}" alt="Carte du tracé de {{ ride.name }}">
     </div>
   {% endif %}
 
-  {% if ride.ridewithgps_embed_url or ride.thumb_url %}
+  {% if ride.ridewithgps_embed_url %}
   <p class="detail-map-note">Carte et profil intégrés depuis RideWithGPS — apparence gérée par RideWithGPS.</p>
+  {% elif ride.strava_embed_id %}
+  <p class="detail-map-note">Carte interactive intégrée depuis Strava — apparence gérée par Strava.</p>
+  {% elif ride.thumb_url %}
+  <p class="detail-map-note">Carte statique générée depuis le tracé local.</p>
   {% endif %}
 
   <dl class="specs">
@@ -43,6 +60,24 @@
     <div><dt>Dénivelé positif</dt><dd>{{ ride.elevation_m }} m</dd></div>
     {% if ride.start_city %}<div><dt>Ville de départ</dt><dd>{{ ride.start_city }}</dd></div>{% endif %}
   </dl>
+
+  {% if ride.ravitos %}
+  <section class="ravitos" aria-label="Ravitos près du parcours">
+    <h2>Ravitos</h2>
+    <div class="ravito-list">
+      {% for ravito in ride.ravitos %}
+        <article class="ravito">
+          <div>
+            <h3>{{ ravito.name }}</h3>
+            <p>{{ ravito.route_distance_label }} · {{ ravito.distance_label }}</p>
+          </div>
+          <a href="{{ ravito.map_url }}" target="_blank" rel="noopener"
+             aria-label="Ouvrir {{ ravito.name }} sur la carte">Carte</a>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
 
   {% if ride.images %}
   <section class="ride-photos" aria-label="Photos de {{ ride.name }}" data-photo-gallery>
@@ -86,6 +121,9 @@
 {% endblock %}
 
 {% block scripts %}
+{% if ride.strava_embed_id and not ride.ridewithgps_embed_url %}
+<script src="https://strava-embeds.com/embed.js"></script>
+{% endif %}
 {% if ride.images %}
 <script src="{{ base_path }}/assets/js/gallery.js" defer></script>
 {% endif %}

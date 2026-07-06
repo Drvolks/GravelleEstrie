@@ -20,7 +20,8 @@ from django.template.loader import render_to_string
 
 from rides.models import Ride
 from rides.services.images import list_ride_images
-from rides.services.location import geometry_starts_in_quebec
+from rides.services.location import geometry_starts_in_quebec, infer_start_city
+from rides.services.ravitos import find_nearby_ravitos, parse_ravito_points
 
 DEFAULT_RIDE_COVER = "default-ride-cover.jpg"
 GPX_NS = "http://www.topografix.com/GPX/1/1"
@@ -65,8 +66,9 @@ class Command(BaseCommand):
             if settings.RWGPS_EXCLUDED_ROUTE_IDS:
                 rides_qs = rides_qs.exclude(rwgps_route_id__in=settings.RWGPS_EXCLUDED_ROUTE_IDS)
             rides = [ride for ride in rides_qs if geometry_starts_in_quebec(ride.geometry)]
+            ravitos = parse_ravito_points(settings.RAVITO_POINTS)
             views = [
-                self._ride_view(r, base_path, out, thumbs_dir, thumb_backup_dir)
+                self._ride_view(r, base_path, out, thumbs_dir, thumb_backup_dir, ravitos)
                 for r in rides
             ]
 
@@ -82,7 +84,7 @@ class Command(BaseCommand):
 
             # Index
             (out / "index.html").write_text(
-                render_to_string(
+                self._render_template(
                     "site/index.html",
                     {
                         **common,
@@ -99,7 +101,7 @@ class Command(BaseCommand):
                 ride_dir = out / "rides" / view.slug
                 ride_dir.mkdir(parents=True, exist_ok=True)
                 (ride_dir / "index.html").write_text(
-                    render_to_string("site/detail.html", {**common, "ride": view}),
+                    self._render_template("site/detail.html", {**common, "ride": view}),
                     encoding="utf-8",
                 )
 
@@ -118,6 +120,11 @@ class Command(BaseCommand):
         )
 
     # -- helpers ------------------------------------------------------------
+
+    @staticmethod
+    def _render_template(template_name: str, context: dict) -> str:
+        html = render_to_string(template_name, context)
+        return "\n".join(line.rstrip() for line in html.splitlines()) + "\n"
 
     def _copy_assets(self, out: Path):
         src = Path(settings.BASE_DIR) / "rides" / "static_src"
@@ -138,6 +145,7 @@ class Command(BaseCommand):
         out: Path,
         thumbs_dir: Path,
         thumb_backup_dir: Path | None,
+        ravitos: list,
     ) -> SimpleNamespace:
         thumb_url = ""
         dest = thumbs_dir / f"{ride.slug}.png"
@@ -152,20 +160,27 @@ class Command(BaseCommand):
 
         images = self._copy_ride_images(ride, base_path, out)
         gpx_url = self._write_gpx_file(ride, base_path, out)
+        nearby_ravitos = self._nearby_ravito_views(ride, ravitos)
+
+        start_city = ride.start_city or infer_start_city(ride.geometry)
 
         return SimpleNamespace(
             name=ride.name,
             slug=ride.slug,
             description=ride.description,
             ride_date=ride.ride_date,
-            start_city=ride.start_city,
+            start_city=start_city,
             distance_km=ride.distance_km,
+            distance_m=round(ride.distance_m),
             elevation_m=ride.elevation_m,
             strava_url=ride.strava_url,
+            strava_embed_id=ride.strava_activity_id,
             ridewithgps_url=ride.ridewithgps_url,
             ridewithgps_embed_url=self._ridewithgps_embed_url(ride),
             thumb_url=thumb_url,
             images=images,
+            ravitos=nearby_ravitos,
+            ravito_count=len(nearby_ravitos),
             gpx_url=gpx_url,
             cover_image_url=(
                 images[0].url if images else self._default_cover_url(base_path)
@@ -233,6 +248,55 @@ class Command(BaseCommand):
         ET.indent(root, space="  ")
         ET.ElementTree(root).write(dest, encoding="utf-8", xml_declaration=True)
         return f"{base_path}/assets/gpx/{ride.slug}.gpx"
+
+    def _nearby_ravito_views(self, ride: Ride, ravitos: list) -> list[SimpleNamespace]:
+        matches = find_nearby_ravitos(
+            ride.geometry,
+            ravitos,
+            radius_m=settings.RAVITO_RADIUS_M,
+            min_route_distance_m=settings.RAVITO_MIN_ROUTE_DISTANCE_M,
+            endpoint_exclusion_radius_m=settings.RAVITO_ENDPOINT_EXCLUSION_RADIUS_M,
+        )
+        return [
+            SimpleNamespace(
+                name=match.ravito.name,
+                lat=match.ravito.lat,
+                lng=match.ravito.lng,
+                distance_m=round(match.distance_m),
+                distance_label=self._ravito_distance_label(match.distance_m),
+                route_distance_km=round(match.route_distance_m / 1000, 1),
+                route_distance_label=self._ravito_route_distance_label(
+                    match.route_distance_m
+                ),
+                map_url=(
+                    match.ravito.url
+                    or self._ravito_map_url(match.ravito.lat, match.ravito.lng)
+                ),
+            )
+            for match in matches
+        ]
+
+    @classmethod
+    def _ravito_map_url(cls, lat: float, lng: float) -> str:
+        query = urlencode(
+            {
+                "api": "1",
+                "query": f"{cls._format_coordinate(lat)},{cls._format_coordinate(lng)}",
+            }
+        )
+        return f"https://www.google.com/maps/search/?{query}"
+
+    @staticmethod
+    def _ravito_distance_label(distance_m: float) -> str:
+        if distance_m >= 1000:
+            distance_km = f"{distance_m / 1000:.1f}".replace(".", ",")
+            return f"~{distance_km} km du parcours"
+        return f"~{int(round(distance_m))} m du parcours"
+
+    @staticmethod
+    def _ravito_route_distance_label(route_distance_m: float) -> str:
+        distance_km = f"{route_distance_m / 1000:.1f}".replace(".", ",")
+        return f"après ~{distance_km} km"
 
     @staticmethod
     def _geometry_points(geometry) -> list[tuple[float, float]]:

@@ -58,7 +58,7 @@ python -m http.server 8765 --directory preview
 - `rides/models.py` — single `Ride` model. `source` records provenance only;
   cross-source linking is via independent nullable `strava_activity_id` /
   `rwgps_route_id` fields on the *same row* (a ride can have both). `geometry` is a
-  JSON list of `[lat, lng]` pairs used to bake thumbnails.
+  JSON list of `[lat, lng]` pairs used to bake thumbnails and detect nearby ravitos.
 - `rides/services/` — `strava.py`, `ridewithgps.py` (API clients), `geometry.py`,
   `location.py` (Quebec start-point filtering), `thumbnails.py` (renders PNGs from
   route geometry + OSM tiles), `images.py` (discovers git-ignored local ride photos),
@@ -93,8 +93,13 @@ python -m http.server 8765 --directory preview
     first local photo as a subtle background, falling back to
     `assets/img/default-ride-cover.jpg`. It also writes Garmin-compatible GPX Track
     files from stored `Ride.geometry` to `assets/gpx/<slug>.gpx` and links them from
-    the detail page. No runtime API or JS map in the output — thumbnails and the
-    RideWithGPS iframe embed are the only map rendering.
+    the detail page. Detail map rendering prefers the RideWithGPS iframe, then the
+    official Strava route embed for Strava-only routes, then the static thumbnail.
+    It also reads
+    `RAVITO_POINTS`, `RAVITO_RADIUS_M`, `RAVITO_MIN_ROUTE_DISTANCE_M`, and
+    `RAVITO_ENDPOINT_EXCLUSION_RADIUS_M` and shows configured Google Maps or
+    coordinate-based ravitos that fall near each route after the first 30 km,
+    excluding stops too close to the route's start/finish points.
   - `strava_auth.py` — one-time local-server OAuth flow that writes
     `STRAVA_REFRESH_TOKEN` into `.env`.
 - `rides/templates/site/` — the static site templates (`index.html`, `detail.html`,
