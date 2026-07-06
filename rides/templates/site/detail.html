@@ -125,6 +125,6 @@
 <script src="https://strava-embeds.com/embed.js"></script>
 {% endif %}
 {% if ride.images %}
-<script src="{{ base_path }}/assets/js/gallery.js" defer></script>
+<script src="{{ base_path }}/assets/js/gallery.js?v={{ asset_version }}" defer></script>
 {% endif %}
 {% endblock %}

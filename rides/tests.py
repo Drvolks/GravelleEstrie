@@ -691,7 +691,8 @@ class BuildSiteTests(TestCase):
             self.assertTrue(detail.exists())
             self.assertEqual("www.example.com\n", cname.read_text(encoding="utf-8"))
             html = index.read_text(encoding="utf-8")
-            self.assertIn("/Test/assets/css/style.css", html)
+            self.assertIn("/Test/assets/css/style.css?v=", html)
+            self.assertIn("/Test/assets/js/search.js?v=", html)
             self.assertIn("Sortie A", html)
             self.assertIn("has-ride-cover", html)
             self.assertIn("/Test/assets/img/default-ride-cover.jpg", html)
@@ -723,7 +724,7 @@ class BuildSiteTests(TestCase):
                 Path(tmp) / "rides" / "sortie-a" / "index.html"
             ).read_text(encoding="utf-8")
 
-        self.assertIn('href="/assets/css/style.css"', index_html)
+        self.assertIn('href="/assets/css/style.css?v=', index_html)
         self.assertIn('href="/rides/sortie-a/"', index_html)
         self.assertIn('href="/assets/gpx/sortie-a.gpx"', detail_html)
         self.assertIn('<nav class="breadcrumb"><a href="/">', detail_html)

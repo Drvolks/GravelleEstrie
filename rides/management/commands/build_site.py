@@ -6,6 +6,7 @@ the pre-rendered thumbnail PNGs and static assets, no runtime API or JS map.
 """
 from __future__ import annotations
 
+import hashlib
 import math
 import shutil
 import tempfile
@@ -61,6 +62,7 @@ class Command(BaseCommand):
             self._copy_assets(out)
             thumbs_dir = out / "assets" / "thumbs"
             thumbs_dir.mkdir(parents=True, exist_ok=True)
+            asset_version = self._asset_version(out / "assets")
 
             rides_qs = Ride.objects.published()
             if settings.RWGPS_EXCLUDED_ROUTE_IDS:
@@ -80,6 +82,7 @@ class Command(BaseCommand):
                 "site_title": settings.SITE_TITLE,
                 "site_tagline": settings.SITE_TAGLINE,
                 "default_cover_url": self._default_cover_url(base_path),
+                "asset_version": asset_version,
             }
 
             # Index
@@ -130,6 +133,20 @@ class Command(BaseCommand):
         src = Path(settings.BASE_DIR) / "rides" / "static_src"
         dest = out / "assets"
         shutil.copytree(src, dest, dirs_exist_ok=True)
+
+    @staticmethod
+    def _asset_version(assets_dir: Path) -> str:
+        digest = hashlib.sha256()
+        for relative in (
+            Path("css/style.css"),
+            Path("js/gallery.js"),
+            Path("js/search.js"),
+        ):
+            path = assets_dir / relative
+            if path.exists():
+                digest.update(relative.as_posix().encode("utf-8"))
+                digest.update(path.read_bytes())
+        return digest.hexdigest()[:12]
 
     @staticmethod
     def _backup_existing_dir(source: Path, dest: Path) -> Path | None:
