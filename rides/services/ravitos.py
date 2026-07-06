@@ -36,6 +36,12 @@ class RavitoMatch:
     remaining_distance_m: float
 
 
+@dataclass(frozen=True)
+class ParkingMatch:
+    parking: Ravito
+    distance_m: float
+
+
 def parse_ravito_points(raw: str) -> list[Ravito]:
     """Parse configured ravitos from coordinates or Google Maps URLs.
 
@@ -44,12 +50,30 @@ def parse_ravito_points(raw: str) -> list[Ravito]:
     - ``https://maps.app.goo.gl/...`` or a full Google Maps URL
     - ``Name|https://maps.app.goo.gl/...`` to override the displayed name
     """
+    return parse_map_points(raw, default_name="Ravito")
+
+
+def parse_parking_points(raw: str) -> list[Ravito]:
+    return parse_map_points(raw, default_name="Stationnement")
+
+
+def parse_map_points(raw: str, *, default_name: str = "Point") -> list[Ravito]:
     ravitos = []
     for entry in _split_entries(raw):
-        ravito = _parse_ravito_entry(entry)
+        ravito = _parse_ravito_entry(entry, default_name=default_name)
         if ravito:
             ravitos.append(ravito)
-    return ravitos
+    return _dedupe_points(ravitos, default_name=default_name)
+
+
+def _dedupe_points(points: list[Ravito], *, default_name: str) -> list[Ravito]:
+    deduped: dict[str, Ravito] = {}
+    for point in points:
+        key = point.url or f"{point.lat:.6f},{point.lng:.6f}"
+        existing = deduped.get(key)
+        if existing is None or (existing.name == default_name and point.name != default_name):
+            deduped[key] = point
+    return list(deduped.values())
 
 
 def _split_entries(raw: str) -> list[str]:
@@ -66,16 +90,16 @@ def _split_entries(raw: str) -> list[str]:
     return [entry.strip() for entry in re.split(r"[;\n]+", normalized) if entry.strip()]
 
 
-def _parse_ravito_entry(entry: str) -> Ravito | None:
+def _parse_ravito_entry(entry: str, *, default_name: str) -> Ravito | None:
     parts = [part.strip() for part in entry.split("|")]
     if len(parts) == 3:
         ravito = _parse_coordinate_entry(parts)
         if ravito:
             return ravito
     if len(parts) == 2 and _looks_like_url(parts[1]):
-        return _parse_url_entry(parts[1], name_override=parts[0])
+        return _parse_url_entry(parts[1], name_override=parts[0], default_name=default_name)
     if len(parts) == 1 and _looks_like_url(parts[0]):
-        return _parse_url_entry(parts[0])
+        return _parse_url_entry(parts[0], default_name=default_name)
     return None
 
 
@@ -92,7 +116,12 @@ def _parse_coordinate_entry(parts: list[str]) -> Ravito | None:
     return Ravito(name=parts[0], lat=lat, lng=lng)
 
 
-def _parse_url_entry(url: str, *, name_override: str = "") -> Ravito | None:
+def _parse_url_entry(
+    url: str,
+    *,
+    name_override: str = "",
+    default_name: str = "Ravito",
+) -> Ravito | None:
     resolved_url = url
     coordinates = _extract_coordinates(url)
     if not coordinates:
@@ -102,7 +131,7 @@ def _parse_url_entry(url: str, *, name_override: str = "") -> Ravito | None:
         logger.warning("Skipping ravito URL without coordinates: %s", url)
         return None
     lat, lng = coordinates
-    name = name_override.strip() or _extract_place_name(resolved_url) or "Ravito"
+    name = name_override.strip() or _extract_place_name(resolved_url) or default_name
     return Ravito(name=name, lat=lat, lng=lng, url=url)
 
 
@@ -126,6 +155,7 @@ def _extract_coordinates(url: str) -> tuple[float, float] | None:
         r"!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)",
         r"@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)",
         r"[?&](?:q|query|ll)=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)",
+        r"/(?:search|place)/(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)",
     ):
         match = re.search(pattern, decoded_url)
         if not match:
@@ -197,6 +227,26 @@ def find_nearby_ravitos(
             )
 
     return sorted(matches, key=lambda match: (match.distance_m, match.ravito.name.lower()))
+
+
+def find_nearby_parking(
+    geometry: Iterable[Iterable[float]],
+    parkings: Iterable[Ravito],
+    radius_m: float,
+) -> list[ParkingMatch]:
+    """Return configured parking points near the route start point."""
+    points = _geometry_points(geometry)
+    if not points or radius_m <= 0:
+        return []
+
+    start = points[0]
+    matches = []
+    for parking in parkings:
+        distance = _distance_between_points_m((parking.lat, parking.lng), start)
+        if distance <= radius_m:
+            matches.append(ParkingMatch(parking=parking, distance_m=distance))
+
+    return sorted(matches, key=lambda match: (match.distance_m, match.parking.name.lower()))
 
 
 def _geometry_points(geometry: Iterable[Iterable[float]]) -> list[tuple[float, float]]:

@@ -19,6 +19,8 @@
   const elevationMaxOut = document.getElementById("elevation-max-out");
   const adminWithoutRavitoFilter = document.getElementById("admin-without-ravito-filter");
   const adminWithoutRavito = document.getElementById("admin-without-ravito");
+  const adminWithoutParkingFilter = document.getElementById("admin-without-parking-filter");
+  const adminWithoutParking = document.getElementById("admin-without-parking");
   const reset = document.getElementById("reset");
   const countEl = document.getElementById("result-count");
   const emptyEl = document.getElementById("empty");
@@ -30,6 +32,9 @@
 
   if (isAdmin && adminWithoutRavitoFilter) {
     adminWithoutRavitoFilter.hidden = false;
+  }
+  if (isAdmin && adminWithoutParkingFilter) {
+    adminWithoutParkingFilter.hidden = false;
   }
 
   function normalize(s) {
@@ -127,6 +132,7 @@
     const [minDist, maxDist] = normalizeRange(distanceMin, distanceMax, activeInput);
     const [minElev, maxElev] = normalizeRange(elevationMin, elevationMax, activeInput);
     const onlyWithoutRavito = Boolean(isAdmin && adminWithoutRavito && adminWithoutRavito.checked);
+    const onlyWithoutParking = Boolean(isAdmin && adminWithoutParking && adminWithoutParking.checked);
 
     updateRangeSlider(distanceSlider, distanceMin, distanceMax);
     updateRangeSlider(elevationSlider, elevationMin, elevationMax);
@@ -143,12 +149,14 @@
       const d = Number(card.dataset.distance);
       const e = Number(card.dataset.elevation);
       const ravitoCount = Number(card.dataset.ravitos || 0);
+      const parkingCount = Number(card.dataset.parkings || 0);
 
       const matchesText = !q || name.includes(q) || city.includes(q);
       const matchesDist = d >= minDist && d <= maxDist;
       const matchesElev = e >= minElev && e <= maxElev;
       const matchesRavito = !onlyWithoutRavito || ravitoCount === 0;
-      const show = matchesText && matchesDist && matchesElev && matchesRavito;
+      const matchesParking = !onlyWithoutParking || parkingCount === 0;
+      const show = matchesText && matchesDist && matchesElev && matchesRavito && matchesParking;
 
       card.hidden = !show;
       if (show) visible++;
@@ -170,6 +178,9 @@
   if (adminWithoutRavito) {
     adminWithoutRavito.addEventListener("change", function () { apply(); });
   }
+  if (adminWithoutParking) {
+    adminWithoutParking.addEventListener("change", function () { apply(); });
+  }
   reset.addEventListener("click", function () {
     search.value = "";
     sortBy.value = "name";
@@ -180,6 +191,9 @@
     elevationMax.value = elevationMax.max;
     if (adminWithoutRavito) {
       adminWithoutRavito.checked = false;
+    }
+    if (adminWithoutParking) {
+      adminWithoutParking.checked = false;
     }
     apply();
   });

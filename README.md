@@ -272,16 +272,19 @@ import; they do not include RideWithGPS cue sheets or turn-by-turn metadata.
 
 ### Ravitos
 
-Known grocery stores, cafés, and dépanneurs can be listed in `.env`, then
-`build_site` automatically shows the ones within `RAVITO_RADIUS_M` of each
-route on the ride detail page, once the closest point on the route is far
-enough from the start.
+Known grocery stores, cafés, dépanneurs, and parking spots can be listed in
+`.env`. `build_site` automatically shows ravitos within `RAVITO_RADIUS_M` of
+each route on the ride detail page, once the closest point on the route is far
+enough from the start. Parking spots use the same entry format, but are matched
+against the route's first GPS point.
 
 ```env
 RAVITO_POINTS=https://maps.app.goo.gl/bCT3vqf9aJ38ohCo9;Nom court|https://www.google.com/maps/place/...;Nom manuel|45.123456|-72.123456
 RAVITO_RADIUS_M=500
 RAVITO_MIN_ROUTE_DISTANCE_M=30000
 RAVITO_ENDPOINT_EXCLUSION_RADIUS_M=3000
+PARKING_POINTS=Stationnement|https://maps.app.goo.gl/...;Stationnement manuel|45.123456|-72.123456
+PARKING_RADIUS_M=500
 ```
 
 Entries can be separated by `;`, newlines, or commas before another Google
@@ -293,8 +296,8 @@ that cannot be resolved to coordinates are skipped. By default, a ravito must
 be at least 30 km into the route and more than 3 km from the route's start or
 finish point.
 
-Add `?admin=true` to the static site index URL to reveal an admin-only filter
-for rides without any detected ravito:
+Add `?admin=true` to the static site index URL to reveal admin-only filters
+for rides without any detected ravito or parking:
 
 ```text
 https://www.gravelleestrie.com/?admin=true

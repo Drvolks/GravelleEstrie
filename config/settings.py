@@ -162,6 +162,11 @@ RAVITO_RADIUS_M = env_int("RAVITO_RADIUS_M", 500)
 RAVITO_MIN_ROUTE_DISTANCE_M = env_int("RAVITO_MIN_ROUTE_DISTANCE_M", 30_000)
 RAVITO_ENDPOINT_EXCLUSION_RADIUS_M = env_int("RAVITO_ENDPOINT_EXCLUSION_RADIUS_M", 3_000)
 
+# Semicolon-separated parking points near known ride starts. Same entry
+# formats as RAVITO_POINTS.
+PARKING_POINTS = os.environ.get("PARKING_POINTS", "")
+PARKING_RADIUS_M = env_int("PARKING_RADIUS_M", 500)
+
 # Strava API
 STRAVA_CLIENT_ID = os.environ.get("STRAVA_CLIENT_ID", "")
 STRAVA_CLIENT_SECRET = os.environ.get("STRAVA_CLIENT_SECRET", "")

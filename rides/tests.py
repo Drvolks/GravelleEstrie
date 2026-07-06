@@ -15,7 +15,13 @@ from rides.services.location import (
     geometry_starts_in_quebec,
     infer_start_city,
 )
-from rides.services.ravitos import Ravito, find_nearby_ravitos, parse_ravito_points
+from rides.services.ravitos import (
+    Ravito,
+    find_nearby_parking,
+    find_nearby_ravitos,
+    parse_parking_points,
+    parse_ravito_points,
+)
 from rides.services.ridewithgps import RideWithGPSClient, RWGPSRide
 from rides.services.strava import StravaClient, StravaRide, StravaRouteFetchError
 
@@ -108,6 +114,23 @@ class RavitoTests(TestCase):
         ravitos = parse_ravito_points(f"Ravito court|{url}")
         self.assertEqual([r.name for r in ravitos], ["Ravito court"])
 
+    def test_parse_parking_points_uses_parking_default_name(self):
+        parkings = parse_parking_points("https://www.google.com/maps/search/?api=1&query=45,-72")
+        self.assertEqual(len(parkings), 1)
+        self.assertEqual(parkings[0].name, "Stationnement")
+
+    def test_parse_parking_points_accepts_google_search_path_coordinates(self):
+        url = "https://www.google.com/maps/search/45.167415,+-72.038035?entry=tts"
+        parkings = parse_parking_points(url)
+        self.assertEqual(len(parkings), 1)
+        self.assertEqual(parkings[0].lat, 45.167415)
+        self.assertEqual(parkings[0].lng, -72.038035)
+
+    def test_parse_map_points_dedupes_duplicate_urls(self):
+        raw = "https://www.google.com/maps/search/?api=1&query=45,-72;Parking|https://www.google.com/maps/search/?api=1&query=45,-72"
+        parkings = parse_parking_points(raw)
+        self.assertEqual([parking.name for parking in parkings], ["Parking"])
+
     def test_find_nearby_ravitos_matches_route_segments_and_sorts_by_distance(self):
         route = [[45.0, -72.0], [45.0, -71.99]]
         ravitos = [
@@ -140,6 +163,18 @@ class RavitoTests(TestCase):
 
         self.assertEqual([match.ravito.name for match in matches], ["Relevant"])
         self.assertGreaterEqual(matches[0].route_distance_m, 30_000)
+
+    def test_find_nearby_parking_matches_only_route_start(self):
+        route = [[45.0, -72.0], [45.0, -71.0]]
+        parkings = [
+            Ravito("Depart", 45.0002, -72.0),
+            Ravito("Arrivee", 45.0, -71.0),
+        ]
+
+        matches = find_nearby_parking(route, parkings, radius_m=500)
+
+        self.assertEqual([match.parking.name for match in matches], ["Depart"])
+        self.assertLess(matches[0].distance_m, 50)
 
 
 class QuebecLocationFilterTests(TestCase):
@@ -674,7 +709,7 @@ class ImportCommandTests(TestCase):
         )
 
 
-@override_settings(RAVITO_POINTS="")
+@override_settings(RAVITO_POINTS="", PARKING_POINTS="")
 class BuildSiteTests(TestCase):
     @override_settings(SITE_BASE_PATH="/Test", SITE_CUSTOM_DOMAIN="www.example.com")
     def test_build_site_writes_pages(self):
@@ -709,7 +744,10 @@ class BuildSiteTests(TestCase):
             self.assertIn('id="elevation-slider"', html)
             self.assertIn('id="admin-without-ravito-filter"', html)
             self.assertIn('id="admin-without-ravito"', html)
+            self.assertIn('id="admin-without-parking-filter"', html)
+            self.assertIn('id="admin-without-parking"', html)
             self.assertIn('data-ravitos="0"', html)
+            self.assertIn('data-parkings="0"', html)
 
     @override_settings(SITE_BASE_PATH="", SITE_CUSTOM_DOMAIN="")
     def test_build_site_supports_custom_domain_root_paths(self):
@@ -905,6 +943,31 @@ class BuildSiteTests(TestCase):
         self.assertNotIn("Ravito depart", html)
         self.assertNotIn("Ravito arrivee", html)
         self.assertIn('data-ravitos="1"', index_html)
+
+    @override_settings(
+        SITE_BASE_PATH="/Test",
+        PARKING_POINTS="Parking depart|45|-72;Parking loin|45|-71",
+        PARKING_RADIUS_M=500,
+    )
+    def test_build_site_shows_nearby_parkings_on_detail_pages(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(
+            name="Sortie A",
+            geometry=[[45.0, -72.0], [45.0, -71.0]],
+            distance_m=80_000,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            detail = Path(tmp) / "rides" / "sortie-a" / "index.html"
+            html = detail.read_text(encoding="utf-8")
+
+        self.assertIn("Stationnements", html)
+        self.assertIn("Parking depart", html)
+        self.assertIn("du départ", html)
+        self.assertIn("https://www.google.com/maps/search/?api=1&amp;query=45%2C-72", html)
+        self.assertNotIn("Parking loin", html)
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_preserves_existing_thumbnails_when_media_file_is_missing(self):

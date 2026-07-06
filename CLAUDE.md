@@ -100,6 +100,8 @@ python -m http.server 8765 --directory preview
     `RAVITO_ENDPOINT_EXCLUSION_RADIUS_M` and shows configured Google Maps or
     coordinate-based ravitos that fall near each route after the first 30 km,
     excluding stops too close to the route's start/finish points.
+    `PARKING_POINTS` and `PARKING_RADIUS_M` use the same point format and show
+    configured parking spots near the route's first GPS point.
   - `strava_auth.py` — one-time local-server OAuth flow that writes
     `STRAVA_REFRESH_TOKEN` into `.env`.
 - `rides/templates/site/` — the static site templates (`index.html`, `detail.html`,

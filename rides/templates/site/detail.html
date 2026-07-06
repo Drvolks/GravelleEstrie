@@ -61,6 +61,24 @@
     {% if ride.start_city %}<div><dt>Ville de départ</dt><dd>{{ ride.start_city }}</dd></div>{% endif %}
   </dl>
 
+  {% if ride.parkings %}
+  <section class="parkings" aria-label="Stationnements près du départ">
+    <h2>Stationnements</h2>
+    <div class="parking-list">
+      {% for parking in ride.parkings %}
+        <article class="parking">
+          <div>
+            <h3>{{ parking.name }}</h3>
+            <p>{{ parking.distance_label }}</p>
+          </div>
+          <a href="{{ parking.map_url }}" target="_blank" rel="noopener"
+             aria-label="Ouvrir {{ parking.name }} sur la carte">Carte</a>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
   {% if ride.ravitos %}
   <section class="ravitos" aria-label="Ravitos près du parcours">
     <h2>Ravitos</h2>
