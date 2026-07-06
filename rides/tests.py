@@ -131,6 +131,19 @@ class RavitoTests(TestCase):
         parkings = parse_parking_points(raw)
         self.assertEqual([parking.name for parking in parkings], ["Parking"])
 
+    def test_parse_map_points_prefers_override_name_over_google_name(self):
+        short_url = "https://maps.app.goo.gl/parking"
+        resolved_url = (
+            "https://www.google.com/maps/place/Google+Parking/"
+            "@45,-72,17z/data=!4m6!3m5!8m2!3d45!4d-72"
+        )
+        raw = f"{short_url};Nom env|{short_url}"
+
+        with mock.patch("rides.services.ravitos._resolve_url", return_value=resolved_url):
+            parkings = parse_parking_points(raw)
+
+        self.assertEqual([parking.name for parking in parkings], ["Nom env"])
+
     def test_find_nearby_ravitos_matches_route_segments_and_sorts_by_distance(self):
         route = [[45.0, -72.0], [45.0, -71.99]]
         ravitos = [

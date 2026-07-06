@@ -26,6 +26,7 @@ class Ravito:
     lat: float
     lng: float
     url: str = ""
+    name_is_override: bool = False
 
 
 @dataclass(frozen=True)
@@ -71,7 +72,15 @@ def _dedupe_points(points: list[Ravito], *, default_name: str) -> list[Ravito]:
     for point in points:
         key = point.url or f"{point.lat:.6f},{point.lng:.6f}"
         existing = deduped.get(key)
-        if existing is None or (existing.name == default_name and point.name != default_name):
+        if (
+            existing is None
+            or (point.name_is_override and not existing.name_is_override)
+            or (
+                not existing.name_is_override
+                and existing.name == default_name
+                and point.name != default_name
+            )
+        ):
             deduped[key] = point
     return list(deduped.values())
 
@@ -113,7 +122,7 @@ def _parse_coordinate_entry(parts: list[str]) -> Ravito | None:
         return None
     if not _valid_coordinates(lat, lng):
         return None
-    return Ravito(name=parts[0], lat=lat, lng=lng)
+    return Ravito(name=parts[0], lat=lat, lng=lng, name_is_override=True)
 
 
 def _parse_url_entry(
@@ -131,8 +140,15 @@ def _parse_url_entry(
         logger.warning("Skipping ravito URL without coordinates: %s", url)
         return None
     lat, lng = coordinates
-    name = name_override.strip() or _extract_place_name(resolved_url) or default_name
-    return Ravito(name=name, lat=lat, lng=lng, url=url)
+    override_name = name_override.strip()
+    name = override_name or _extract_place_name(resolved_url) or default_name
+    return Ravito(
+        name=name,
+        lat=lat,
+        lng=lng,
+        url=url,
+        name_is_override=bool(override_name),
+    )
 
 
 def _resolve_url(url: str) -> str:
