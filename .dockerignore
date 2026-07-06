@@ -10,6 +10,7 @@ media/
 output/
 docs/
 staticfiles/
+.cache/
 .github/
 *.md
 !README.md

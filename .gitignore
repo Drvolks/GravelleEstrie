@@ -9,6 +9,7 @@ venv/
 *.sqlite3
 media/
 staticfiles/
+.cache/
 
 # Secrets / env
 .env

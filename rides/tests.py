@@ -1,3 +1,5 @@
+import json
+import os
 import xml.etree.ElementTree as ET
 from io import StringIO
 from pathlib import Path
@@ -143,6 +145,48 @@ class RavitoTests(TestCase):
             parkings = parse_parking_points(raw)
 
         self.assertEqual([parking.name for parking in parkings], ["Nom env"])
+
+    def test_parse_ravito_points_uses_cached_google_maps_url(self):
+        short_url = "https://maps.app.goo.gl/cached"
+        resolved_url = (
+            "https://www.google.com/maps/place/Cached+Cafe/"
+            "@45.0004,-71.995,17z/data=!4m6!3m5!8m2!3d45.0004!4d-71.995"
+        )
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            cache_path = Path(tmp) / "google-maps-url-cache.json"
+            cache_path.write_text(
+                json.dumps({short_url: resolved_url}),
+                encoding="utf-8",
+            )
+
+            with mock.patch.dict(os.environ, {"GOOGLE_MAPS_URL_CACHE_PATH": str(cache_path)}):
+                with mock.patch("rides.services.ravitos.requests.get") as get:
+                    ravitos = parse_ravito_points(short_url)
+
+        get.assert_not_called()
+        self.assertEqual([ravito.name for ravito in ravitos], ["Cached Cafe"])
+
+    def test_parse_ravito_points_writes_google_maps_url_cache(self):
+        short_url = "https://maps.app.goo.gl/to-cache"
+        resolved_url = (
+            "https://www.google.com/maps/place/Cached+Store/"
+            "@45.0004,-71.995,17z/data=!4m6!3m5!8m2!3d45.0004!4d-71.995"
+        )
+        response = mock.Mock(url=resolved_url)
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            cache_path = Path(tmp) / "google-maps-url-cache.json"
+            with mock.patch.dict(os.environ, {"GOOGLE_MAPS_URL_CACHE_PATH": str(cache_path)}):
+                with mock.patch("rides.services.ravitos.requests.get", return_value=response):
+                    ravitos = parse_ravito_points(short_url)
+
+            cache = json.loads(cache_path.read_text(encoding="utf-8"))
+
+        self.assertEqual([ravito.name for ravito in ravitos], ["Cached Store"])
+        self.assertEqual(cache[short_url], resolved_url)
 
     def test_find_nearby_ravitos_matches_route_segments_and_sorts_by_distance(self):
         route = [[45.0, -72.0], [45.0, -71.99]]

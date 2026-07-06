@@ -57,12 +57,14 @@ services:
       RAVITO_ENDPOINT_EXCLUSION_RADIUS_M: ${RAVITO_ENDPOINT_EXCLUSION_RADIUS_M:-3000}
       PARKING_POINTS: ${PARKING_POINTS:-}
       PARKING_RADIUS_M: ${PARKING_RADIUS_M:-500}
+      GOOGLE_MAPS_URL_CACHE_PATH: ${GOOGLE_MAPS_URL_CACHE_PATH:-/app/.cache/google-maps-url-cache.json}
       SITE_BASE_PATH: ${SITE_BASE_PATH:-}
       SITE_CUSTOM_DOMAIN: ${SITE_CUSTOM_DOMAIN:-www.gravelleestrie.com}
     ports:
       - "8000:8000"
     volumes:
       - media:/app/media       # persisted uploaded thumbnails
+      - ./.cache:/app/.cache   # cached Google Maps short-link resolutions
       - ./docs:/app/docs       # committed static site for GitHub Pages
 
   # Serves the generated static site at the custom-domain root.

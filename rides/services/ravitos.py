@@ -6,8 +6,11 @@ route geometry during static site generation.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
 import logging
 import math
+import os
+from pathlib import Path
 import re
 from typing import Iterable
 from urllib.parse import unquote_plus, urlparse
@@ -16,8 +19,13 @@ import requests
 
 EARTH_RADIUS_M = 6_371_000
 URL_TIMEOUT_SECONDS = 8
+URL_CACHE_ENV = "GOOGLE_MAPS_URL_CACHE_PATH"
+DEFAULT_URL_CACHE_PATH = Path(".cache/google-maps-url-cache.json")
 
 logger = logging.getLogger(__name__)
+
+_url_cache: dict[str, str] | None = None
+_url_cache_path: Path | None = None
 
 
 @dataclass(frozen=True)
@@ -152,6 +160,10 @@ def _parse_url_entry(
 
 
 def _resolve_url(url: str) -> str:
+    cached_url = _cached_resolved_url(url)
+    if cached_url:
+        return cached_url
+
     try:
         response = requests.get(
             url,
@@ -159,10 +171,81 @@ def _resolve_url(url: str) -> str:
             headers={"User-Agent": "GravelleEstrie/1.0"},
             timeout=URL_TIMEOUT_SECONDS,
         )
-        return response.url or url
+        resolved_url = response.url or url
     except requests.RequestException as exc:
         logger.warning("Could not resolve ravito URL %s: %s", url, exc)
         return url
+    if resolved_url != url and _extract_coordinates(resolved_url):
+        _remember_resolved_url(url, resolved_url)
+    return resolved_url
+
+
+def _cached_resolved_url(url: str) -> str:
+    cache = _load_url_cache()
+    cached_url = cache.get(url, "")
+    if cached_url and _extract_coordinates(cached_url):
+        return cached_url
+    return ""
+
+
+def _remember_resolved_url(url: str, resolved_url: str) -> None:
+    path = _current_url_cache_path()
+    if path is None:
+        return
+    cache = _load_url_cache()
+    if cache.get(url) == resolved_url:
+        return
+    cache[url] = resolved_url
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path = path.with_name(f"{path.name}.tmp")
+        tmp_path.write_text(
+            json.dumps(dict(sorted(cache.items())), indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        tmp_path.replace(path)
+    except OSError as exc:
+        logger.warning("Could not write Google Maps URL cache %s: %s", path, exc)
+
+
+def _load_url_cache() -> dict[str, str]:
+    global _url_cache, _url_cache_path
+
+    path = _current_url_cache_path()
+    if path is None:
+        return {}
+    if _url_cache is not None and _url_cache_path == path:
+        return _url_cache
+
+    _url_cache_path = path
+    try:
+        raw_cache = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        _url_cache = {}
+        return _url_cache
+    except (json.JSONDecodeError, OSError) as exc:
+        logger.warning("Could not read Google Maps URL cache %s: %s", path, exc)
+        _url_cache = {}
+        return _url_cache
+
+    if not isinstance(raw_cache, dict):
+        logger.warning("Ignoring invalid Google Maps URL cache %s", path)
+        _url_cache = {}
+        return _url_cache
+
+    _url_cache = {
+        str(source_url): str(resolved_url)
+        for source_url, resolved_url in raw_cache.items()
+        if _looks_like_url(str(source_url)) and _looks_like_url(str(resolved_url))
+    }
+    return _url_cache
+
+
+def _current_url_cache_path() -> Path | None:
+    raw_path = os.environ.get(URL_CACHE_ENV, "").strip()
+    if raw_path.lower() in {"0", "false", "no", "off", "none"}:
+        return None
+    return Path(raw_path) if raw_path else DEFAULT_URL_CACHE_PATH
 
 
 def _extract_coordinates(url: str) -> tuple[float, float] | None:

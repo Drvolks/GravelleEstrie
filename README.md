@@ -285,16 +285,19 @@ RAVITO_MIN_ROUTE_DISTANCE_M=30000
 RAVITO_ENDPOINT_EXCLUSION_RADIUS_M=3000
 PARKING_POINTS=Stationnement|https://maps.app.goo.gl/...;Stationnement manuel|45.123456|-72.123456
 PARKING_RADIUS_M=500
+GOOGLE_MAPS_URL_CACHE_PATH=.cache/google-maps-url-cache.json
 ```
 
 Entries can be separated by `;`, newlines, or commas before another Google
 Maps URL. A Google Maps URL can be used alone; if it has a long Google place
 name, prefix it with `Nom à afficher|`. Coordinate entries also work as
 `Nom|latitude|longitude`. Short `maps.app.goo.gl` links are resolved during
-`build_site`, so that command needs network access when you use them. Entries
-that cannot be resolved to coordinates are skipped. By default, a ravito must
-be at least 30 km into the route and more than 3 km from the route's start or
-finish point.
+`build_site`, then cached locally in `GOOGLE_MAPS_URL_CACHE_PATH` so later
+builds do not need to hit Google again for the same links. Delete that cache
+file to force a refresh; set `GOOGLE_MAPS_URL_CACHE_PATH=off` to disable it.
+Entries that cannot be resolved to coordinates are skipped and are not cached.
+By default, a ravito must be at least 30 km into the route and more than 3 km
+from the route's start or finish point.
 
 Add `?admin=true` to the static site index URL to reveal admin-only filters
 for rides without any detected ravito or parking:
