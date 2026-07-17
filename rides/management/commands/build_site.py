@@ -202,6 +202,7 @@ class Command(BaseCommand):
             slug=ride.slug,
             description=ride.description,
             ride_date=ride.ride_date,
+            created_at=ride.created_at,
             start_city=start_city,
             distance_km=ride.distance_km,
             distance_m=round(ride.distance_m),

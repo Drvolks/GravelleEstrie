@@ -110,6 +110,11 @@
           || compareText(a.dataset.name, b.dataset.name);
         return direction * result;
       }
+      if (field === "created") {
+        result = compareText(a.dataset.created, b.dataset.created)
+          || compareText(a.dataset.name, b.dataset.name);
+        return direction * result;
+      }
       if (field === "city") {
         if (!a.dataset.city && b.dataset.city) return 1;
         if (a.dataset.city && !b.dataset.city) return -1;

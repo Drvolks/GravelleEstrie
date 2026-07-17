@@ -792,6 +792,8 @@ class BuildSiteTests(TestCase):
             self.assertIn('id="sort-direction"', html)
             self.assertIn('data-direction="asc"', html)
             self.assertIn('<option value="distance">Distance</option>', html)
+            self.assertIn("<option value=\"created\">Date d'ajout</option>", html)
+            self.assertIn('data-created="', html)
             self.assertIn('class="sort-direction-icon"', html)
             self.assertIn('id="distance-min"', html)
             self.assertIn('id="distance-max"', html)

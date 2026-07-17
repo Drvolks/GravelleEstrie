@@ -12,6 +12,7 @@
       <span>Trier par</span>
       <select id="sort-by">
         <option value="name">Nom</option>
+        <option value="created">Date d'ajout</option>
         <option value="distance">Distance</option>
         <option value="elevation">Dénivelé</option>
         <option value="city">Ville de départ</option>
@@ -55,6 +56,7 @@
   {% for ride in rides %}
   <article class="card" data-name="{{ ride.name|lower }}" data-city="{{ ride.start_city|lower }}"
            data-distance="{{ ride.distance_km }}" data-elevation="{{ ride.elevation_m }}"
+           data-created="{{ ride.created_at|date:'Y-m-d H:i:s' }}"
            data-ravitos="{{ ride.ravito_count }}" data-parkings="{{ ride.parking_count }}">
     <a class="card-link" href="{{ base_path }}/rides/{{ ride.slug }}/">
       <div class="card-thumb">
