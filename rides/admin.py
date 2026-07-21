@@ -42,7 +42,17 @@ class RideAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {"fields": ("name", "slug", "description", "ride_date", "is_published")}),
-        ("Lieu & statistiques", {"fields": ("start_city", "distance_m", "elevation_gain_m")}),
+        (
+            "Lieu & statistiques",
+            {
+                "fields": (
+                    "start_city",
+                    "distance_m",
+                    "elevation_gain_m",
+                    "strava_elevation_gain_m",
+                )
+            },
+        ),
         ("Tracé", {"fields": ("geometry", "point_count", "thumbnail", "thumb_preview")}),
         ("Images locales", {"fields": ("local_image_folder", "local_images_preview")}),
         (
@@ -74,6 +84,8 @@ class RideAdmin(admin.ModelAdmin):
 
     @admin.display(description="Dénivelé", ordering="elevation_gain_m")
     def elevation_display(self, obj):
+        if obj.strava_elevation_gain_m:
+            return f"{obj.elevation_m} m (Strava)"
         return f"{obj.elevation_m} m"
 
     @admin.display(description="Points")

@@ -193,7 +193,12 @@ RideWithGPS route from `RWGPS_USER_ID`, plus any route ids in
 `RWGPS_EXTRA_ROUTE_IDS`), then `import_strava` matches each new
 `STRAVA_ROUTE_IDS` route onto an existing RideWithGPS-sourced ride (same name,
 similar distance) and merges its link in — or creates a new ride if genuinely
-not already present. Both steps are incremental by default: they still read
+not already present. A merge normally only fills in gaps, with one exception:
+Strava's elevation gain is always recorded, because RideWithGPS systematically
+under-reports climbing (e.g. 1178 m vs Strava's 1275 m on the Pork Epic). Rides
+linked to a Strava route therefore display Strava's figure; the RideWithGPS
+value is kept alongside it and used as the fallback. Both steps are incremental
+by default: they still read
 the source route lists, but skip detail fetches for source ids already present
 locally, which keeps repeat runs lighter on API calls. Pass `--full` to fetch
 and update every configured route, including already-imported ones. Pass

@@ -137,6 +137,10 @@ def _upsert(
         # already contributed by the source that created this row.
         setattr(ride, id_field, payload.external_id)
         setattr(ride, url_field, url_value)
+        # Exception to "don't clobber": RideWithGPS under-reports climbing, so
+        # Strava's elevation is kept even though RWGPS created this row.
+        if is_strava and payload.elevation_gain_m:
+            ride.strava_elevation_gain_m = payload.elevation_gain_m
         if not ride.start_city and payload.start_city:
             ride.start_city = payload.start_city
         if not ride.ride_date and payload.ride_date:
@@ -144,10 +148,21 @@ def _upsert(
         if len(payload.geometry) > len(ride.geometry or []):
             ride.geometry = payload.geometry
     else:
+        cross_linked = bool(getattr(ride, other_id_field, ""))
         ride.name = clean_ride_name(payload.name)
         ride.distance_m = payload.distance_m
-        ride.elevation_gain_m = payload.elevation_gain_m
-        ride.geometry = payload.geometry
+        if is_strava:
+            ride.strava_elevation_gain_m = payload.elevation_gain_m or None
+        # On a cross-linked row, keep the other source's elevation as the
+        # fallback `elevation_m` falls back to instead of overwriting it.
+        if not (is_strava and cross_linked):
+            ride.elevation_gain_m = payload.elevation_gain_m
+        # Same idea for the track: a re-import must never downgrade a
+        # cross-linked ride to the other source's coarser polyline (Strava's
+        # route polylines are far sparser than RideWithGPS's, and the GPX we
+        # publish is baked from whatever is stored here).
+        if not cross_linked or len(payload.geometry) >= len(ride.geometry or []):
+            ride.geometry = payload.geometry
         setattr(ride, id_field, payload.external_id)
         setattr(ride, url_field, url_value)
         if payload.ride_date:

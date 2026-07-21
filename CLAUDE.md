@@ -59,6 +59,12 @@ python -m http.server 8765 --directory preview
   cross-source linking is via independent nullable `strava_activity_id` /
   `rwgps_route_id` fields on the *same row* (a ride can have both). `geometry` is a
   JSON list of `[lat, lng]` pairs used to bake thumbnails and detect nearby ravitos.
+  Elevation is stored twice: `elevation_gain_m` holds the creating source's figure
+  (usually RideWithGPS) and `strava_elevation_gain_m` holds Strava's when the ride is
+  linked to a Strava route. RideWithGPS systematically under-reports climbing, so the
+  `elevation_m` property — the only thing the site and admin display — prefers the
+  Strava value and falls back to `elevation_gain_m`. Clear the Strava field in the
+  admin to force the RideWithGPS/manual value.
 - `rides/services/` — `strava.py`, `ridewithgps.py` (API clients), `geometry.py`,
   `location.py` (Quebec start-point filtering), `thumbnails.py` (renders PNGs from
   route geometry + OSM tiles), `images.py` (discovers git-ignored local ride photos),

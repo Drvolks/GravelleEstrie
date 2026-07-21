@@ -31,6 +31,19 @@ class Ride(models.Model):
     # Stats
     distance_m = models.FloatField("Distance (m)", default=0)
     elevation_gain_m = models.FloatField("Dénivelé positif (m)", default=0)
+    # RideWithGPS systematically under-reports climbing compared to Strava, so
+    # when both sources are linked to this ride Strava's figure is the one
+    # shown (see `elevation_m`). Left null when the ride has no Strava route.
+    strava_elevation_gain_m = models.FloatField(
+        "Dénivelé positif Strava (m)",
+        null=True,
+        blank=True,
+        help_text=(
+            "Renseigné par l'import Strava. Affiché de préférence au dénivelé "
+            "RideWithGPS, qui sous-estime. Vider ce champ pour retomber sur "
+            "le dénivelé positif ci-dessus."
+        ),
+    )
 
     # Geometry: list of [lat, lng] pairs (WGS84).
     geometry = models.JSONField("Tracé (points lat/lng)", default=list, blank=True)
@@ -114,6 +127,9 @@ class Ride(models.Model):
 
     @property
     def elevation_m(self) -> int:
+        """Climbing to display: Strava's figure when we have one, else RWGPS's."""
+        if self.strava_elevation_gain_m:
+            return int(round(self.strava_elevation_gain_m))
         return int(round(self.elevation_gain_m))
 
     @property

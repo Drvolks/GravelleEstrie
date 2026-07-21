@@ -624,6 +624,64 @@ class ImporterTests(TestCase):
         self.assertEqual(ride.ride_date, actual_ride_day)
 
     @mock.patch("rides.services.importer.build_thumbnail_file", return_value=None)
+    def test_strava_elevation_wins_over_rwgps_on_merged_ride(self, _thumb):
+        rwgps_client = mock.Mock(spec=RideWithGPSClient)
+        rwgps_client.fetch_rides.return_value = [
+            self._rwgps_payload(name="Pork Epic", distance_m=78000, elevation_gain_m=1178)
+        ]
+        importer.import_ridewithgps(client=rwgps_client)
+
+        strava_client = mock.Mock(spec=StravaClient)
+        strava_client.fetch_rides.return_value = [
+            self._strava_payload(name="Pork Epic", distance_m=78000, elevation_gain_m=1275)
+        ]
+        self.assertEqual(importer.import_strava(client=strava_client).merged, 1)
+
+        ride = Ride.objects.get()
+        self.assertEqual(ride.elevation_gain_m, 1178)  # RWGPS value kept as-is
+        self.assertEqual(ride.strava_elevation_gain_m, 1275)
+        self.assertEqual(ride.elevation_m, 1275)  # ...but Strava's is displayed
+
+        # A later --full RideWithGPS refresh must not undo it.
+        rwgps_client.fetch_rides.return_value = [
+            self._rwgps_payload(name="Pork Epic", distance_m=78000, elevation_gain_m=1180)
+        ]
+        importer.import_ridewithgps(client=rwgps_client, full=True)
+        self.assertEqual(Ride.objects.get().elevation_m, 1275)
+
+    @mock.patch("rides.services.importer.build_thumbnail_file", return_value=None)
+    def test_full_strava_reimport_keeps_denser_rwgps_track(self, _thumb):
+        dense = [[45.0 + i / 10000.0, -72.0] for i in range(200)]
+        rwgps_client = mock.Mock(spec=RideWithGPSClient)
+        rwgps_client.fetch_rides.return_value = [
+            self._rwgps_payload(distance_m=30000, elevation_gain_m=1000, geometry=dense)
+        ]
+        importer.import_ridewithgps(client=rwgps_client)
+
+        strava_client = mock.Mock(spec=StravaClient)
+        strava_client.fetch_rides.return_value = [
+            self._strava_payload(distance_m=30000, elevation_gain_m=1100, geometry=SQUARE)
+        ]
+        importer.import_strava(client=strava_client)
+        # Re-run with --full: this now takes the id-match update path.
+        importer.import_strava(client=strava_client, full=True)
+
+        ride = Ride.objects.get()
+        self.assertEqual(len(ride.geometry), len(dense))
+        self.assertEqual(ride.elevation_gain_m, 1000)  # RWGPS fallback intact
+        self.assertEqual(ride.elevation_m, 1100)
+
+    @mock.patch("rides.services.importer.build_thumbnail_file", return_value=None)
+    def test_strava_only_ride_records_its_own_elevation(self, _thumb):
+        client = mock.Mock(spec=StravaClient)
+        client.fetch_rides.return_value = [self._strava_payload(elevation_gain_m=900)]
+        importer.import_strava(client=client)
+
+        ride = Ride.objects.get()
+        self.assertEqual(ride.strava_elevation_gain_m, 900)
+        self.assertEqual(ride.elevation_m, 900)
+
+    @mock.patch("rides.services.importer.build_thumbnail_file", return_value=None)
     def test_rwgps_creates_standalone_rides_by_default(self, _thumb):
         rwgps_client = mock.Mock(spec=RideWithGPSClient)
         rwgps_client.fetch_rides.return_value = [
