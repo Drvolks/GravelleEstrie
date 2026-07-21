@@ -281,7 +281,9 @@ Known grocery stores, cafés, dépanneurs, and parking spots can be listed in
 `.env`. `build_site` automatically shows ravitos within `RAVITO_RADIUS_M` of
 each route on the ride detail page, once the closest point on the route is far
 enough from the start. Parking spots use the same entry format, but are matched
-against the route's first GPS point.
+against the route's first GPS point, and "plaisirs après ride" (places to eat
+and drink once the ride is done) are matched against the route's last GPS
+point.
 
 ```env
 RAVITO_POINTS=https://maps.app.goo.gl/bCT3vqf9aJ38ohCo9;Nom court|https://www.google.com/maps/place/...;Nom manuel|45.123456|-72.123456
@@ -290,6 +292,8 @@ RAVITO_MIN_ROUTE_DISTANCE_M=30000
 RAVITO_ENDPOINT_EXCLUSION_RADIUS_M=3000
 PARKING_POINTS=Stationnement|https://maps.app.goo.gl/...;Stationnement manuel|45.123456|-72.123456
 PARKING_RADIUS_M=500
+PLAISIRS_POINTS=Resto|https://maps.app.goo.gl/...;Bar manuel|45.123456|-72.123456
+PLAISIRS_RADIUS_M=500
 GOOGLE_MAPS_URL_CACHE_PATH=.cache/google-maps-url-cache.json
 ```
 

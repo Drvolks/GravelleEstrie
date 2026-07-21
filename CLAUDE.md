@@ -107,7 +107,9 @@ python -m http.server 8765 --directory preview
     coordinate-based ravitos that fall near each route after the first 30 km,
     excluding stops too close to the route's start/finish points.
     `PARKING_POINTS` and `PARKING_RADIUS_M` use the same point format and show
-    configured parking spots near the route's first GPS point.
+    configured parking spots near the route's first GPS point;
+    `PLAISIRS_POINTS` and `PLAISIRS_RADIUS_M` do the same for "plaisirs après
+    ride" (places to eat and drink) near the route's *last* GPS point.
   - `strava_auth.py` — one-time local-server OAuth flow that writes
     `STRAVA_REFRESH_TOKEN` into `.env`.
 - `rides/templates/site/` — the static site templates (`index.html`, `detail.html`,

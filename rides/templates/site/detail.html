@@ -97,6 +97,24 @@
   </section>
   {% endif %}
 
+  {% if ride.plaisirs %}
+  <section class="plaisirs" aria-label="Plaisirs après ride près de l'arrivée">
+    <h2>Plaisirs après ride</h2>
+    <div class="plaisir-list">
+      {% for plaisir in ride.plaisirs %}
+        <article class="plaisir">
+          <div>
+            <h3>{{ plaisir.name }}</h3>
+            <p>{{ plaisir.distance_label }}</p>
+          </div>
+          <a href="{{ plaisir.map_url }}" target="_blank" rel="noopener"
+             aria-label="Ouvrir {{ plaisir.name }} sur la carte">Carte</a>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
   {% if ride.images %}
   <section class="ride-photos" aria-label="Photos de {{ ride.name }}" data-photo-gallery>
     {% for image in ride.images %}

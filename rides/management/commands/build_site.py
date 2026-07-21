@@ -24,8 +24,10 @@ from rides.services.images import list_ride_images
 from rides.services.location import geometry_starts_in_quebec, infer_start_city
 from rides.services.ravitos import (
     find_nearby_parking,
+    find_nearby_plaisirs,
     find_nearby_ravitos,
     parse_parking_points,
+    parse_plaisir_points,
     parse_ravito_points,
 )
 
@@ -75,6 +77,7 @@ class Command(BaseCommand):
             rides = [ride for ride in rides_qs if geometry_starts_in_quebec(ride.geometry)]
             ravitos = parse_ravito_points(settings.RAVITO_POINTS)
             parkings = parse_parking_points(settings.PARKING_POINTS)
+            plaisirs = parse_plaisir_points(settings.PLAISIRS_POINTS)
             views = [
                 self._ride_view(
                     r,
@@ -84,6 +87,7 @@ class Command(BaseCommand):
                     thumb_backup_dir,
                     ravitos,
                     parkings,
+                    plaisirs,
                 )
                 for r in rides
             ]
@@ -178,6 +182,7 @@ class Command(BaseCommand):
         thumb_backup_dir: Path | None,
         ravitos: list,
         parkings: list,
+        plaisirs: list,
     ) -> SimpleNamespace:
         thumb_url = ""
         dest = thumbs_dir / f"{ride.slug}.png"
@@ -194,6 +199,7 @@ class Command(BaseCommand):
         gpx_url = self._write_gpx_file(ride, base_path, out)
         nearby_ravitos = self._nearby_ravito_views(ride, ravitos)
         nearby_parkings = self._nearby_parking_views(ride, parkings)
+        nearby_plaisirs = self._nearby_plaisir_views(ride, plaisirs)
 
         start_city = ride.start_city or infer_start_city(ride.geometry)
 
@@ -217,6 +223,8 @@ class Command(BaseCommand):
             ravito_count=len(nearby_ravitos),
             parkings=nearby_parkings,
             parking_count=len(nearby_parkings),
+            plaisirs=nearby_plaisirs,
+            plaisir_count=len(nearby_plaisirs),
             gpx_url=gpx_url,
             cover_image_url=(
                 images[0].url if images else self._default_cover_url(base_path)
@@ -328,6 +336,27 @@ class Command(BaseCommand):
                 map_url=(
                     match.parking.url
                     or self._map_url(match.parking.lat, match.parking.lng)
+                ),
+            )
+            for match in matches
+        ]
+
+    def _nearby_plaisir_views(self, ride: Ride, plaisirs: list) -> list[SimpleNamespace]:
+        matches = find_nearby_plaisirs(
+            ride.geometry,
+            plaisirs,
+            radius_m=settings.PLAISIRS_RADIUS_M,
+        )
+        return [
+            SimpleNamespace(
+                name=match.plaisir.name,
+                lat=match.plaisir.lat,
+                lng=match.plaisir.lng,
+                distance_m=round(match.distance_m),
+                distance_label=self._point_distance_label(match.distance_m, "de l'arrivée"),
+                map_url=(
+                    match.plaisir.url
+                    or self._map_url(match.plaisir.lat, match.plaisir.lng)
                 ),
             )
             for match in matches

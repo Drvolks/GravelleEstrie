@@ -167,6 +167,12 @@ RAVITO_ENDPOINT_EXCLUSION_RADIUS_M = env_int("RAVITO_ENDPOINT_EXCLUSION_RADIUS_M
 PARKING_POINTS = os.environ.get("PARKING_POINTS", "")
 PARKING_RADIUS_M = env_int("PARKING_RADIUS_M", 500)
 
+# Semicolon-separated "plaisirs après ride" points (places to eat and drink at
+# the end of a route). Same entry formats as RAVITO_POINTS. Matched against the
+# route's last GPS point.
+PLAISIRS_POINTS = os.environ.get("PLAISIRS_POINTS", "")
+PLAISIRS_RADIUS_M = env_int("PLAISIRS_RADIUS_M", 500)
+
 # Strava API
 STRAVA_CLIENT_ID = os.environ.get("STRAVA_CLIENT_ID", "")
 STRAVA_CLIENT_SECRET = os.environ.get("STRAVA_CLIENT_SECRET", "")

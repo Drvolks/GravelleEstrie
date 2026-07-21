@@ -48,6 +48,10 @@
       <input type="checkbox" id="admin-without-parking">
       <span>Sans stationnement</span>
     </label>
+    <label class="admin-filter" id="admin-without-plaisir-filter" hidden>
+      <input type="checkbox" id="admin-without-plaisir">
+      <span>Sans plaisir après ride</span>
+    </label>
     <button type="button" id="reset" class="reset">Réinitialiser</button>
   </div>
 </section>
@@ -57,7 +61,8 @@
   <article class="card" data-name="{{ ride.name|lower }}" data-city="{{ ride.start_city|lower }}"
            data-distance="{{ ride.distance_km }}" data-elevation="{{ ride.elevation_m }}"
            data-created="{{ ride.created_at|date:'Y-m-d H:i:s' }}"
-           data-ravitos="{{ ride.ravito_count }}" data-parkings="{{ ride.parking_count }}">
+           data-ravitos="{{ ride.ravito_count }}" data-parkings="{{ ride.parking_count }}"
+           data-plaisirs="{{ ride.plaisir_count }}">
     <a class="card-link" href="{{ base_path }}/rides/{{ ride.slug }}/">
       <div class="card-thumb">
         {% if ride.thumb_url %}

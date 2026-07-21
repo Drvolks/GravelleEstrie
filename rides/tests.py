@@ -20,8 +20,10 @@ from rides.services.location import (
 from rides.services.ravitos import (
     Ravito,
     find_nearby_parking,
+    find_nearby_plaisirs,
     find_nearby_ravitos,
     parse_parking_points,
+    parse_plaisir_points,
     parse_ravito_points,
 )
 from rides.services.ridewithgps import RideWithGPSClient, RWGPSRide
@@ -232,6 +234,23 @@ class RavitoTests(TestCase):
 
         self.assertEqual([match.parking.name for match in matches], ["Depart"])
         self.assertLess(matches[0].distance_m, 50)
+
+    def test_find_nearby_plaisirs_matches_only_route_finish(self):
+        route = [[45.0, -72.0], [45.0, -71.0]]
+        plaisirs = [
+            Ravito("Depart", 45.0, -72.0),
+            Ravito("Arrivee", 45.0002, -71.0),
+        ]
+
+        matches = find_nearby_plaisirs(route, plaisirs, radius_m=500)
+
+        self.assertEqual([match.plaisir.name for match in matches], ["Arrivee"])
+        self.assertLess(matches[0].distance_m, 50)
+
+    def test_parse_plaisir_points_defaults_name(self):
+        plaisirs = parse_plaisir_points("https://www.google.com/maps/@45,-71.5,17z")
+
+        self.assertEqual([plaisir.name for plaisir in plaisirs], ["Plaisir"])
 
 
 class QuebecLocationFilterTests(TestCase):
@@ -824,7 +843,7 @@ class ImportCommandTests(TestCase):
         )
 
 
-@override_settings(RAVITO_POINTS="", PARKING_POINTS="")
+@override_settings(RAVITO_POINTS="", PARKING_POINTS="", PLAISIRS_POINTS="")
 class BuildSiteTests(TestCase):
     @override_settings(SITE_BASE_PATH="/Test", SITE_CUSTOM_DOMAIN="www.example.com")
     def test_build_site_writes_pages(self):
@@ -1085,6 +1104,33 @@ class BuildSiteTests(TestCase):
         self.assertIn("du départ", html)
         self.assertIn("https://www.google.com/maps/search/?api=1&amp;query=45%2C-72", html)
         self.assertNotIn("Parking loin", html)
+
+    @override_settings(
+        SITE_BASE_PATH="/Test",
+        PLAISIRS_POINTS="Resto arrivee|45|-71;Resto depart|45|-72",
+        PLAISIRS_RADIUS_M=500,
+    )
+    def test_build_site_shows_nearby_plaisirs_on_detail_pages(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(
+            name="Sortie A",
+            geometry=[[45.0, -72.0], [45.0, -71.0]],
+            distance_m=80_000,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            detail = Path(tmp) / "rides" / "sortie-a" / "index.html"
+            html = detail.read_text(encoding="utf-8")
+            index_html = (Path(tmp) / "index.html").read_text(encoding="utf-8")
+
+        self.assertIn("Plaisirs après ride", html)
+        self.assertIn("Resto arrivee", html)
+        self.assertIn("de l&#x27;arrivée", html)
+        self.assertIn("https://www.google.com/maps/search/?api=1&amp;query=45%2C-71", html)
+        self.assertNotIn("Resto depart", html)
+        self.assertIn('data-plaisirs="1"', index_html)
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_preserves_existing_thumbnails_when_media_file_is_missing(self):

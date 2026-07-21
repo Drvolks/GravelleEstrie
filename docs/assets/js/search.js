@@ -21,6 +21,8 @@
   const adminWithoutRavito = document.getElementById("admin-without-ravito");
   const adminWithoutParkingFilter = document.getElementById("admin-without-parking-filter");
   const adminWithoutParking = document.getElementById("admin-without-parking");
+  const adminWithoutPlaisirFilter = document.getElementById("admin-without-plaisir-filter");
+  const adminWithoutPlaisir = document.getElementById("admin-without-plaisir");
   const reset = document.getElementById("reset");
   const countEl = document.getElementById("result-count");
   const emptyEl = document.getElementById("empty");
@@ -35,6 +37,9 @@
   }
   if (isAdmin && adminWithoutParkingFilter) {
     adminWithoutParkingFilter.hidden = false;
+  }
+  if (isAdmin && adminWithoutPlaisirFilter) {
+    adminWithoutPlaisirFilter.hidden = false;
   }
 
   function normalize(s) {
@@ -138,6 +143,7 @@
     const [minElev, maxElev] = normalizeRange(elevationMin, elevationMax, activeInput);
     const onlyWithoutRavito = Boolean(isAdmin && adminWithoutRavito && adminWithoutRavito.checked);
     const onlyWithoutParking = Boolean(isAdmin && adminWithoutParking && adminWithoutParking.checked);
+    const onlyWithoutPlaisir = Boolean(isAdmin && adminWithoutPlaisir && adminWithoutPlaisir.checked);
 
     updateRangeSlider(distanceSlider, distanceMin, distanceMax);
     updateRangeSlider(elevationSlider, elevationMin, elevationMax);
@@ -155,13 +161,15 @@
       const e = Number(card.dataset.elevation);
       const ravitoCount = Number(card.dataset.ravitos || 0);
       const parkingCount = Number(card.dataset.parkings || 0);
+      const plaisirCount = Number(card.dataset.plaisirs || 0);
 
       const matchesText = !q || name.includes(q) || city.includes(q);
       const matchesDist = d >= minDist && d <= maxDist;
       const matchesElev = e >= minElev && e <= maxElev;
       const matchesRavito = !onlyWithoutRavito || ravitoCount === 0;
       const matchesParking = !onlyWithoutParking || parkingCount === 0;
-      const show = matchesText && matchesDist && matchesElev && matchesRavito && matchesParking;
+      const matchesPlaisir = !onlyWithoutPlaisir || plaisirCount === 0;
+      const show = matchesText && matchesDist && matchesElev && matchesRavito && matchesParking && matchesPlaisir;
 
       card.hidden = !show;
       if (show) visible++;
@@ -183,6 +191,9 @@
   if (adminWithoutRavito) {
     adminWithoutRavito.addEventListener("change", function () { apply(); });
   }
+  if (adminWithoutPlaisir) {
+    adminWithoutPlaisir.addEventListener("change", function () { apply(); });
+  }
   if (adminWithoutParking) {
     adminWithoutParking.addEventListener("change", function () { apply(); });
   }
@@ -196,6 +207,9 @@
     elevationMax.value = elevationMax.max;
     if (adminWithoutRavito) {
       adminWithoutRavito.checked = false;
+    }
+    if (adminWithoutPlaisir) {
+      adminWithoutPlaisir.checked = false;
     }
     if (adminWithoutParking) {
       adminWithoutParking.checked = false;

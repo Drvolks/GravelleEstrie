@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/style.css?v=0e0681a66b8b">
+  <link rel="stylesheet" href="/assets/css/style.css?v=cfd43102b850">
 </head>
 <body class="has-ride-cover" style="--ride-cover-image: url('/assets/img/default-ride-cover.jpg');">
   <header class="site-header">
@@ -70,6 +70,10 @@
       <input type="checkbox" id="admin-without-parking">
       <span>Sans stationnement</span>
     </label>
+    <label class="admin-filter" id="admin-without-plaisir-filter" hidden>
+      <input type="checkbox" id="admin-without-plaisir">
+      <span>Sans plaisir après ride</span>
+    </label>
     <button type="button" id="reset" class="reset">Réinitialiser</button>
   </div>
 </section>
@@ -79,7 +83,8 @@
   <article class="card" data-name="1234" data-city="lac-brome"
            data-distance="31.8" data-elevation="469"
            data-created="2026-07-01 08:55:28"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/1234/">
       <div class="card-thumb">
 
@@ -103,7 +108,8 @@
   <article class="card" data-name="16/08/21" data-city="orford"
            data-distance="63.3" data-elevation="695"
            data-created="2026-07-01 08:55:27"
-           data-ravitos="0" data-parkings="0">
+           data-ravitos="0" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/160821-copier/">
       <div class="card-thumb">
 
@@ -127,7 +133,8 @@
   <article class="card" data-name="3 circuits en 1" data-city="bromont"
            data-distance="69.7" data-elevation="776"
            data-created="2026-07-01 08:56:01"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/3-circuits-en-1/">
       <div class="card-thumb">
 
@@ -151,7 +158,8 @@
   <article class="card" data-name="autumn leaves" data-city="bromont"
            data-distance="69.4" data-elevation="1281"
            data-created="2026-07-01 08:56:16"
-           data-ravitos="1" data-parkings="2">
+           data-ravitos="1" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/autumn-leaves/">
       <div class="card-thumb">
 
@@ -175,7 +183,8 @@
   <article class="card" data-name="back on track" data-city="lac-brome"
            data-distance="44.9" data-elevation="502"
            data-created="2026-07-01 08:55:39"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/back-on-track/">
       <div class="card-thumb">
 
@@ -199,7 +208,8 @@
   <article class="card" data-name="back on track, un autre essai ....." data-city="lac-brome"
            data-distance="42.8" data-elevation="457"
            data-created="2026-07-01 08:55:39"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/back-on-track-un-autre-essai/">
       <div class="card-thumb">
 
@@ -223,7 +233,8 @@
   <article class="card" data-name="bad to the bone" data-city="lac-brome"
            data-distance="58.5" data-elevation="1011"
            data-created="2026-07-02 07:50:16"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/bad-to-the-bone/">
       <div class="card-thumb">
 
@@ -247,7 +258,8 @@
   <article class="card" data-name="best day of my life" data-city="lac-brome"
            data-distance="73.8" data-elevation="1275"
            data-created="2026-07-01 08:55:29"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/best-day-of-my-life/">
       <div class="card-thumb">
 
@@ -271,7 +283,8 @@
   <article class="card" data-name="bigger heart" data-city="lac-brome"
            data-distance="46.8" data-elevation="643"
            data-created="2026-07-01 08:55:31"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/bigger-heart/">
       <div class="card-thumb">
 
@@ -295,7 +308,8 @@
   <article class="card" data-name="birthday ride 82km / 1281md+" data-city="dunham"
            data-distance="82.1" data-elevation="1281"
            data-created="2026-07-01 08:56:14"
-           data-ravitos="7" data-parkings="1">
+           data-ravitos="7" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/birthday-ride-82km-1281md/">
       <div class="card-thumb">
 
@@ -319,7 +333,8 @@
   <article class="card" data-name="brown eyed girl" data-city="lac-brome"
            data-distance="55.0" data-elevation="747"
            data-created="2026-07-01 08:55:29"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/brown-eyed-girl/">
       <div class="card-thumb">
 
@@ -343,7 +358,8 @@
   <article class="card" data-name="brown eyed girl 2025" data-city="lac-brome"
            data-distance="67.3" data-elevation="908"
            data-created="2026-07-01 08:56:09"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/brown-eyed-girl-2025/">
       <div class="card-thumb">
 
@@ -367,7 +383,8 @@
   <article class="card" data-name="ça ne sera pas la dernière ..... 66km/800md+" data-city="waterloo"
            data-distance="65.7" data-elevation="804"
            data-created="2026-07-02 07:50:06"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/ca-ne-sera-pas-la-derniere-66km800md/">
       <div class="card-thumb">
 
@@ -391,7 +408,8 @@
   <article class="card" data-name="check it out 90km/1500md+" data-city="lac-brome"
            data-distance="89.2" data-elevation="1490"
            data-created="2026-07-02 07:50:07"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/check-it-out-90km1500md/">
       <div class="card-thumb">
 
@@ -415,7 +433,8 @@
   <article class="card" data-name="ciao bye" data-city="ayer&#x27;s cliff"
            data-distance="86.9" data-elevation="1267"
            data-created="2026-07-01 08:55:35"
-           data-ravitos="1" data-parkings="4">
+           data-ravitos="1" data-parkings="4"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/ciao-bye/">
       <div class="card-thumb">
 
@@ -439,7 +458,8 @@
   <article class="card" data-name="circuit #1     30km/400md+" data-city="bromont"
            data-distance="29.7" data-elevation="332"
            data-created="2026-07-01 08:56:01"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/circuit-1-30km400md/">
       <div class="card-thumb">
 
@@ -463,7 +483,8 @@
   <article class="card" data-name="circuit #2     51km/750md+" data-city="bromont"
            data-distance="51.1" data-elevation="640"
            data-created="2026-07-01 08:56:01"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/circuit-2-51km750md/">
       <div class="card-thumb">
 
@@ -487,7 +508,8 @@
   <article class="card" data-name="circuit #3     70km/1100md+" data-city="bromont"
            data-distance="69.5" data-elevation="901"
            data-created="2026-07-01 08:56:01"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/circuit-3-70km1100md/">
       <div class="card-thumb">
 
@@ -511,7 +533,8 @@
   <article class="card" data-name="collapse" data-city="shefford"
            data-distance="84.1" data-elevation="955"
            data-created="2026-07-01 08:56:13"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/collapse/">
       <div class="card-thumb">
 
@@ -535,7 +558,8 @@
   <article class="card" data-name="complete level 1 ---- 87km / 1350md+" data-city="lac-brome"
            data-distance="86.8" data-elevation="1136"
            data-created="2026-07-01 08:56:11"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/complete-level-1-87km-1350md/">
       <div class="card-thumb">
 
@@ -559,7 +583,8 @@
   <article class="card" data-name="complete level 2 ---- 64km / 1100md+" data-city="lac-brome"
            data-distance="63.7" data-elevation="1098"
            data-created="2026-07-01 08:56:10"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/complete-level-2-64km-1100md/">
       <div class="card-thumb">
 
@@ -583,7 +608,8 @@
   <article class="card" data-name="costaude / grange pardue 91km / 1900md+" data-city="ham-nord"
            data-distance="91.6" data-elevation="1709"
            data-created="2026-07-01 08:56:12"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/costaude-grange-pardue-91km-1900md/">
       <div class="card-thumb">
 
@@ -607,7 +633,8 @@
   <article class="card" data-name="départ parc de la yamaska et saucette" data-city="roxton pond"
            data-distance="73.6" data-elevation="435"
            data-created="2026-07-02 07:42:05"
-           data-ravitos="0" data-parkings="0">
+           data-ravitos="0" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/depart-parc-de-la-yamaska-et-saucette/">
       <div class="card-thumb">
 
@@ -631,7 +658,8 @@
   <article class="card" data-name="douglas fir" data-city="lac-brome"
            data-distance="67.9" data-elevation="1058"
            data-created="2026-07-01 08:55:35"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/douglas-fir/">
       <div class="card-thumb">
 
@@ -655,7 +683,8 @@
   <article class="card" data-name="dreamworld" data-city="bromont"
            data-distance="80.3" data-elevation="1356"
            data-created="2026-07-02 07:50:19"
-           data-ravitos="6" data-parkings="0">
+           data-ravitos="6" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/dreamworld/">
       <div class="card-thumb">
 
@@ -679,7 +708,8 @@
   <article class="card" data-name="drive all night" data-city="bromont"
            data-distance="59.5" data-elevation="945"
            data-created="2026-07-01 08:55:33"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/drive-all-night/">
       <div class="card-thumb">
 
@@ -703,7 +733,8 @@
   <article class="card" data-name="envoye a maison 58km/965md+" data-city="dunham"
            data-distance="58.1" data-elevation="965"
            data-created="2026-07-02 07:50:01"
-           data-ravitos="4" data-parkings="1">
+           data-ravitos="4" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/envoye-a-maison-58km965md/">
       <div class="card-thumb">
 
@@ -727,7 +758,8 @@
   <article class="card" data-name="fête nationale du québec. 74km / 12300md+" data-city="lac-brome"
            data-distance="73.7" data-elevation="1230"
            data-created="2026-07-01 08:56:19"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/fete-nationale-du-quebec-74km-12300md/">
       <div class="card-thumb">
 
@@ -751,7 +783,8 @@
   <article class="card" data-name="free bird 59km / 562md+" data-city="bromont"
            data-distance="59.2" data-elevation="562"
            data-created="2026-07-01 08:56:06"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/free-bird-59km-562md/">
       <div class="card-thumb">
 
@@ -775,7 +808,8 @@
   <article class="card" data-name="full classique" data-city="bromont"
            data-distance="69.2" data-elevation="974"
            data-created="2026-07-01 08:55:30"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/full-classique/">
       <div class="card-thumb">
 
@@ -799,7 +833,8 @@
   <article class="card" data-name="g093 - gravelle - ayer&#x27;s cliff / ogden" data-city="ayer&#x27;s cliff"
            data-distance="81.6" data-elevation="1027"
            data-created="2026-07-06 09:11:00"
-           data-ravitos="0" data-parkings="3">
+           data-ravitos="0" data-parkings="3"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/g093-gravelle-ayers-cliff-ogden/">
       <div class="card-thumb">
 
@@ -823,7 +858,8 @@
   <article class="card" data-name="gab longue 2026 #1" data-city="bromont"
            data-distance="41.9" data-elevation="613"
            data-created="2026-07-02 07:49:57"
-           data-ravitos="0" data-parkings="2">
+           data-ravitos="0" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/gab-longue-2026-1/">
       <div class="card-thumb">
 
@@ -847,7 +883,8 @@
   <article class="card" data-name="glory days" data-city="lac-brome"
            data-distance="74.9" data-elevation="962"
            data-created="2026-07-01 08:55:33"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/glory-days/">
       <div class="card-thumb">
 
@@ -871,7 +908,8 @@
   <article class="card" data-name="grand hippopotame 66km/900md+" data-city="shefford"
            data-distance="65.7" data-elevation="743"
            data-created="2026-07-01 08:56:18"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/grand-hippopotame-66km900md/">
       <div class="card-thumb">
 
@@ -895,7 +933,8 @@
   <article class="card" data-name="grand lumberjack" data-city="lac-brome"
            data-distance="90.2" data-elevation="1408"
            data-created="2026-07-01 08:55:35"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/grand-lumberjack/">
       <div class="card-thumb">
 
@@ -919,7 +958,8 @@
   <article class="card" data-name="grand lumberjack" data-city="lac-brome"
            data-distance="90.4" data-elevation="1408"
            data-created="2026-07-01 08:55:36"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/grand-lumberjack-2/">
       <div class="card-thumb">
 
@@ -943,7 +983,8 @@
   <article class="card" data-name="grand lumberjack" data-city="lac-brome"
            data-distance="90.4" data-elevation="1408"
            data-created="2026-07-01 08:55:37"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/grand-lumberjack-3/">
       <div class="card-thumb">
 
@@ -967,7 +1008,8 @@
   <article class="card" data-name="gravel &amp; bike 68km / 1068md+" data-city="bromont"
            data-distance="67.9" data-elevation="1068"
            data-created="2026-07-01 08:56:19"
-           data-ravitos="1" data-parkings="2">
+           data-ravitos="1" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/gravel-bike-68km-1068md/">
       <div class="card-thumb">
 
@@ -991,7 +1033,8 @@
   <article class="card" data-name="gr-ayc-016b ayer&#x27;s cliff 62k-611m" data-city="ayer&#x27;s cliff"
            data-distance="61.6" data-elevation="611"
            data-created="2026-07-02 07:42:05"
-           data-ravitos="0" data-parkings="3">
+           data-ravitos="0" data-parkings="3"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/gr-ayc-016b-ayers-cliff-62k-611m/">
       <div class="card-thumb">
 
@@ -1015,7 +1058,8 @@
   <article class="card" data-name="great balls of fire" data-city="lac-brome"
            data-distance="82.3" data-elevation="1268"
            data-created="2026-07-01 08:56:10"
-           data-ravitos="2" data-parkings="1">
+           data-ravitos="2" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/great-balls-of-fire/">
       <div class="card-thumb">
 
@@ -1039,7 +1083,8 @@
   <article class="card" data-name="guiding light" data-city="bromont"
            data-distance="75.2" data-elevation="1113"
            data-created="2026-07-02 07:50:18"
-           data-ravitos="1" data-parkings="0">
+           data-ravitos="1" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/guiding-light/">
       <div class="card-thumb">
 
@@ -1063,7 +1108,8 @@
   <article class="card" data-name="happy mother day" data-city="bromont"
            data-distance="61.5" data-elevation="672"
            data-created="2026-07-01 08:56:02"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/happy-mother-day/">
       <div class="card-thumb">
 
@@ -1087,7 +1133,8 @@
   <article class="card" data-name="hard sun" data-city="bromont"
            data-distance="73.1" data-elevation="872"
            data-created="2026-07-01 08:55:28"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/hard-sun/">
       <div class="card-thumb">
 
@@ -1111,7 +1158,8 @@
   <article class="card" data-name="hard to tell" data-city="waterloo"
            data-distance="81.6" data-elevation="1027"
            data-created="2026-07-01 08:55:32"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/hard-to-tell/">
       <div class="card-thumb">
 
@@ -1135,7 +1183,8 @@
   <article class="card" data-name="heureux d&#x27;un printemps" data-city="bromont"
            data-distance="61.4" data-elevation="571"
            data-created="2026-07-01 08:56:08"
-           data-ravitos="1" data-parkings="2">
+           data-ravitos="1" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/heureux-dun-printemps/">
       <div class="card-thumb">
 
@@ -1159,7 +1208,8 @@
   <article class="card" data-name="heureux d&#x27;un printemps mod" data-city="bromont"
            data-distance="56.6" data-elevation="529"
            data-created="2026-07-01 08:56:08"
-           data-ravitos="1" data-parkings="2">
+           data-ravitos="1" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/heureux-dun-printemps-mod/">
       <div class="card-thumb">
 
@@ -1183,7 +1233,8 @@
   <article class="card" data-name="hippotame à isabelle (mon stef)" data-city="shefford"
            data-distance="65.3" data-elevation="770"
            data-created="2026-07-01 08:56:10"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/hippotame-a-isabelle-mon-stef/">
       <div class="card-thumb">
 
@@ -1207,7 +1258,8 @@
   <article class="card" data-name="home" data-city="frelighsburg"
            data-distance="73.1" data-elevation="1158"
            data-created="2026-07-01 08:55:29"
-           data-ravitos="4" data-parkings="0">
+           data-ravitos="4" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/home/">
       <div class="card-thumb">
 
@@ -1231,7 +1283,8 @@
   <article class="card" data-name="homeland (classique) 64km / 892md+" data-city="bromont"
            data-distance="63.7" data-elevation="892"
            data-created="2026-07-01 08:56:17"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/homeland-classique-64km-892md/">
       <div class="card-thumb">
 
@@ -1255,7 +1308,8 @@
   <article class="card" data-name="i like it, i love it     60km/1100md+" data-city="lac-brome"
            data-distance="60.4" data-elevation="1093"
            data-created="2026-07-01 08:56:16"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/i-like-it-i-love-it-60km1100md/">
       <div class="card-thumb">
 
@@ -1279,7 +1333,8 @@
   <article class="card" data-name="it won&#x27;t be long" data-city="lac-brome"
            data-distance="72.8" data-elevation="1091"
            data-created="2026-07-02 07:50:10"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/it-wont-be-long/">
       <div class="card-thumb">
 
@@ -1303,7 +1358,8 @@
   <article class="card" data-name="lac bromont 01" data-city="bromont"
            data-distance="59.7" data-elevation="978"
            data-created="2026-07-02 07:50:15"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/lac-bromont-01/">
       <div class="card-thumb">
 
@@ -1327,7 +1383,8 @@
   <article class="card" data-name="la classique 59km/826md+" data-city="bromont"
            data-distance="59.0" data-elevation="826"
            data-created="2026-07-01 08:56:06"
-           data-ravitos="1" data-parkings="2">
+           data-ravitos="1" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/la-classique-59km826md/">
       <div class="card-thumb">
 
@@ -1351,7 +1408,8 @@
   <article class="card" data-name="la classique (modifiée)" data-city="bromont"
            data-distance="66.3" data-elevation="786"
            data-created="2026-07-01 08:55:40"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/la-classique-modifiee/">
       <div class="card-thumb">
 
@@ -1375,7 +1433,8 @@
   <article class="card" data-name="la costaude de dixiville" data-city="ayer&#x27;s cliff"
            data-distance="86.9" data-elevation="1449"
            data-created="2026-07-01 08:56:02"
-           data-ravitos="1" data-parkings="4">
+           data-ravitos="1" data-parkings="4"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/la-costaude-de-dixiville/">
       <div class="card-thumb">
 
@@ -1399,7 +1458,8 @@
   <article class="card" data-name="la costaude (gravel bike)" data-city="victoriaville"
            data-distance="84.4" data-elevation="1400"
            data-created="2026-07-01 08:56:11"
-           data-ravitos="0" data-parkings="0">
+           data-ravitos="0" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/la-costaude-gravel-bike-copier/">
       <div class="card-thumb">
 
@@ -1423,7 +1483,8 @@
   <article class="card" data-name="laisse les bons temps rouler (kain) 51km" data-city="bromont"
            data-distance="51.2" data-elevation="898"
            data-created="2026-07-02 07:50:07"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/laisse-les-bons-temps-rouler-kain-51km/">
       <div class="card-thumb">
 
@@ -1447,7 +1508,8 @@
   <article class="card" data-name="le p&#x27;tit bonheur 80km/1200md+" data-city="ayer&#x27;s cliff"
            data-distance="79.9" data-elevation="1168"
            data-created="2026-07-02 07:50:05"
-           data-ravitos="1" data-parkings="4">
+           data-ravitos="1" data-parkings="4"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/le-ptit-bonheur-80km1200md/">
       <div class="card-thumb">
 
@@ -1471,7 +1533,8 @@
   <article class="card" data-name="les mollets rouges (gravel bike)" data-city="ham-nord"
            data-distance="60.0" data-elevation="1049"
            data-created="2026-07-01 08:56:12"
-           data-ravitos="0" data-parkings="0">
+           data-ravitos="0" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/les-mollets-rouges-gravel-bike-copier/">
       <div class="card-thumb">
 
@@ -1495,7 +1558,8 @@
   <article class="card" data-name="little more time cw" data-city="lac-brome"
            data-distance="55.0" data-elevation="859"
            data-created="2026-07-02 07:50:16"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/little-more-time-cw/">
       <div class="card-thumb">
 
@@ -1519,7 +1583,8 @@
   <article class="card" data-name="loin d&#x27;ici ......" data-city="lac-brome"
            data-distance="43.1" data-elevation="518"
            data-created="2026-07-01 08:55:30"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/loin-dici/">
       <div class="card-thumb">
 
@@ -1543,7 +1608,8 @@
   <article class="card" data-name="lumberjack 122km/2000md+" data-city="lac-brome"
            data-distance="122.4" data-elevation="1700"
            data-created="2026-07-01 08:56:15"
-           data-ravitos="3" data-parkings="1">
+           data-ravitos="3" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/lumberjack-122km2000md/">
       <div class="card-thumb">
 
@@ -1567,7 +1633,8 @@
   <article class="card" data-name="lumberjack 62km/1050md+" data-city="lac-brome"
            data-distance="61.7" data-elevation="1051"
            data-created="2026-07-01 08:56:14"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/lumberjack-62km1050md/">
       <div class="card-thumb">
 
@@ -1591,7 +1658,8 @@
   <article class="card" data-name="lumberjack 75km/1300md+" data-city="lac-brome"
            data-distance="75.3" data-elevation="1126"
            data-created="2026-07-01 08:56:14"
-           data-ravitos="2" data-parkings="1">
+           data-ravitos="2" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/lumberjack-75km1300md/">
       <div class="card-thumb">
 
@@ -1615,7 +1683,8 @@
   <article class="card" data-name="lumberjack 90km/1600md+" data-city="lac-brome"
            data-distance="90.1" data-elevation="1317"
            data-created="2026-07-01 08:56:15"
-           data-ravitos="2" data-parkings="1">
+           data-ravitos="2" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/lumberjack-90km1600md/">
       <div class="card-thumb">
 
@@ -1639,7 +1708,8 @@
   <article class="card" data-name="lumberjack classic" data-city="bromont"
            data-distance="62.5" data-elevation="830"
            data-created="2026-07-02 07:50:17"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/lumberjack-classic/">
       <div class="card-thumb">
 
@@ -1663,7 +1733,8 @@
   <article class="card" data-name="lumberjack gravel ride tour #1" data-city="frelighsburg"
            data-distance="76.6" data-elevation="1431"
            data-created="2026-07-02 07:50:18"
-           data-ravitos="4" data-parkings="0">
+           data-ravitos="4" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/lumberjack-gravel-ride-tour-1/">
       <div class="card-thumb">
 
@@ -1687,7 +1758,8 @@
   <article class="card" data-name="lumberjack gravel road ride #3" data-city="lac-brome"
            data-distance="51.8" data-elevation="946"
            data-created="2026-07-02 07:50:17"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/lumberjack-gravel-road-ride-3/">
       <div class="card-thumb">
 
@@ -1711,7 +1783,8 @@
   <article class="card" data-name="mollets rouges / grange pardue 68km / 1400md+" data-city="ham-nord"
            data-distance="67.7" data-elevation="1467"
            data-created="2026-07-01 08:56:12"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/mollets-rouges-grange-pardue-68km-1400md/">
       <div class="card-thumb">
 
@@ -1735,7 +1808,8 @@
   <article class="card" data-name="moyen lumberjack" data-city="lac-brome"
            data-distance="69.4" data-elevation="1062"
            data-created="2026-07-01 08:55:38"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/moyen-lumberjack-3/">
       <div class="card-thumb">
 
@@ -1759,7 +1833,8 @@
   <article class="card" data-name="moyen lumberjack" data-city="lac-brome"
            data-distance="69.4" data-elevation="1062"
            data-created="2026-07-01 08:55:37"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/moyen-lumberjack-2/">
       <div class="card-thumb">
 
@@ -1783,7 +1858,8 @@
   <article class="card" data-name="moyen lumberjack" data-city="lac-brome"
            data-distance="69.2" data-elevation="1061"
            data-created="2026-07-01 08:55:34"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/moyen-lumberjack/">
       <div class="card-thumb">
 
@@ -1807,7 +1883,8 @@
   <article class="card" data-name="old guitar" data-city="bromont"
            data-distance="112.8" data-elevation="1840"
            data-created="2026-07-01 08:55:32"
-           data-ravitos="6" data-parkings="1">
+           data-ravitos="6" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/old-guitar/">
       <div class="card-thumb">
 
@@ -1831,7 +1908,8 @@
   <article class="card" data-name="paradise city 80km / 930md+" data-city="waterloo"
            data-distance="79.5" data-elevation="936"
            data-created="2026-07-01 08:56:11"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/paradise-city-80km-930md/">
       <div class="card-thumb">
 
@@ -1855,7 +1933,8 @@
   <article class="card" data-name="petite suisse" data-city="bolton-ouest"
            data-distance="70.9" data-elevation="1099"
            data-created="2026-07-01 08:55:28"
-           data-ravitos="0" data-parkings="0">
+           data-ravitos="0" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/petite-suisse/">
       <div class="card-thumb">
 
@@ -1879,7 +1958,8 @@
   <article class="card" data-name="petit hippopotame 55km/780md+" data-city="shefford"
            data-distance="55.9" data-elevation="781"
            data-created="2026-07-01 08:56:17"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/petit-hippopotame-55km780md/">
       <div class="card-thumb">
 
@@ -1903,7 +1983,8 @@
   <article class="card" data-name="petit lumberjack" data-city="lac-brome"
            data-distance="51.3" data-elevation="765"
            data-created="2026-07-01 08:55:37"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/petit-lumberjack-2/">
       <div class="card-thumb">
 
@@ -1927,7 +2008,8 @@
   <article class="card" data-name="petit lumberjack" data-city="lac-brome"
            data-distance="51.2" data-elevation="766"
            data-created="2026-07-01 08:55:34"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/petit-lumberjack/">
       <div class="card-thumb">
 
@@ -1951,7 +2033,8 @@
   <article class="card" data-name="polar bear" data-city="lac-brome"
            data-distance="75.4" data-elevation="1263"
            data-created="2026-07-02 07:50:18"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/polar-bear/">
       <div class="card-thumb">
 
@@ -1975,7 +2058,8 @@
   <article class="card" data-name="porc épic" data-city="potton"
            data-distance="43.7" data-elevation="623"
            data-created="2026-07-01 08:55:28"
-           data-ravitos="0" data-parkings="2">
+           data-ravitos="0" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/porc-epic/">
       <div class="card-thumb">
 
@@ -1999,7 +2083,8 @@
   <article class="card" data-name="porc épic coup de coeur" data-city="potton"
            data-distance="52.8" data-elevation="839"
            data-created="2026-07-01 08:56:00"
-           data-ravitos="0" data-parkings="2">
+           data-ravitos="0" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/porc-epic-coup-de-coeur/">
       <div class="card-thumb">
 
@@ -2023,7 +2108,8 @@
   <article class="card" data-name="porc épic long" data-city="potton"
            data-distance="68.0" data-elevation="1027"
            data-created="2026-07-01 08:55:36"
-           data-ravitos="1" data-parkings="2">
+           data-ravitos="1" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/porc-epic-long/">
       <div class="card-thumb">
 
@@ -2047,7 +2133,8 @@
   <article class="card" data-name="pork épic 59km" data-city="potton"
            data-distance="58.9" data-elevation="908"
            data-created="2026-07-01 08:56:05"
-           data-ravitos="0" data-parkings="2">
+           data-ravitos="0" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/pork-epic-59km/">
       <div class="card-thumb">
 
@@ -2071,7 +2158,8 @@
   <article class="card" data-name="pork épic 75km" data-city="potton"
            data-distance="74.5" data-elevation="1147"
            data-created="2026-07-01 08:56:05"
-           data-ravitos="1" data-parkings="2">
+           data-ravitos="1" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/pork-epic-75km/">
       <div class="card-thumb">
 
@@ -2095,7 +2183,8 @@
   <article class="card" data-name="pork épic 78km / 1300md+" data-city="potton"
            data-distance="77.9" data-elevation="1275"
            data-created="2026-07-01 08:56:09"
-           data-ravitos="1" data-parkings="2">
+           data-ravitos="1" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/pork-epic-78km-1300md/">
       <div class="card-thumb">
 
@@ -2119,7 +2208,8 @@
   <article class="card" data-name="quittin time 70km/900md+" data-city="bromont"
            data-distance="70.5" data-elevation="779"
            data-created="2026-07-01 08:56:04"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/quittin-time-70km900md/">
       <div class="card-thumb">
 
@@ -2143,7 +2233,8 @@
   <article class="card" data-name="quittin time 70km/900md+" data-city="bromont"
            data-distance="70.5" data-elevation="779"
            data-created="2026-07-01 08:56:15"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/quittin-time-70km900md-2/">
       <div class="card-thumb">
 
@@ -2167,7 +2258,8 @@
   <article class="card" data-name="quittin time 86km/1220md+" data-city="bromont"
            data-distance="86.0" data-elevation="1062"
            data-created="2026-07-01 08:56:05"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/quittin-time-86km1220md/">
       <div class="card-thumb">
 
@@ -2191,7 +2283,8 @@
   <article class="card" data-name="rad courte 2025" data-city="tingwick"
            data-distance="46.0" data-elevation="648"
            data-created="2026-07-01 08:56:13"
-           data-ravitos="0" data-parkings="0">
+           data-ravitos="0" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/rad-courte-2025/">
       <div class="card-thumb">
 
@@ -2215,7 +2308,8 @@
   <article class="card" data-name="rad longue 2025" data-city="tingwick"
            data-distance="100.5" data-elevation="1368"
            data-created="2026-07-01 08:56:13"
-           data-ravitos="0" data-parkings="0">
+           data-ravitos="0" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/rad-longue-2025/">
       <div class="card-thumb">
 
@@ -2239,7 +2333,8 @@
   <article class="card" data-name="ride before the sunset" data-city="lac-brome"
            data-distance="58.1" data-elevation="1000"
            data-created="2026-07-01 08:55:33"
-           data-ravitos="4" data-parkings="1">
+           data-ravitos="4" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/ride-before-the-sunset/">
       <div class="card-thumb">
 
@@ -2263,7 +2358,8 @@
   <article class="card" data-name="ride on julie" data-city="dunham"
            data-distance="52.1" data-elevation="723"
            data-created="2026-07-01 08:56:03"
-           data-ravitos="4" data-parkings="1">
+           data-ravitos="4" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/ride-on-julie/">
       <div class="card-thumb">
 
@@ -2287,7 +2383,8 @@
   <article class="card" data-name="ride on julie#2" data-city="lac-brome"
            data-distance="49.8" data-elevation="525"
            data-created="2026-07-01 08:56:03"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/ride-on-julie2/">
       <div class="card-thumb">
 
@@ -2311,7 +2408,8 @@
   <article class="card" data-name="road before return to work" data-city="bromont"
            data-distance="70.2" data-elevation="658"
            data-created="2026-07-01 08:55:31"
-           data-ravitos="2" data-parkings="1">
+           data-ravitos="2" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/road-before-return-to-work/">
       <div class="card-thumb">
 
@@ -2335,7 +2433,8 @@
   <article class="card" data-name="rock bottom" data-city="lac-brome"
            data-distance="72.1" data-elevation="1314"
            data-created="2026-07-02 07:50:14"
-           data-ravitos="4" data-parkings="1">
+           data-ravitos="4" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/rock-bottom/">
       <div class="card-thumb">
 
@@ -2359,7 +2458,8 @@
   <article class="card" data-name="rookie ride" data-city="lac-brome"
            data-distance="72.2" data-elevation="1074"
            data-created="2026-07-01 08:56:18"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/rookie-ride/">
       <div class="card-thumb">
 
@@ -2383,7 +2483,8 @@
   <article class="card" data-name="rookie ride 70,5km / 1258md+" data-city="lac-brome"
            data-distance="70.5" data-elevation="1258"
            data-created="2026-07-01 08:56:18"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/rookie-ride-705km-1258md/">
       <div class="card-thumb">
 
@@ -2407,7 +2508,8 @@
   <article class="card" data-name="roses 85km/1400md+" data-city="dunham"
            data-distance="84.7" data-elevation="1411"
            data-created="2026-07-02 07:50:06"
-           data-ravitos="4" data-parkings="1">
+           data-ravitos="4" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/roses-85km1400md/">
       <div class="card-thumb">
 
@@ -2431,7 +2533,8 @@
   <article class="card" data-name="runnin&#x27; wild 59km / 875md+" data-city="dunham"
            data-distance="58.5" data-elevation="873"
            data-created="2026-07-01 08:56:06"
-           data-ravitos="4" data-parkings="1">
+           data-ravitos="4" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/runnin-wild-59km-875md/">
       <div class="card-thumb">
 
@@ -2455,7 +2558,8 @@
   <article class="card" data-name="saturday coffee ride" data-city="lac-brome"
            data-distance="50.5" data-elevation="722"
            data-created="2026-07-02 07:50:05"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/saturday-coffee-ride/">
       <div class="card-thumb">
 
@@ -2479,7 +2583,8 @@
   <article class="card" data-name="saturday sunset" data-city="lac-brome"
            data-distance="29.7" data-elevation="269"
            data-created="2026-07-01 08:55:34"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/saturday-sunset/">
       <div class="card-thumb">
 
@@ -2503,7 +2608,8 @@
   <article class="card" data-name="semi-route semi-trail" data-city="lac-brome"
            data-distance="86.5" data-elevation="1380"
            data-created="2026-07-01 08:55:36"
-           data-ravitos="4" data-parkings="1">
+           data-ravitos="4" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/semi-route-semi-trail/">
       <div class="card-thumb">
 
@@ -2527,7 +2633,8 @@
   <article class="card" data-name="sloom" data-city="ayer&#x27;s cliff"
            data-distance="76.7" data-elevation="1187"
            data-created="2026-07-02 07:50:15"
-           data-ravitos="0" data-parkings="4">
+           data-ravitos="0" data-parkings="4"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/sloom/">
       <div class="card-thumb">
 
@@ -2551,7 +2658,8 @@
   <article class="card" data-name="slow ride avec arrêt virgin hill coffee" data-city="lac-brome"
            data-distance="40.2" data-elevation="411"
            data-created="2026-07-02 07:50:04"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/slow-ride-avec-arret-virgin-hill-coffee/">
       <div class="card-thumb">
 
@@ -2575,7 +2683,8 @@
   <article class="card" data-name="snow" data-city="lac-brome"
            data-distance="46.2" data-elevation="394"
            data-created="2026-07-01 08:55:40"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/snow-2/">
       <div class="card-thumb">
 
@@ -2599,7 +2708,8 @@
   <article class="card" data-name="soirée nocturne 64km / 1000md+" data-city="bromont"
            data-distance="63.8" data-elevation="1015"
            data-created="2026-07-01 08:56:19"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/soiree-nocturne-64km-1000md/">
       <div class="card-thumb">
 
@@ -2623,7 +2733,8 @@
   <article class="card" data-name="soleil 75km/650md+" data-city="waterloo"
            data-distance="75.2" data-elevation="649"
            data-created="2026-07-02 07:50:05"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/soleil-75km650md/">
       <div class="card-thumb">
 
@@ -2647,7 +2758,8 @@
   <article class="card" data-name="soleil bleu" data-city="bromont"
            data-distance="98.9" data-elevation="794"
            data-created="2026-07-01 08:56:14"
-           data-ravitos="4" data-parkings="2">
+           data-ravitos="4" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/soleil-bleu/">
       <div class="card-thumb">
 
@@ -2671,7 +2783,8 @@
   <article class="card" data-name="spirit bird" data-city="lac-brome"
            data-distance="59.9" data-elevation="979"
            data-created="2026-07-02 07:50:16"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/spirit-bird/">
       <div class="card-thumb">
 
@@ -2695,7 +2808,8 @@
   <article class="card" data-name="stayin&#x27; alive 76km / 1375md+" data-city="ayer&#x27;s cliff"
            data-distance="76.3" data-elevation="1375"
            data-created="2026-07-01 08:56:09"
-           data-ravitos="0" data-parkings="4">
+           data-ravitos="0" data-parkings="4"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/stayin-alive-76km-1375md/">
       <div class="card-thumb">
 
@@ -2719,7 +2833,8 @@
   <article class="card" data-name="storm boy 50km/742md+" data-city="bromont"
            data-distance="49.8" data-elevation="742"
            data-created="2026-07-01 08:56:06"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/storm-boy-50km742md/">
       <div class="card-thumb">
 
@@ -2743,7 +2858,8 @@
   <article class="card" data-name="storm boy 68km/983md+" data-city="bromont"
            data-distance="68.2" data-elevation="849"
            data-created="2026-07-01 08:56:07"
-           data-ravitos="3" data-parkings="1">
+           data-ravitos="3" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/storm-boy-68km983md/">
       <div class="card-thumb">
 
@@ -2767,7 +2883,8 @@
   <article class="card" data-name="summer days 81km / 1350md+" data-city="lac-brome"
            data-distance="80.9" data-elevation="1323"
            data-created="2026-07-17 06:44:44"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/summer-days-81km-1350md/">
       <div class="card-thumb">
 
@@ -2791,7 +2908,8 @@
   <article class="card" data-name="sunrise 61km" data-city="ayer&#x27;s cliff"
            data-distance="60.7" data-elevation="933"
            data-created="2026-07-01 08:56:04"
-           data-ravitos="0" data-parkings="4">
+           data-ravitos="0" data-parkings="4"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/sunrise-61km/">
       <div class="card-thumb">
 
@@ -2815,7 +2933,8 @@
   <article class="card" data-name="sunrise 76km" data-city="ayer&#x27;s cliff"
            data-distance="75.8" data-elevation="1165"
            data-created="2026-07-01 08:56:04"
-           data-ravitos="0" data-parkings="4">
+           data-ravitos="0" data-parkings="4"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/sunrise-76km/">
       <div class="card-thumb">
 
@@ -2839,7 +2958,8 @@
   <article class="card" data-name="sun to me 57km / 666md+" data-city="dunham"
            data-distance="56.5" data-elevation="666"
            data-created="2026-07-01 08:56:17"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/sun-to-me-57km-666md/">
       <div class="card-thumb">
 
@@ -2863,7 +2983,8 @@
   <article class="card" data-name="suspicious mind" data-city="bromont"
            data-distance="84.8" data-elevation="1246"
            data-created="2026-07-02 07:50:14"
-           data-ravitos="2" data-parkings="1">
+           data-ravitos="2" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/suspicious-mind/">
       <div class="card-thumb">
 
@@ -2887,7 +3008,8 @@
   <article class="card" data-name="sutton" data-city="sutton"
            data-distance="68.2" data-elevation="1104"
            data-created="2026-07-01 08:56:11"
-           data-ravitos="2" data-parkings="0">
+           data-ravitos="2" data-parkings="0"
+           data-plaisirs="2">
     <a class="card-link" href="/rides/sutton/">
       <div class="card-thumb">
 
@@ -2911,7 +3033,8 @@
   <article class="card" data-name="take a back road 63km" data-city="lac-brome"
            data-distance="62.7" data-elevation="889"
            data-created="2026-07-01 08:56:03"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/take-a-back-road-63km/">
       <div class="card-thumb">
 
@@ -2935,7 +3058,8 @@
   <article class="card" data-name="take a back road 80km" data-city="lac-brome"
            data-distance="79.9" data-elevation="1170"
            data-created="2026-07-01 08:56:02"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/take-a-back-road-80km/">
       <div class="card-thumb">
 
@@ -2959,7 +3083,8 @@
   <article class="card" data-name="take a trip 41km / 465md+" data-city="lac-brome"
            data-distance="41.1" data-elevation="465"
            data-created="2026-07-01 08:56:16"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/take-a-trip-41km-465md/">
       <div class="card-thumb">
 
@@ -2983,7 +3108,8 @@
   <article class="card" data-name="take yours, i&#x27;ll take mine" data-city="potton"
            data-distance="65.0" data-elevation="1185"
            data-created="2026-07-01 08:55:29"
-           data-ravitos="0" data-parkings="2">
+           data-ravitos="0" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/take-yours-ill-take-mine/">
       <div class="card-thumb">
 
@@ -3007,7 +3133,8 @@
   <article class="card" data-name="the farmer" data-city="ayer&#x27;s cliff"
            data-distance="81.8" data-elevation="1133"
            data-created="2026-07-01 08:55:30"
-           data-ravitos="1" data-parkings="4">
+           data-ravitos="1" data-parkings="4"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/the-farmer/">
       <div class="card-thumb">
 
@@ -3031,7 +3158,8 @@
   <article class="card" data-name="the places we&#x27;ll go" data-city="coaticook"
            data-distance="62.1" data-elevation="861"
            data-created="2026-07-01 08:55:31"
-           data-ravitos="0" data-parkings="0">
+           data-ravitos="0" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/the-places-well-go/">
       <div class="card-thumb">
 
@@ -3055,7 +3183,8 @@
   <article class="card" data-name="till the sun comes up" data-city="lac-brome"
            data-distance="69.6" data-elevation="1124"
            data-created="2026-07-01 08:55:31"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/till-the-sun-comes-up/">
       <div class="card-thumb">
 
@@ -3079,7 +3208,8 @@
   <article class="card" data-name="too much, too young, too fast." data-city="bromont"
            data-distance="49.4" data-elevation="568"
            data-created="2026-07-02 07:50:03"
-           data-ravitos="0" data-parkings="2">
+           data-ravitos="0" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/too-much-too-young-too-fast/">
       <div class="card-thumb">
 
@@ -3103,7 +3233,8 @@
   <article class="card" data-name="ulverton #5" data-city="l&#x27;avenir"
            data-distance="54.0" data-elevation="532"
            data-created="2026-07-01 08:56:03"
-           data-ravitos="0" data-parkings="0">
+           data-ravitos="0" data-parkings="0"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/ulverton-5/">
       <div class="card-thumb">
 
@@ -3127,7 +3258,8 @@
   <article class="card" data-name="une belle ride avant de partir" data-city="bromont"
            data-distance="71.6" data-elevation="873"
            data-created="2026-07-01 08:56:07"
-           data-ravitos="2" data-parkings="1">
+           data-ravitos="2" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/une-belle-ride-avant-de-partir/">
       <div class="card-thumb">
 
@@ -3151,7 +3283,8 @@
   <article class="card" data-name="up around the bend" data-city="waterloo"
            data-distance="73.8" data-elevation="708"
            data-created="2026-07-01 08:56:08"
-           data-ravitos="1" data-parkings="1">
+           data-ravitos="1" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/up-around-the-bend/">
       <div class="card-thumb">
 
@@ -3175,7 +3308,8 @@
   <article class="card" data-name="vacation" data-city="potton"
            data-distance="78.6" data-elevation="1208"
            data-created="2026-07-01 08:55:33"
-           data-ravitos="1" data-parkings="2">
+           data-ravitos="1" data-parkings="2"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/vacation/">
       <div class="card-thumb">
 
@@ -3199,7 +3333,8 @@
   <article class="card" data-name="we were young" data-city="ayer&#x27;s cliff"
            data-distance="79.3" data-elevation="1150"
            data-created="2026-07-01 08:56:12"
-           data-ravitos="1" data-parkings="4">
+           data-ravitos="1" data-parkings="4"
+           data-plaisirs="1">
     <a class="card-link" href="/rides/we-were-young/">
       <div class="card-thumb">
 
@@ -3223,7 +3358,8 @@
   <article class="card" data-name="when i get to heaven 53km/500md+" data-city="lac-brome"
            data-distance="53.3" data-elevation="497"
            data-created="2026-07-01 08:56:07"
-           data-ravitos="0" data-parkings="1">
+           data-ravitos="0" data-parkings="1"
+           data-plaisirs="0">
     <a class="card-link" href="/rides/when-i-get-to-heaven-53km500md/">
       <div class="card-thumb">
 
@@ -3256,7 +3392,7 @@
     </div>
   </footer>
 
-<script src="/assets/js/search.js?v=0e0681a66b8b" defer></script>
+<script src="/assets/js/search.js?v=cfd43102b850" defer></script>
 
 </body>
 </html>

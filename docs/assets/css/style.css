@@ -291,22 +291,26 @@ main.wrap { padding-top: 28px; }
 .specs dt { color: var(--muted-2); font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; }
 .specs dd { margin: 4px 0 0; font-size: 1.25rem; font-weight: 700; color: var(--ink); }
 .ravitos,
-.parkings { margin: 24px 0; }
+.parkings,
+.plaisirs { margin: 24px 0; }
 .ravitos h2,
-.parkings h2 {
+.parkings h2,
+.plaisirs h2 {
   margin: 0 0 12px;
   color: var(--ink);
   font-size: 1.1rem;
   font-weight: 800;
 }
 .ravito-list,
-.parking-list {
+.parking-list,
+.plaisir-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 12px;
 }
 .ravito,
-.parking {
+.parking,
+.plaisir {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -320,22 +324,26 @@ main.wrap { padding-top: 28px; }
   box-shadow: var(--shadow);
 }
 .parking { border-top-color: var(--navy); }
+.plaisir { border-top-color: var(--orange-light); }
 .ravito h3,
-.parking h3 {
+.parking h3,
+.plaisir h3 {
   margin: 0;
   color: var(--ink);
   font-size: 1rem;
   font-weight: 800;
 }
 .ravito p,
-.parking p {
+.parking p,
+.plaisir p {
   margin: 4px 0 0;
   color: var(--muted);
   font-size: .88rem;
   font-weight: 700;
 }
 .ravito a,
-.parking a {
+.parking a,
+.plaisir a {
   flex: 0 0 auto;
   padding: 8px 12px;
   border-radius: 10px;
@@ -346,7 +354,8 @@ main.wrap { padding-top: 28px; }
 }
 .parking a { background: var(--orange); color: var(--navy); }
 .ravito a:hover,
-.parking a:hover { text-decoration: none; opacity: .92; }
+.parking a:hover,
+.plaisir a:hover { text-decoration: none; opacity: .92; }
 .ride-photos {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -422,6 +431,7 @@ body.has-ride-cover .detail-map,
 body.has-ride-cover .specs div,
 body.has-ride-cover .ravito,
 body.has-ride-cover .parking,
+body.has-ride-cover .plaisir,
 body.has-ride-cover .ride-photo-thumb {
   background-color: rgba(255, 255, 255, .68);
   backdrop-filter: blur(12px);

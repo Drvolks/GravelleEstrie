@@ -51,6 +51,12 @@ class ParkingMatch:
     distance_m: float
 
 
+@dataclass(frozen=True)
+class PlaisirMatch:
+    plaisir: Ravito
+    distance_m: float
+
+
 def parse_ravito_points(raw: str) -> list[Ravito]:
     """Parse configured ravitos from coordinates or Google Maps URLs.
 
@@ -64,6 +70,10 @@ def parse_ravito_points(raw: str) -> list[Ravito]:
 
 def parse_parking_points(raw: str) -> list[Ravito]:
     return parse_map_points(raw, default_name="Stationnement")
+
+
+def parse_plaisir_points(raw: str) -> list[Ravito]:
+    return parse_map_points(raw, default_name="Plaisir")
 
 
 def parse_map_points(raw: str, *, default_name: str = "Point") -> list[Ravito]:
@@ -334,18 +344,43 @@ def find_nearby_parking(
     radius_m: float,
 ) -> list[ParkingMatch]:
     """Return configured parking points near the route start point."""
+    return [
+        ParkingMatch(parking=point, distance_m=distance)
+        for point, distance in _find_near_endpoint(geometry, parkings, radius_m, index=0)
+    ]
+
+
+def find_nearby_plaisirs(
+    geometry: Iterable[Iterable[float]],
+    plaisirs: Iterable[Ravito],
+    radius_m: float,
+) -> list[PlaisirMatch]:
+    """Return configured post-ride spots near the route finish point."""
+    return [
+        PlaisirMatch(plaisir=point, distance_m=distance)
+        for point, distance in _find_near_endpoint(geometry, plaisirs, radius_m, index=-1)
+    ]
+
+
+def _find_near_endpoint(
+    geometry: Iterable[Iterable[float]],
+    candidates: Iterable[Ravito],
+    radius_m: float,
+    *,
+    index: int,
+) -> list[tuple[Ravito, float]]:
     points = _geometry_points(geometry)
     if not points or radius_m <= 0:
         return []
 
-    start = points[0]
+    endpoint = points[index]
     matches = []
-    for parking in parkings:
-        distance = _distance_between_points_m((parking.lat, parking.lng), start)
+    for candidate in candidates:
+        distance = _distance_between_points_m((candidate.lat, candidate.lng), endpoint)
         if distance <= radius_m:
-            matches.append(ParkingMatch(parking=parking, distance_m=distance))
+            matches.append((candidate, distance))
 
-    return sorted(matches, key=lambda match: (match.distance_m, match.parking.name.lower()))
+    return sorted(matches, key=lambda match: (match[1], match[0].name.lower()))
 
 
 def _geometry_points(geometry: Iterable[Iterable[float]]) -> list[tuple[float, float]]:
