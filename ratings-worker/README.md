@@ -15,8 +15,11 @@ POST /api/ratings/:ride_slug
 `POST /api/ratings` accepts `{ "ride_slugs": ["ride-a", "ride-b"] }` and
 returns summaries for the static index page. Missing rides return zero votes.
 
-`GET /api/ratings/:ride_slug` returns one summary. `POST
-/api/ratings/:ride_slug` records a Turnstile-verified vote.
+`GET /api/ratings/:ride_slug` returns one summary. When called with
+`?voter_id=<browser-voter-id>`, it also returns `my_rating` with the current
+browser voter's rating for that ride, or `null` when no matching vote exists.
+`POST /api/ratings/:ride_slug` records or updates a Turnstile-verified vote for
+the same browser voter id.
 
 ## Setup
 

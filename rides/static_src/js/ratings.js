@@ -4,6 +4,7 @@
 
   const VOTER_STORAGE_KEY = "gravelleestrie:voter-id";
   const VOTED_STORAGE_PREFIX = "gravelleestrie:rated:";
+  const RATING_STORAGE_PREFIX = "gravelleestrie:rating:";
   const TURNSTILE_WAIT_MS = 5000;
   let memoryVoterId = "";
 
@@ -27,6 +28,10 @@
     }
   }
 
+  function getStoredVoterId() {
+    return getStoredValue(VOTER_STORAGE_KEY) || memoryVoterId;
+  }
+
   function getVoterId() {
     let voterId = getStoredValue(VOTER_STORAGE_KEY) || memoryVoterId;
     if (!voterId) {
@@ -43,8 +48,16 @@
     return getStoredValue(`${VOTED_STORAGE_PREFIX}${slug}`) === "1";
   }
 
-  function markVoted(slug) {
+  function getStoredRating(slug) {
+    const rating = Number(getStoredValue(`${RATING_STORAGE_PREFIX}${slug}`));
+    return Number.isInteger(rating) && rating >= 1 && rating <= 5 ? rating : 0;
+  }
+
+  function markVoted(slug, rating) {
     setStoredValue(`${VOTED_STORAGE_PREFIX}${slug}`, "1");
+    if (Number.isInteger(rating) && rating >= 1 && rating <= 5) {
+      setStoredValue(`${RATING_STORAGE_PREFIX}${slug}`, String(rating));
+    }
   }
 
   function waitForTurnstile(deadline) {
@@ -178,6 +191,7 @@
     const averageEl = widget.querySelector("[data-rating-average]");
     const statusEl = widget.querySelector("[data-rating-status]");
     const turnstileEl = widget.querySelector("[data-rating-turnstile]");
+    const currentVoteEl = widget.querySelector("[data-rating-current]");
     const displayStars = Array.from(widget.querySelectorAll("[data-rating-display-star]"));
     const voteButton = widget.querySelector("[data-rating-open]");
     const dialog = widget.querySelector("[data-rating-dialog]");
@@ -196,6 +210,7 @@
     let turnstileWidgetId = null;
     let pendingRating = null;
     let turnstileReadyPromise = null;
+    let selectedRating = getStoredRating(slug);
 
     function closeDialog() {
       if (dialog.open && dialog.close) {
@@ -206,25 +221,36 @@
     }
 
     function openDialog() {
+      selectedRating = getStoredRating(slug);
       if (dialog.showModal) {
         if (!dialog.open) dialog.showModal();
       } else {
         dialog.hidden = false;
       }
-      setStars(starButtons, 0);
+      renderCurrentVote();
+      setStars(starButtons, selectedRating);
       setStatus(statusEl, "", "");
       ensureTurnstileReady();
     }
 
     function updateVotedState() {
       const votedNow = hasVoted(slug);
-      voteButton.hidden = votedNow;
+      voteButton.hidden = false;
+      voteButton.textContent = votedNow ? "Modifier mon vote" : "Voter";
       widget.classList.toggle("has-voted", votedNow);
-      if (votedNow) {
-        setVotingDisabled(starButtons, true);
-        if (turnstileEl) turnstileEl.hidden = true;
-        closeDialog();
+      selectedRating = getStoredRating(slug);
+      renderCurrentVote();
+    }
+
+    function renderCurrentVote() {
+      if (!currentVoteEl) return;
+      if (selectedRating) {
+        currentVoteEl.textContent = `Votre vote actuel : ${selectedRating} / 5`;
+        currentVoteEl.hidden = false;
+        return;
       }
+      currentVoteEl.textContent = "";
+      currentVoteEl.hidden = true;
     }
 
     function ensureTurnstileReady() {
@@ -277,8 +303,8 @@
       button.setAttribute("role", "radio");
       button.addEventListener("mouseenter", () => setStars(starButtons, Number(button.dataset.ratingValue)));
       button.addEventListener("focus", () => setStars(starButtons, Number(button.dataset.ratingValue)));
-      button.addEventListener("mouseleave", () => setStars(starButtons, 0));
-      button.addEventListener("blur", () => setStars(starButtons, 0));
+      button.addEventListener("mouseleave", () => setStars(starButtons, selectedRating));
+      button.addEventListener("blur", () => setStars(starButtons, selectedRating));
       button.addEventListener("click", () => submitVote(Number(button.dataset.ratingValue)));
     }
 
@@ -294,16 +320,28 @@
     updateVotedState();
 
     async function loadSummary() {
-      const response = await fetch(`${apiBase}/api/ratings/${encodeURIComponent(slug)}`, {
+      const url = new URL(`${apiBase}/api/ratings/${encodeURIComponent(slug)}`);
+      if (hasVoted(slug) && !getStoredRating(slug)) {
+        const voterId = getStoredVoterId();
+        if (voterId) url.searchParams.set("voter_id", voterId);
+      }
+
+      const response = await fetch(url.toString(), {
         headers: { Accept: "application/json" },
       });
       if (!response.ok) throw new Error("summary failed");
       currentSummary = await response.json();
+      if (Number.isInteger(currentSummary.my_rating)) {
+        markVoted(slug, currentSummary.my_rating);
+        selectedRating = currentSummary.my_rating;
+        renderCurrentVote();
+      }
       renderSummary(averageEl, currentSummary, displayStars);
+      if (dialog.open) setStars(starButtons, selectedRating);
     }
 
     async function submitVote(rating) {
-      if (submitting || hasVoted(slug)) return;
+      if (submitting) return;
       const turnstileReady = await ensureTurnstileReady();
       if (!turnstileReady) return;
 
@@ -338,14 +376,15 @@
 
       const payload = await readJson(response);
       if (response.status === 409) {
-        markVoted(slug);
+        markVoted(slug, rating);
         if (payload.summary) {
           currentSummary = payload.summary;
           renderSummary(averageEl, currentSummary, displayStars);
         }
         setStatus(statusEl, "Vous avez déjà voté pour cette sortie.", "success");
-        updateVotedState();
         submitting = false;
+        setVotingDisabled(starButtons, false);
+        updateVotedState();
         return;
       }
 
@@ -360,12 +399,22 @@
         return;
       }
 
-      markVoted(slug);
+      markVoted(slug, rating);
+      selectedRating = rating;
       currentSummary = payload.summary || payload;
       renderSummary(averageEl, currentSummary, displayStars);
-      setStatus(statusEl, "Merci, votre vote est enregistré.", "success");
-      updateVotedState();
+      setStatus(
+        statusEl,
+        payload.updated ? "Merci, votre vote est modifié." : "Merci, votre vote est enregistré.",
+        "success"
+      );
+      if (window.turnstile && turnstileWidgetId !== null) {
+        window.turnstile.reset(turnstileWidgetId);
+        currentToken = "";
+      }
       submitting = false;
+      setVotingDisabled(starButtons, false);
+      updateVotedState();
     }
 
     try {

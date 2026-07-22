@@ -57,7 +57,7 @@ export async function handleRequest(request, env) {
   }
 
   if (request.method === "GET") {
-    return jsonResponse(request, env, await getSummary(env, slug));
+    return getRideRating(request, env, slug);
   }
 
   if (request.method === "POST") {
@@ -174,16 +174,11 @@ async function submitVote(request, env, slug) {
   const userAgentHash = await sha256Hex(`${env.RATING_HASH_SALT}:ua:${userAgent}`);
 
   const existing = await env.DB.prepare(
-    "select id from ride_votes where ride_slug = ?1 and voter_hash = ?2 limit 1"
+    "select id, rating from ride_votes where ride_slug = ?1 and voter_hash = ?2 limit 1"
   ).bind(slug, voterHash).first();
 
   if (existing) {
-    return jsonResponse(
-      request,
-      env,
-      { error: "Vous avez deja vote pour cette sortie.", summary: await getSummary(env, slug) },
-      409
-    );
+    return updateVote(request, env, slug, existing, rating, ipHash, userAgentHash);
   }
 
   const ipVotes = await countRecentVotes(env, "ip_hash", ipHash);
@@ -203,12 +198,12 @@ async function submitVote(request, env, slug) {
     ).bind(slug, rating, voterHash, ipHash, userAgentHash).run();
   } catch (error) {
     if (String(error && error.message).toLowerCase().includes("unique")) {
-      return jsonResponse(
-        request,
-        env,
-        { error: "Vous avez deja vote pour cette sortie.", summary: await getSummary(env, slug) },
-        409
-      );
+      const existingAfterConflict = await env.DB.prepare(
+        "select id, rating from ride_votes where ride_slug = ?1 and voter_hash = ?2 limit 1"
+      ).bind(slug, voterHash).first();
+      if (existingAfterConflict) {
+        return updateVote(request, env, slug, existingAfterConflict, rating, ipHash, userAgentHash);
+      }
     }
     throw error;
   }
@@ -226,7 +221,64 @@ async function submitVote(request, env, slug) {
        updated_at = current_timestamp`
   ).bind(slug, rating).run();
 
-  return jsonResponse(request, env, { summary: await getSummary(env, slug) }, 201);
+  return jsonResponse(request, env, { summary: await getSummary(env, slug), rating, updated: false }, 201);
+}
+
+async function updateVote(request, env, slug, existing, rating, ipHash, userAgentHash) {
+  const previousRating = Number(existing.rating);
+  const delta = rating - previousRating;
+
+  await env.DB.prepare(
+    `update ride_votes
+     set rating = ?1,
+         ip_hash = ?2,
+         user_agent_hash = ?3
+     where id = ?4`
+  ).bind(rating, ipHash, userAgentHash, existing.id).run();
+
+  if (delta !== 0) {
+    await env.DB.prepare(
+      `update ride_rating_summary
+       set rating_sum = rating_sum + ?1,
+           average_rating = ((rating_sum + ?1) * 1.0 / vote_count),
+           updated_at = current_timestamp
+       where ride_slug = ?2`
+    ).bind(delta, slug).run();
+  }
+
+  return jsonResponse(request, env, {
+    summary: await getSummary(env, slug),
+    rating,
+    previous_rating: previousRating,
+    updated: true,
+  });
+}
+
+async function getRideRating(request, env, slug) {
+  const summary = await getSummary(env, slug);
+  const voterId = new URL(request.url).searchParams.get("voter_id");
+
+  if (!voterId) {
+    return jsonResponse(request, env, summary);
+  }
+
+  if (!VOTER_ID_RE.test(voterId)) {
+    return jsonResponse(request, env, { error: "Identifiant de vote invalide." }, 400);
+  }
+
+  if (!env.RATING_HASH_SALT) {
+    return jsonResponse(request, env, { error: "Configuration de vote incomplete." }, 500);
+  }
+
+  const voterHash = await sha256Hex(`${env.RATING_HASH_SALT}:voter:${voterId}`);
+  const vote = await env.DB.prepare(
+    "select rating from ride_votes where ride_slug = ?1 and voter_hash = ?2 limit 1"
+  ).bind(slug, voterHash).first();
+
+  return jsonResponse(request, env, {
+    ...summary,
+    my_rating: vote ? Number(vote.rating) : null,
+  });
 }
 
 async function parseJson(request) {
