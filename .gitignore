@@ -14,6 +14,9 @@ staticfiles/
 
 # Secrets / env
 .env
+ratings-worker/.dev.vars
+ratings-worker/.dev.vars.*
+!ratings-worker/.dev.vars.example
 
 # Generated static site
 output/

@@ -6,7 +6,7 @@ import { handleRequest } from "../src/index.js";
 function mockEnv(rows) {
   const queries = [];
   return {
-    ALLOWED_ORIGINS: "https://www.gravelleestrie.com",
+    ALLOWED_ORIGINS: "https://gravelleestrie.com,https://www.gravelleestrie.com",
     queries,
     DB: {
       prepare(sql) {
@@ -90,4 +90,22 @@ test("rejects invalid batch slugs", async () => {
 
   const response = await handleRequest(request, mockEnv([]));
   assert.equal(response.status, 400);
+});
+
+test("allows preflight from the apex production origin", async () => {
+  const request = new Request("https://worker.example/api/ratings", {
+    method: "OPTIONS",
+    headers: {
+      Origin: "https://gravelleestrie.com",
+      "Access-Control-Request-Method": "POST",
+      "Access-Control-Request-Headers": "content-type,accept",
+    },
+  });
+
+  const response = await handleRequest(request, mockEnv([]));
+
+  assert.equal(response.status, 204);
+  assert.equal(response.headers.get("Access-Control-Allow-Origin"), "https://gravelleestrie.com");
+  assert.match(response.headers.get("Access-Control-Allow-Methods") || "", /POST/);
+  assert.match(response.headers.get("Access-Control-Allow-Headers") || "", /Content-Type/);
 });

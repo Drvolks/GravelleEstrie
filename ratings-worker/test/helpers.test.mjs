@@ -20,7 +20,10 @@ test("parses configured allowed origins", () => {
 });
 
 test("allows only configured browser origins", () => {
-  const env = { ALLOWED_ORIGINS: "https://www.example.com" };
+  const env = { ALLOWED_ORIGINS: "https://example.com,https://www.example.com" };
+  const allowedRoot = new Request("https://worker.example/api/ratings/ride-a", {
+    headers: { Origin: "https://example.com" },
+  });
   const allowed = new Request("https://worker.example/api/ratings/ride-a", {
     headers: { Origin: "https://www.example.com" },
   });
@@ -28,6 +31,7 @@ test("allows only configured browser origins", () => {
     headers: { Origin: "https://evil.example" },
   });
 
+  assert.equal(isAllowedOrigin(allowedRoot, env), true);
   assert.equal(isAllowedOrigin(allowed, env), true);
   assert.equal(isAllowedOrigin(denied, env), false);
 });

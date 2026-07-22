@@ -82,4 +82,7 @@ npm run dev
 ```
 
 Add the local Worker URL to `RATINGS_API_URL` when previewing the static site.
-`wrangler.toml` already allows common local preview origins.
+Production `wrangler.toml` only allows `https://gravelleestrie.com` and
+`https://www.gravelleestrie.com`. Local preview origins are kept in
+`.dev.vars`, which Wrangler loads during `npm run dev` and which is ignored by
+Git. Use `.dev.vars.example` as the template if you need to recreate it.
