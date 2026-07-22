@@ -211,6 +211,7 @@
     let pendingRating = null;
     let turnstileReadyPromise = null;
     let selectedRating = getStoredRating(slug);
+    let currentVoteRating = selectedRating;
 
     function closeDialog() {
       if (dialog.open && dialog.close) {
@@ -222,6 +223,9 @@
 
     function openDialog() {
       selectedRating = getStoredRating(slug);
+      currentVoteRating = selectedRating;
+      pendingRating = null;
+      setVotingDisabled(starButtons, false);
       if (dialog.showModal) {
         if (!dialog.open) dialog.showModal();
       } else {
@@ -238,14 +242,17 @@
       voteButton.hidden = false;
       voteButton.textContent = votedNow ? "Modifier mon vote" : "Voter";
       widget.classList.toggle("has-voted", votedNow);
-      selectedRating = getStoredRating(slug);
+      if (!dialog.open) {
+        selectedRating = getStoredRating(slug);
+        currentVoteRating = selectedRating;
+      }
       renderCurrentVote();
     }
 
     function renderCurrentVote() {
       if (!currentVoteEl) return;
-      if (selectedRating) {
-        currentVoteEl.textContent = `Votre vote actuel : ${selectedRating} / 5`;
+      if (currentVoteRating) {
+        currentVoteEl.textContent = `Votre vote actuel : ${currentVoteRating} / 5`;
         currentVoteEl.hidden = false;
         return;
       }
@@ -301,10 +308,18 @@
 
     for (const button of starButtons) {
       button.setAttribute("role", "radio");
-      button.addEventListener("mouseenter", () => setStars(starButtons, Number(button.dataset.ratingValue)));
-      button.addEventListener("focus", () => setStars(starButtons, Number(button.dataset.ratingValue)));
-      button.addEventListener("mouseleave", () => setStars(starButtons, selectedRating));
-      button.addEventListener("blur", () => setStars(starButtons, selectedRating));
+      button.addEventListener("mouseenter", () => {
+        if (!button.disabled) setStars(starButtons, Number(button.dataset.ratingValue));
+      });
+      button.addEventListener("focus", () => {
+        if (!button.disabled) setStars(starButtons, Number(button.dataset.ratingValue));
+      });
+      button.addEventListener("mouseleave", () => {
+        if (!button.disabled) setStars(starButtons, selectedRating);
+      });
+      button.addEventListener("blur", () => {
+        if (!button.disabled) setStars(starButtons, selectedRating);
+      });
       button.addEventListener("click", () => submitVote(Number(button.dataset.ratingValue)));
     }
 
@@ -334,6 +349,7 @@
       if (Number.isInteger(currentSummary.my_rating)) {
         markVoted(slug, currentSummary.my_rating);
         selectedRating = currentSummary.my_rating;
+        currentVoteRating = currentSummary.my_rating;
         renderCurrentVote();
       }
       renderSummary(averageEl, currentSummary, displayStars);
@@ -342,18 +358,25 @@
 
     async function submitVote(rating) {
       if (submitting) return;
+      selectedRating = rating;
+      setStars(starButtons, selectedRating);
+      setVotingDisabled(starButtons, true);
+
       const turnstileReady = await ensureTurnstileReady();
-      if (!turnstileReady) return;
+      if (!turnstileReady) {
+        setVotingDisabled(starButtons, false);
+        return;
+      }
 
       if (!currentToken) {
         if (window.turnstile && turnstileWidgetId !== null) {
           pendingRating = rating;
-          setVotingDisabled(starButtons, true);
           setStatus(statusEl, "Validation anti-robot...", "");
           window.turnstile.execute(turnstileWidgetId);
           return;
         }
         setStatus(statusEl, "Validation anti-robot indisponible.", "error");
+        setVotingDisabled(starButtons, false);
         return;
       }
 
@@ -413,7 +436,7 @@
         currentToken = "";
       }
       submitting = false;
-      setVotingDisabled(starButtons, false);
+      setVotingDisabled(starButtons, dialog.open);
       updateVotedState();
     }
 

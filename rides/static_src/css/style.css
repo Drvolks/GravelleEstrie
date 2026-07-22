@@ -428,8 +428,8 @@ main.wrap { padding-top: 28px; }
   line-height: 1;
   cursor: pointer;
 }
-.rating-stars button:hover,
-.rating-stars button:focus-visible,
+.rating-stars button:not(:disabled):hover,
+.rating-stars button:not(:disabled):focus-visible,
 .rating-stars button.is-active {
   color: #f0a202;
 }
