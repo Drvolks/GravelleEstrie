@@ -29,6 +29,7 @@
   const grid = document.getElementById("rides");
   const cards = Array.from(document.querySelectorAll(".card"));
   const isAdmin = new URLSearchParams(window.location.search).get("admin") === "true";
+  let previousSortField = sortBy.value;
 
   if (!cards.length) return;
 
@@ -105,6 +106,18 @@
 
     sorted.sort(function (a, b) {
       let result;
+      if (field === "rating") {
+        result = Number(a.dataset.ratingAverage || 0) - Number(b.dataset.ratingAverage || 0)
+          || Number(a.dataset.ratingVotes || 0) - Number(b.dataset.ratingVotes || 0)
+          || compareText(a.dataset.name, b.dataset.name);
+        return direction * result;
+      }
+      if (field === "votes") {
+        result = Number(a.dataset.ratingVotes || 0) - Number(b.dataset.ratingVotes || 0)
+          || Number(a.dataset.ratingAverage || 0) - Number(b.dataset.ratingAverage || 0)
+          || compareText(a.dataset.name, b.dataset.name);
+        return direction * result;
+      }
       if (field === "distance") {
         result = Number(a.dataset.distance) - Number(b.dataset.distance)
           || compareText(a.dataset.name, b.dataset.name);
@@ -179,7 +192,18 @@
   }
 
   search.addEventListener("input", function () { apply(); });
-  sortBy.addEventListener("change", function () { apply(); });
+  sortBy.addEventListener("change", function () {
+    if (
+      (sortBy.value === "rating" || sortBy.value === "votes") &&
+      previousSortField !== "rating" &&
+      previousSortField !== "votes"
+    ) {
+      setSortDirection("desc");
+    }
+    previousSortField = sortBy.value;
+    apply();
+  });
+  document.addEventListener("gravelle:ratings-updated", function () { apply(); });
   sortDirection.addEventListener("click", function () {
     setSortDirection(getSortDirection() === "desc" ? "asc" : "desc");
     apply();
@@ -200,6 +224,7 @@
   reset.addEventListener("click", function () {
     search.value = "";
     sortBy.value = "name";
+    previousSortField = "name";
     setSortDirection("asc");
     distanceMin.value = distanceMin.min;
     distanceMax.value = distanceMax.max;

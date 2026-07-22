@@ -95,12 +95,17 @@ class Command(BaseCommand):
             max_distance = self._ceil_max((v.distance_km for v in views), default=100, step=10)
             max_elevation = self._ceil_max((v.elevation_m for v in views), default=1000, step=100)
 
+            ratings_api_url = settings.RATINGS_API_URL.rstrip("/")
+            turnstile_site_key = settings.TURNSTILE_SITE_KEY.strip()
             common = {
                 "base_path": base_path,
                 "site_title": settings.SITE_TITLE,
                 "site_tagline": settings.SITE_TAGLINE,
                 "default_cover_url": self._default_cover_url(base_path),
                 "asset_version": asset_version,
+                "ratings_enabled": bool(ratings_api_url and turnstile_site_key),
+                "ratings_api_url": ratings_api_url,
+                "turnstile_site_key": turnstile_site_key,
             }
 
             # Index
@@ -158,6 +163,7 @@ class Command(BaseCommand):
         for relative in (
             Path("css/style.css"),
             Path("js/gallery.js"),
+            Path("js/ratings.js"),
             Path("js/search.js"),
         ):
             path = assets_dir / relative

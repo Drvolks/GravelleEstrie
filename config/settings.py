@@ -155,6 +155,11 @@ SITE_CUSTOM_DOMAIN = os.environ.get("SITE_CUSTOM_DOMAIN", "www.gravelleestrie.co
 SITE_TITLE = "Gravelle Estrie"
 SITE_TAGLINE = "Sorties gravelle du club Gravelle Estrie"
 
+# Optional static-site ratings. When both values are set, ride detail pages
+# load the rating widget and submit votes to the Cloudflare Worker API.
+RATINGS_API_URL = os.environ.get("RATINGS_API_URL", "").strip().rstrip("/")
+TURNSTILE_SITE_KEY = os.environ.get("TURNSTILE_SITE_KEY", "").strip()
+
 # Semicolon-separated ravito points. Entries can be Google Maps URLs,
 # ``Name|Google Maps URL``, or ``Name|latitude|longitude``.
 RAVITO_POINTS = os.environ.get("RAVITO_POINTS", "")

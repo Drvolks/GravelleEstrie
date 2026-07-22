@@ -1,0 +1,19 @@
+name = "gravelleestrie-ratings"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+ALLOWED_ORIGINS = "https://www.gravelleestrie.com,http://localhost:8080,http://127.0.0.1:8080,http://localhost:8765,http://127.0.0.1:8765"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "gravelleestrie-ratings"
+database_id = "replace-with-cloudflare-d1-database-id"
+
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 30
+  period = 60
