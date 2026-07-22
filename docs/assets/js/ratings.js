@@ -84,18 +84,16 @@
     }
   }
 
-  function renderSummary(averageEl, starButtons, summary, displayStars = []) {
+  function renderSummary(averageEl, summary, displayStars = []) {
     const count = Number(summary.vote_count || 0);
     const average = Number(summary.average_rating || 0);
     if (!count) {
       averageEl.textContent = "Aucune note pour le moment";
-      setStars(starButtons, 0);
       setDisplayStars(displayStars, 0);
       return;
     }
 
     averageEl.textContent = `${average.toFixed(1)} / 5 (${count} vote${count > 1 ? "s" : ""})`;
-    setStars(starButtons, Math.round(average));
     setDisplayStars(displayStars, Math.round(average));
   }
 
@@ -213,6 +211,7 @@
       } else {
         dialog.hidden = false;
       }
+      setStars(starButtons, 0);
       setStatus(statusEl, "", "");
       ensureTurnstileReady();
     }
@@ -278,8 +277,8 @@
       button.setAttribute("role", "radio");
       button.addEventListener("mouseenter", () => setStars(starButtons, Number(button.dataset.ratingValue)));
       button.addEventListener("focus", () => setStars(starButtons, Number(button.dataset.ratingValue)));
-      button.addEventListener("mouseleave", () => renderSummary(averageEl, starButtons, currentSummary, displayStars));
-      button.addEventListener("blur", () => renderSummary(averageEl, starButtons, currentSummary, displayStars));
+      button.addEventListener("mouseleave", () => setStars(starButtons, 0));
+      button.addEventListener("blur", () => setStars(starButtons, 0));
       button.addEventListener("click", () => submitVote(Number(button.dataset.ratingValue)));
     }
 
@@ -300,7 +299,7 @@
       });
       if (!response.ok) throw new Error("summary failed");
       currentSummary = await response.json();
-      renderSummary(averageEl, starButtons, currentSummary, displayStars);
+      renderSummary(averageEl, currentSummary, displayStars);
     }
 
     async function submitVote(rating) {
@@ -342,7 +341,7 @@
         markVoted(slug);
         if (payload.summary) {
           currentSummary = payload.summary;
-          renderSummary(averageEl, starButtons, currentSummary, displayStars);
+          renderSummary(averageEl, currentSummary, displayStars);
         }
         setStatus(statusEl, "Vous avez déjà voté pour cette sortie.", "success");
         updateVotedState();
@@ -363,7 +362,7 @@
 
       markVoted(slug);
       currentSummary = payload.summary || payload;
-      renderSummary(averageEl, starButtons, currentSummary, displayStars);
+      renderSummary(averageEl, currentSummary, displayStars);
       setStatus(statusEl, "Merci, votre vote est enregistré.", "success");
       updateVotedState();
       submitting = false;
