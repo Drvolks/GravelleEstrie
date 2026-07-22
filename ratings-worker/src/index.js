@@ -11,7 +11,7 @@ const RIDE_ROUTE = /^\/api\/ratings\/([a-z0-9-]+)$/;
 const VOTER_ID_RE = /^[A-Za-z0-9:_-]{8,160}$/;
 const MAX_BATCH_SLUGS = 500;
 const D1_BATCH_CHUNK_SIZE = 50;
-const MAX_IP_VOTES_PER_HOUR = 5;
+const MAX_IP_VOTES_PER_HOUR = 20;
 const MAX_VOTER_VOTES_PER_HOUR = 10;
 
 export default {
