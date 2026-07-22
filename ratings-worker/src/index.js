@@ -10,6 +10,7 @@ const RATING_COLLECTION_ROUTE = /^\/api\/ratings$/;
 const RIDE_ROUTE = /^\/api\/ratings\/([a-z0-9-]+)$/;
 const VOTER_ID_RE = /^[A-Za-z0-9:_-]{8,160}$/;
 const MAX_BATCH_SLUGS = 500;
+const D1_BATCH_CHUNK_SIZE = 50;
 const MAX_IP_VOTES_PER_HOUR = 5;
 const MAX_VOTER_VOTES_PER_HOUR = 10;
 
@@ -78,15 +79,20 @@ async function getBatchSummaries(request, env) {
     return jsonResponse(request, env, { error: "Liste de sorties invalide." }, 400);
   }
 
-  const placeholders = slugs.map((_, index) => `?${index + 1}`).join(", ");
-  const rows = await env.DB.prepare(
-    `select ride_slug, vote_count, average_rating
-     from ride_rating_summary
-     where ride_slug in (${placeholders})`
-  ).bind(...slugs).all();
+  const rows = [];
+  for (let index = 0; index < slugs.length; index += D1_BATCH_CHUNK_SIZE) {
+    const chunk = slugs.slice(index, index + D1_BATCH_CHUNK_SIZE);
+    const placeholders = chunk.map((_, chunkIndex) => `?${chunkIndex + 1}`).join(", ");
+    const result = await env.DB.prepare(
+      `select ride_slug, vote_count, average_rating
+       from ride_rating_summary
+       where ride_slug in (${placeholders})`
+    ).bind(...chunk).all();
+    rows.push(...(result.results || []));
+  }
 
   const summariesBySlug = new Map(
-    (rows.results || []).map((row) => [
+    rows.map((row) => [
       row.ride_slug,
       {
         ride_slug: row.ride_slug,
@@ -146,7 +152,20 @@ async function submitVote(request, env, slug) {
 
   const turnstile = await verifyTurnstile(env, turnstileToken, clientIp);
   if (!turnstile.success) {
-    return jsonResponse(request, env, { error: "Validation anti-robot refusee." }, 403);
+    console.warn("Turnstile verification failed", {
+      errorCodes: turnstile.errorCodes,
+      hostname: turnstile.hostname,
+      action: turnstile.action,
+    });
+    return jsonResponse(
+      request,
+      env,
+      {
+        error: "Validation anti-robot refusee.",
+        turnstile_error_codes: turnstile.errorCodes,
+      },
+      403
+    );
   }
 
   const userAgent = (request.headers.get("user-agent") || "unknown").slice(0, 256);
@@ -220,7 +239,7 @@ async function parseJson(request) {
 
 async function verifyTurnstile(env, token, remoteIp) {
   if (!env.TURNSTILE_SECRET_KEY || !token || token.length > 2048) {
-    return { success: false };
+    return { success: false, errorCodes: ["missing-local-input"] };
   }
 
   const formData = new FormData();
@@ -234,11 +253,26 @@ async function verifyTurnstile(env, token, remoteIp) {
     body: formData,
   });
   const result = await response.json();
+  const errorCodes = result["error-codes"] || [];
 
-  if (!result.success) return { success: false };
-  if (result.action && result.action !== "ride_rating") return { success: false };
+  if (!result.success) {
+    return {
+      success: false,
+      errorCodes,
+      hostname: result.hostname,
+      action: result.action,
+    };
+  }
+  if (result.action && result.action !== "ride_rating") {
+    return {
+      success: false,
+      errorCodes: ["action-mismatch"],
+      hostname: result.hostname,
+      action: result.action,
+    };
+  }
 
-  return { success: true };
+  return { success: true, hostname: result.hostname, action: result.action };
 }
 
 async function countRecentVotes(env, column, hash) {

@@ -282,7 +282,9 @@ pages, plus average score and vote count on the ride list. The list can sort by
 average score or number of votes. Votes are not stored in GitHub Pages: the
 browser calls a Cloudflare Worker in `ratings-worker/`, which validates
 Cloudflare Turnstile, rate-limits requests, hashes visitor signals, and stores
-the vote in Cloudflare D1.
+the vote in Cloudflare D1. Turnstile runs only when a visitor submits a vote
+and is configured client-side to stay hidden unless Cloudflare requires
+interaction.
 
 Ratings are disabled by default. To enable them, deploy the Worker, then set:
 
