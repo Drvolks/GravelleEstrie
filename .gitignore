@@ -4,6 +4,7 @@ __pycache__/
 .venv/
 venv/
 *.egg-info/
+node_modules/
 
 # Django
 *.sqlite3

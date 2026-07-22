@@ -885,6 +885,59 @@ class BuildSiteTests(TestCase):
             self.assertIn('data-ravitos="0"', html)
             self.assertIn('data-parkings="0"', html)
 
+    @override_settings(SITE_BASE_PATH="/Test", RATINGS_API_URL="", TURNSTILE_SITE_KEY="")
+    def test_build_site_omits_ratings_when_unconfigured(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(name="Sortie A", geometry=SQUARE, distance_m=1000, start_city="Magog")
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            index_html = (Path(tmp) / "index.html").read_text(encoding="utf-8")
+            html = (Path(tmp) / "rides" / "sortie-a" / "index.html").read_text(
+                encoding="utf-8"
+            )
+
+        self.assertNotIn("data-ratings-index", index_html)
+        self.assertNotIn('<option value="rating">Note moyenne</option>', index_html)
+        self.assertNotIn("data-card-rating-summary", index_html)
+        self.assertNotIn("data-ride-rating", html)
+        self.assertNotIn("ratings.js", html)
+        self.assertNotIn("turnstile/v0/api.js", html)
+
+    @override_settings(
+        SITE_BASE_PATH="/Test",
+        RATINGS_API_URL="https://ratings.example.workers.dev/",
+        TURNSTILE_SITE_KEY="1x00000000000000000000AA",
+    )
+    def test_build_site_renders_ratings_when_configured(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(name="Sortie A", geometry=SQUARE, distance_m=1000, start_city="Magog")
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            index_html = (Path(tmp) / "index.html").read_text(encoding="utf-8")
+            html = (Path(tmp) / "rides" / "sortie-a" / "index.html").read_text(
+                encoding="utf-8"
+            )
+
+        self.assertIn('data-ratings-index data-ratings-api-url="https://ratings.example.workers.dev"', index_html)
+        self.assertIn('<option value="rating">Note moyenne</option>', index_html)
+        self.assertIn('<option value="votes">Nombre de votes</option>', index_html)
+        self.assertIn('data-ride-slug="sortie-a"', index_html)
+        self.assertIn('data-rating-average="0"', index_html)
+        self.assertIn('data-rating-votes="0"', index_html)
+        self.assertIn('data-card-rating-summary hidden', index_html)
+        self.assertNotIn("Note --", index_html)
+        self.assertIn("/Test/assets/js/ratings.js?v=", index_html)
+        self.assertIn('class="ride-rating"', html)
+        self.assertIn('data-ride-slug="sortie-a"', html)
+        self.assertIn('data-ratings-api-url="https://ratings.example.workers.dev"', html)
+        self.assertIn('data-turnstile-site-key="1x00000000000000000000AA"', html)
+        self.assertIn("/Test/assets/js/ratings.js?v=", html)
+        self.assertIn("https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit", html)
+
     @override_settings(SITE_BASE_PATH="", SITE_CUSTOM_DOMAIN="")
     def test_build_site_supports_custom_domain_root_paths(self):
         from django.core.management import call_command

@@ -275,6 +275,28 @@ FIT/TCX/GPX exports are primarily a product/UI feature. These generated GPX
 files are breadcrumb tracks (`lat/lng` points), suitable for manual Garmin
 import; they do not include RideWithGPS cue sheets or turn-by-turn metadata.
 
+### Ride ratings
+
+The generated static site can show a 1-5 star rating widget on ride detail
+pages, plus average score and vote count on the ride list. The list can sort by
+average score or number of votes. Votes are not stored in GitHub Pages: the
+browser calls a Cloudflare Worker in `ratings-worker/`, which validates
+Cloudflare Turnstile, rate-limits requests, hashes visitor signals, and stores
+the vote in Cloudflare D1. Turnstile runs only when a visitor submits a vote
+and is configured client-side to stay hidden unless Cloudflare requires
+interaction.
+
+Ratings are disabled by default. To enable them, deploy the Worker, then set:
+
+```bash
+RATINGS_API_URL=https://gravelleestrie-ratings.<account>.workers.dev
+TURNSTILE_SITE_KEY=<public Turnstile site key>
+```
+
+Run `python manage.py build_site` after setting those values. See
+`ratings-worker/README.md` for the D1 schema, Worker secrets, and Wrangler
+commands.
+
 ### Ravitos
 
 Known grocery stores, cafés, dépanneurs, and parking spots can be listed in

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/style.css?v=cfd43102b850">
+  <link rel="stylesheet" href="/assets/css/style.css?v=92213fda81dd">
 </head>
 <body class="has-ride-cover" style="--ride-cover-image: url('/assets/img/default-ride-cover.jpg');">
   <header class="site-header">
@@ -38,6 +38,10 @@
         <option value="distance">Distance</option>
         <option value="elevation">Dénivelé</option>
         <option value="city">Ville de départ</option>
+
+        <option value="rating">Note moyenne</option>
+        <option value="votes">Nombre de votes</option>
+
       </select>
     </label>
     <button type="button" id="sort-direction" class="sort-direction" data-direction="asc"
@@ -78,13 +82,15 @@
   </div>
 </section>
 
-<section class="grid" id="rides">
+<section class="grid" id="rides"
+         data-ratings-index data-ratings-api-url="https://gravelleestrie-ratings.fleece-00-clad.workers.dev">
 
   <article class="card" data-name="1234" data-city="lac-brome"
            data-distance="31.8" data-elevation="469"
            data-created="2026-07-01 08:55:28"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="1234"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/1234/">
       <div class="card-thumb">
 
@@ -100,6 +106,9 @@
         <p class="card-stats">
           <span class="stat">31.8 km</span>
           <span class="stat">↗ 469 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -109,7 +118,8 @@
            data-distance="63.3" data-elevation="695"
            data-created="2026-07-01 08:55:27"
            data-ravitos="0" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="160821-copier"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/160821-copier/">
       <div class="card-thumb">
 
@@ -125,6 +135,9 @@
         <p class="card-stats">
           <span class="stat">63.3 km</span>
           <span class="stat">↗ 695 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -134,7 +147,8 @@
            data-distance="69.7" data-elevation="776"
            data-created="2026-07-01 08:56:01"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="3-circuits-en-1"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/3-circuits-en-1/">
       <div class="card-thumb">
 
@@ -150,6 +164,9 @@
         <p class="card-stats">
           <span class="stat">69.7 km</span>
           <span class="stat">↗ 776 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -159,7 +176,8 @@
            data-distance="69.4" data-elevation="1281"
            data-created="2026-07-01 08:56:16"
            data-ravitos="1" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="autumn-leaves"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/autumn-leaves/">
       <div class="card-thumb">
 
@@ -175,6 +193,9 @@
         <p class="card-stats">
           <span class="stat">69.4 km</span>
           <span class="stat">↗ 1281 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -184,7 +205,8 @@
            data-distance="44.9" data-elevation="502"
            data-created="2026-07-01 08:55:39"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="back-on-track"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/back-on-track/">
       <div class="card-thumb">
 
@@ -200,6 +222,9 @@
         <p class="card-stats">
           <span class="stat">44.9 km</span>
           <span class="stat">↗ 502 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -209,7 +234,8 @@
            data-distance="42.8" data-elevation="457"
            data-created="2026-07-01 08:55:39"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="back-on-track-un-autre-essai"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/back-on-track-un-autre-essai/">
       <div class="card-thumb">
 
@@ -225,6 +251,9 @@
         <p class="card-stats">
           <span class="stat">42.8 km</span>
           <span class="stat">↗ 457 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -234,7 +263,8 @@
            data-distance="58.5" data-elevation="1011"
            data-created="2026-07-02 07:50:16"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="bad-to-the-bone"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/bad-to-the-bone/">
       <div class="card-thumb">
 
@@ -250,6 +280,9 @@
         <p class="card-stats">
           <span class="stat">58.5 km</span>
           <span class="stat">↗ 1011 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -259,7 +292,8 @@
            data-distance="73.8" data-elevation="1275"
            data-created="2026-07-01 08:55:29"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="best-day-of-my-life"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/best-day-of-my-life/">
       <div class="card-thumb">
 
@@ -275,6 +309,9 @@
         <p class="card-stats">
           <span class="stat">73.8 km</span>
           <span class="stat">↗ 1275 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -284,7 +321,8 @@
            data-distance="46.8" data-elevation="643"
            data-created="2026-07-01 08:55:31"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="bigger-heart"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/bigger-heart/">
       <div class="card-thumb">
 
@@ -300,6 +338,9 @@
         <p class="card-stats">
           <span class="stat">46.8 km</span>
           <span class="stat">↗ 643 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -309,7 +350,8 @@
            data-distance="82.1" data-elevation="1281"
            data-created="2026-07-01 08:56:14"
            data-ravitos="7" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="birthday-ride-82km-1281md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/birthday-ride-82km-1281md/">
       <div class="card-thumb">
 
@@ -325,6 +367,9 @@
         <p class="card-stats">
           <span class="stat">82.1 km</span>
           <span class="stat">↗ 1281 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -334,7 +379,8 @@
            data-distance="55.0" data-elevation="747"
            data-created="2026-07-01 08:55:29"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="brown-eyed-girl"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/brown-eyed-girl/">
       <div class="card-thumb">
 
@@ -350,6 +396,9 @@
         <p class="card-stats">
           <span class="stat">55.0 km</span>
           <span class="stat">↗ 747 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -359,7 +408,8 @@
            data-distance="67.3" data-elevation="908"
            data-created="2026-07-01 08:56:09"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="brown-eyed-girl-2025"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/brown-eyed-girl-2025/">
       <div class="card-thumb">
 
@@ -375,6 +425,9 @@
         <p class="card-stats">
           <span class="stat">67.3 km</span>
           <span class="stat">↗ 908 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -384,7 +437,8 @@
            data-distance="65.7" data-elevation="804"
            data-created="2026-07-02 07:50:06"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="ca-ne-sera-pas-la-derniere-66km800md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/ca-ne-sera-pas-la-derniere-66km800md/">
       <div class="card-thumb">
 
@@ -400,6 +454,9 @@
         <p class="card-stats">
           <span class="stat">65.7 km</span>
           <span class="stat">↗ 804 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -409,7 +466,8 @@
            data-distance="89.2" data-elevation="1490"
            data-created="2026-07-02 07:50:07"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="check-it-out-90km1500md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/check-it-out-90km1500md/">
       <div class="card-thumb">
 
@@ -425,6 +483,9 @@
         <p class="card-stats">
           <span class="stat">89.2 km</span>
           <span class="stat">↗ 1490 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -434,7 +495,8 @@
            data-distance="86.9" data-elevation="1267"
            data-created="2026-07-01 08:55:35"
            data-ravitos="1" data-parkings="4"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="ciao-bye"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/ciao-bye/">
       <div class="card-thumb">
 
@@ -450,6 +512,9 @@
         <p class="card-stats">
           <span class="stat">86.9 km</span>
           <span class="stat">↗ 1267 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -459,7 +524,8 @@
            data-distance="29.7" data-elevation="332"
            data-created="2026-07-01 08:56:01"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="circuit-1-30km400md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/circuit-1-30km400md/">
       <div class="card-thumb">
 
@@ -475,6 +541,9 @@
         <p class="card-stats">
           <span class="stat">29.7 km</span>
           <span class="stat">↗ 332 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -484,7 +553,8 @@
            data-distance="51.1" data-elevation="640"
            data-created="2026-07-01 08:56:01"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="circuit-2-51km750md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/circuit-2-51km750md/">
       <div class="card-thumb">
 
@@ -500,6 +570,9 @@
         <p class="card-stats">
           <span class="stat">51.1 km</span>
           <span class="stat">↗ 640 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -509,7 +582,8 @@
            data-distance="69.5" data-elevation="901"
            data-created="2026-07-01 08:56:01"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="circuit-3-70km1100md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/circuit-3-70km1100md/">
       <div class="card-thumb">
 
@@ -525,6 +599,9 @@
         <p class="card-stats">
           <span class="stat">69.5 km</span>
           <span class="stat">↗ 901 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -534,7 +611,8 @@
            data-distance="84.1" data-elevation="955"
            data-created="2026-07-01 08:56:13"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="collapse"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/collapse/">
       <div class="card-thumb">
 
@@ -550,6 +628,9 @@
         <p class="card-stats">
           <span class="stat">84.1 km</span>
           <span class="stat">↗ 955 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -559,7 +640,8 @@
            data-distance="86.8" data-elevation="1136"
            data-created="2026-07-01 08:56:11"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="complete-level-1-87km-1350md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/complete-level-1-87km-1350md/">
       <div class="card-thumb">
 
@@ -575,6 +657,9 @@
         <p class="card-stats">
           <span class="stat">86.8 km</span>
           <span class="stat">↗ 1136 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -584,7 +669,8 @@
            data-distance="63.7" data-elevation="1098"
            data-created="2026-07-01 08:56:10"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="complete-level-2-64km-1100md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/complete-level-2-64km-1100md/">
       <div class="card-thumb">
 
@@ -600,6 +686,9 @@
         <p class="card-stats">
           <span class="stat">63.7 km</span>
           <span class="stat">↗ 1098 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -609,7 +698,8 @@
            data-distance="91.6" data-elevation="1709"
            data-created="2026-07-01 08:56:12"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="costaude-grange-pardue-91km-1900md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/costaude-grange-pardue-91km-1900md/">
       <div class="card-thumb">
 
@@ -625,6 +715,9 @@
         <p class="card-stats">
           <span class="stat">91.6 km</span>
           <span class="stat">↗ 1709 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -634,7 +727,8 @@
            data-distance="73.6" data-elevation="435"
            data-created="2026-07-02 07:42:05"
            data-ravitos="0" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="depart-parc-de-la-yamaska-et-saucette"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/depart-parc-de-la-yamaska-et-saucette/">
       <div class="card-thumb">
 
@@ -650,6 +744,9 @@
         <p class="card-stats">
           <span class="stat">73.6 km</span>
           <span class="stat">↗ 435 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -659,7 +756,8 @@
            data-distance="67.9" data-elevation="1058"
            data-created="2026-07-01 08:55:35"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="douglas-fir"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/douglas-fir/">
       <div class="card-thumb">
 
@@ -675,6 +773,9 @@
         <p class="card-stats">
           <span class="stat">67.9 km</span>
           <span class="stat">↗ 1058 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -684,7 +785,8 @@
            data-distance="80.3" data-elevation="1356"
            data-created="2026-07-02 07:50:19"
            data-ravitos="6" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="dreamworld"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/dreamworld/">
       <div class="card-thumb">
 
@@ -700,6 +802,9 @@
         <p class="card-stats">
           <span class="stat">80.3 km</span>
           <span class="stat">↗ 1356 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -709,7 +814,8 @@
            data-distance="59.5" data-elevation="945"
            data-created="2026-07-01 08:55:33"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="drive-all-night"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/drive-all-night/">
       <div class="card-thumb">
 
@@ -725,6 +831,9 @@
         <p class="card-stats">
           <span class="stat">59.5 km</span>
           <span class="stat">↗ 945 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -734,7 +843,8 @@
            data-distance="58.1" data-elevation="965"
            data-created="2026-07-02 07:50:01"
            data-ravitos="4" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="envoye-a-maison-58km965md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/envoye-a-maison-58km965md/">
       <div class="card-thumb">
 
@@ -750,6 +860,9 @@
         <p class="card-stats">
           <span class="stat">58.1 km</span>
           <span class="stat">↗ 965 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -759,7 +872,8 @@
            data-distance="73.7" data-elevation="1230"
            data-created="2026-07-01 08:56:19"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="fete-nationale-du-quebec-74km-12300md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/fete-nationale-du-quebec-74km-12300md/">
       <div class="card-thumb">
 
@@ -775,6 +889,9 @@
         <p class="card-stats">
           <span class="stat">73.7 km</span>
           <span class="stat">↗ 1230 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -784,7 +901,8 @@
            data-distance="59.2" data-elevation="562"
            data-created="2026-07-01 08:56:06"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="free-bird-59km-562md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/free-bird-59km-562md/">
       <div class="card-thumb">
 
@@ -800,6 +918,9 @@
         <p class="card-stats">
           <span class="stat">59.2 km</span>
           <span class="stat">↗ 562 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -809,7 +930,8 @@
            data-distance="69.2" data-elevation="974"
            data-created="2026-07-01 08:55:30"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="full-classique"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/full-classique/">
       <div class="card-thumb">
 
@@ -825,6 +947,9 @@
         <p class="card-stats">
           <span class="stat">69.2 km</span>
           <span class="stat">↗ 974 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -834,7 +959,8 @@
            data-distance="81.6" data-elevation="1027"
            data-created="2026-07-06 09:11:00"
            data-ravitos="0" data-parkings="3"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="g093-gravelle-ayers-cliff-ogden"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/g093-gravelle-ayers-cliff-ogden/">
       <div class="card-thumb">
 
@@ -850,6 +976,9 @@
         <p class="card-stats">
           <span class="stat">81.6 km</span>
           <span class="stat">↗ 1027 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -859,7 +988,8 @@
            data-distance="41.9" data-elevation="613"
            data-created="2026-07-02 07:49:57"
            data-ravitos="0" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="gab-longue-2026-1"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/gab-longue-2026-1/">
       <div class="card-thumb">
 
@@ -875,6 +1005,9 @@
         <p class="card-stats">
           <span class="stat">41.9 km</span>
           <span class="stat">↗ 613 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -884,7 +1017,8 @@
            data-distance="74.9" data-elevation="962"
            data-created="2026-07-01 08:55:33"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="glory-days"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/glory-days/">
       <div class="card-thumb">
 
@@ -900,6 +1034,9 @@
         <p class="card-stats">
           <span class="stat">74.9 km</span>
           <span class="stat">↗ 962 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -909,7 +1046,8 @@
            data-distance="65.7" data-elevation="743"
            data-created="2026-07-01 08:56:18"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="grand-hippopotame-66km900md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/grand-hippopotame-66km900md/">
       <div class="card-thumb">
 
@@ -925,6 +1063,9 @@
         <p class="card-stats">
           <span class="stat">65.7 km</span>
           <span class="stat">↗ 743 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -934,7 +1075,8 @@
            data-distance="90.2" data-elevation="1408"
            data-created="2026-07-01 08:55:35"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="grand-lumberjack"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/grand-lumberjack/">
       <div class="card-thumb">
 
@@ -950,6 +1092,9 @@
         <p class="card-stats">
           <span class="stat">90.2 km</span>
           <span class="stat">↗ 1408 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -959,7 +1104,8 @@
            data-distance="90.4" data-elevation="1408"
            data-created="2026-07-01 08:55:36"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="grand-lumberjack-2"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/grand-lumberjack-2/">
       <div class="card-thumb">
 
@@ -975,6 +1121,9 @@
         <p class="card-stats">
           <span class="stat">90.4 km</span>
           <span class="stat">↗ 1408 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -984,7 +1133,8 @@
            data-distance="90.4" data-elevation="1408"
            data-created="2026-07-01 08:55:37"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="grand-lumberjack-3"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/grand-lumberjack-3/">
       <div class="card-thumb">
 
@@ -1000,6 +1150,9 @@
         <p class="card-stats">
           <span class="stat">90.4 km</span>
           <span class="stat">↗ 1408 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1009,7 +1162,8 @@
            data-distance="67.9" data-elevation="1068"
            data-created="2026-07-01 08:56:19"
            data-ravitos="1" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="gravel-bike-68km-1068md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/gravel-bike-68km-1068md/">
       <div class="card-thumb">
 
@@ -1025,6 +1179,9 @@
         <p class="card-stats">
           <span class="stat">67.9 km</span>
           <span class="stat">↗ 1068 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1034,7 +1191,8 @@
            data-distance="61.6" data-elevation="611"
            data-created="2026-07-02 07:42:05"
            data-ravitos="0" data-parkings="3"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="gr-ayc-016b-ayers-cliff-62k-611m"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/gr-ayc-016b-ayers-cliff-62k-611m/">
       <div class="card-thumb">
 
@@ -1050,6 +1208,9 @@
         <p class="card-stats">
           <span class="stat">61.6 km</span>
           <span class="stat">↗ 611 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1059,7 +1220,8 @@
            data-distance="82.3" data-elevation="1268"
            data-created="2026-07-01 08:56:10"
            data-ravitos="2" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="great-balls-of-fire"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/great-balls-of-fire/">
       <div class="card-thumb">
 
@@ -1075,6 +1237,9 @@
         <p class="card-stats">
           <span class="stat">82.3 km</span>
           <span class="stat">↗ 1268 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1084,7 +1249,8 @@
            data-distance="75.2" data-elevation="1113"
            data-created="2026-07-02 07:50:18"
            data-ravitos="1" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="guiding-light"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/guiding-light/">
       <div class="card-thumb">
 
@@ -1100,6 +1266,9 @@
         <p class="card-stats">
           <span class="stat">75.2 km</span>
           <span class="stat">↗ 1113 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1109,7 +1278,8 @@
            data-distance="61.5" data-elevation="672"
            data-created="2026-07-01 08:56:02"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="happy-mother-day"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/happy-mother-day/">
       <div class="card-thumb">
 
@@ -1125,6 +1295,9 @@
         <p class="card-stats">
           <span class="stat">61.5 km</span>
           <span class="stat">↗ 672 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1134,7 +1307,8 @@
            data-distance="73.1" data-elevation="872"
            data-created="2026-07-01 08:55:28"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="hard-sun"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/hard-sun/">
       <div class="card-thumb">
 
@@ -1150,6 +1324,9 @@
         <p class="card-stats">
           <span class="stat">73.1 km</span>
           <span class="stat">↗ 872 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1159,7 +1336,8 @@
            data-distance="81.6" data-elevation="1027"
            data-created="2026-07-01 08:55:32"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="hard-to-tell"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/hard-to-tell/">
       <div class="card-thumb">
 
@@ -1175,6 +1353,9 @@
         <p class="card-stats">
           <span class="stat">81.6 km</span>
           <span class="stat">↗ 1027 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1184,7 +1365,8 @@
            data-distance="61.4" data-elevation="571"
            data-created="2026-07-01 08:56:08"
            data-ravitos="1" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="heureux-dun-printemps"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/heureux-dun-printemps/">
       <div class="card-thumb">
 
@@ -1200,6 +1382,9 @@
         <p class="card-stats">
           <span class="stat">61.4 km</span>
           <span class="stat">↗ 571 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1209,7 +1394,8 @@
            data-distance="56.6" data-elevation="529"
            data-created="2026-07-01 08:56:08"
            data-ravitos="1" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="heureux-dun-printemps-mod"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/heureux-dun-printemps-mod/">
       <div class="card-thumb">
 
@@ -1225,6 +1411,9 @@
         <p class="card-stats">
           <span class="stat">56.6 km</span>
           <span class="stat">↗ 529 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1234,7 +1423,8 @@
            data-distance="65.3" data-elevation="770"
            data-created="2026-07-01 08:56:10"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="hippotame-a-isabelle-mon-stef"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/hippotame-a-isabelle-mon-stef/">
       <div class="card-thumb">
 
@@ -1250,6 +1440,9 @@
         <p class="card-stats">
           <span class="stat">65.3 km</span>
           <span class="stat">↗ 770 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1259,7 +1452,8 @@
            data-distance="73.1" data-elevation="1158"
            data-created="2026-07-01 08:55:29"
            data-ravitos="4" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="home"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/home/">
       <div class="card-thumb">
 
@@ -1275,6 +1469,9 @@
         <p class="card-stats">
           <span class="stat">73.1 km</span>
           <span class="stat">↗ 1158 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1284,7 +1481,8 @@
            data-distance="63.7" data-elevation="892"
            data-created="2026-07-01 08:56:17"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="homeland-classique-64km-892md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/homeland-classique-64km-892md/">
       <div class="card-thumb">
 
@@ -1300,6 +1498,9 @@
         <p class="card-stats">
           <span class="stat">63.7 km</span>
           <span class="stat">↗ 892 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1309,7 +1510,8 @@
            data-distance="60.4" data-elevation="1093"
            data-created="2026-07-01 08:56:16"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="i-like-it-i-love-it-60km1100md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/i-like-it-i-love-it-60km1100md/">
       <div class="card-thumb">
 
@@ -1325,6 +1527,9 @@
         <p class="card-stats">
           <span class="stat">60.4 km</span>
           <span class="stat">↗ 1093 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1334,7 +1539,8 @@
            data-distance="72.8" data-elevation="1091"
            data-created="2026-07-02 07:50:10"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="it-wont-be-long"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/it-wont-be-long/">
       <div class="card-thumb">
 
@@ -1350,6 +1556,9 @@
         <p class="card-stats">
           <span class="stat">72.8 km</span>
           <span class="stat">↗ 1091 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1359,7 +1568,8 @@
            data-distance="59.7" data-elevation="978"
            data-created="2026-07-02 07:50:15"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="lac-bromont-01"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/lac-bromont-01/">
       <div class="card-thumb">
 
@@ -1375,6 +1585,9 @@
         <p class="card-stats">
           <span class="stat">59.7 km</span>
           <span class="stat">↗ 978 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1384,7 +1597,8 @@
            data-distance="59.0" data-elevation="826"
            data-created="2026-07-01 08:56:06"
            data-ravitos="1" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="la-classique-59km826md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/la-classique-59km826md/">
       <div class="card-thumb">
 
@@ -1400,6 +1614,9 @@
         <p class="card-stats">
           <span class="stat">59.0 km</span>
           <span class="stat">↗ 826 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1409,7 +1626,8 @@
            data-distance="66.3" data-elevation="786"
            data-created="2026-07-01 08:55:40"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="la-classique-modifiee"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/la-classique-modifiee/">
       <div class="card-thumb">
 
@@ -1425,6 +1643,9 @@
         <p class="card-stats">
           <span class="stat">66.3 km</span>
           <span class="stat">↗ 786 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1434,7 +1655,8 @@
            data-distance="86.9" data-elevation="1449"
            data-created="2026-07-01 08:56:02"
            data-ravitos="1" data-parkings="4"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="la-costaude-de-dixiville"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/la-costaude-de-dixiville/">
       <div class="card-thumb">
 
@@ -1450,6 +1672,9 @@
         <p class="card-stats">
           <span class="stat">86.9 km</span>
           <span class="stat">↗ 1449 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1459,7 +1684,8 @@
            data-distance="84.4" data-elevation="1400"
            data-created="2026-07-01 08:56:11"
            data-ravitos="0" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="la-costaude-gravel-bike-copier"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/la-costaude-gravel-bike-copier/">
       <div class="card-thumb">
 
@@ -1475,6 +1701,9 @@
         <p class="card-stats">
           <span class="stat">84.4 km</span>
           <span class="stat">↗ 1400 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1484,7 +1713,8 @@
            data-distance="51.2" data-elevation="898"
            data-created="2026-07-02 07:50:07"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="laisse-les-bons-temps-rouler-kain-51km"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/laisse-les-bons-temps-rouler-kain-51km/">
       <div class="card-thumb">
 
@@ -1500,6 +1730,9 @@
         <p class="card-stats">
           <span class="stat">51.2 km</span>
           <span class="stat">↗ 898 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1509,7 +1742,8 @@
            data-distance="79.9" data-elevation="1168"
            data-created="2026-07-02 07:50:05"
            data-ravitos="1" data-parkings="4"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="le-ptit-bonheur-80km1200md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/le-ptit-bonheur-80km1200md/">
       <div class="card-thumb">
 
@@ -1525,6 +1759,9 @@
         <p class="card-stats">
           <span class="stat">79.9 km</span>
           <span class="stat">↗ 1168 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1534,7 +1771,8 @@
            data-distance="60.0" data-elevation="1049"
            data-created="2026-07-01 08:56:12"
            data-ravitos="0" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="les-mollets-rouges-gravel-bike-copier"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/les-mollets-rouges-gravel-bike-copier/">
       <div class="card-thumb">
 
@@ -1550,6 +1788,9 @@
         <p class="card-stats">
           <span class="stat">60.0 km</span>
           <span class="stat">↗ 1049 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1559,7 +1800,8 @@
            data-distance="55.0" data-elevation="859"
            data-created="2026-07-02 07:50:16"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="little-more-time-cw"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/little-more-time-cw/">
       <div class="card-thumb">
 
@@ -1575,6 +1817,9 @@
         <p class="card-stats">
           <span class="stat">55.0 km</span>
           <span class="stat">↗ 859 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1584,7 +1829,8 @@
            data-distance="43.1" data-elevation="518"
            data-created="2026-07-01 08:55:30"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="loin-dici"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/loin-dici/">
       <div class="card-thumb">
 
@@ -1600,6 +1846,9 @@
         <p class="card-stats">
           <span class="stat">43.1 km</span>
           <span class="stat">↗ 518 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1609,7 +1858,8 @@
            data-distance="122.4" data-elevation="1700"
            data-created="2026-07-01 08:56:15"
            data-ravitos="3" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="lumberjack-122km2000md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/lumberjack-122km2000md/">
       <div class="card-thumb">
 
@@ -1625,6 +1875,9 @@
         <p class="card-stats">
           <span class="stat">122.4 km</span>
           <span class="stat">↗ 1700 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1634,7 +1887,8 @@
            data-distance="61.7" data-elevation="1051"
            data-created="2026-07-01 08:56:14"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="lumberjack-62km1050md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/lumberjack-62km1050md/">
       <div class="card-thumb">
 
@@ -1650,6 +1904,9 @@
         <p class="card-stats">
           <span class="stat">61.7 km</span>
           <span class="stat">↗ 1051 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1659,7 +1916,8 @@
            data-distance="75.3" data-elevation="1126"
            data-created="2026-07-01 08:56:14"
            data-ravitos="2" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="lumberjack-75km1300md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/lumberjack-75km1300md/">
       <div class="card-thumb">
 
@@ -1675,6 +1933,9 @@
         <p class="card-stats">
           <span class="stat">75.3 km</span>
           <span class="stat">↗ 1126 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1684,7 +1945,8 @@
            data-distance="90.1" data-elevation="1317"
            data-created="2026-07-01 08:56:15"
            data-ravitos="2" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="lumberjack-90km1600md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/lumberjack-90km1600md/">
       <div class="card-thumb">
 
@@ -1700,6 +1962,9 @@
         <p class="card-stats">
           <span class="stat">90.1 km</span>
           <span class="stat">↗ 1317 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1709,7 +1974,8 @@
            data-distance="62.5" data-elevation="830"
            data-created="2026-07-02 07:50:17"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="lumberjack-classic"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/lumberjack-classic/">
       <div class="card-thumb">
 
@@ -1725,6 +1991,9 @@
         <p class="card-stats">
           <span class="stat">62.5 km</span>
           <span class="stat">↗ 830 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1734,7 +2003,8 @@
            data-distance="76.6" data-elevation="1431"
            data-created="2026-07-02 07:50:18"
            data-ravitos="4" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="lumberjack-gravel-ride-tour-1"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/lumberjack-gravel-ride-tour-1/">
       <div class="card-thumb">
 
@@ -1750,6 +2020,9 @@
         <p class="card-stats">
           <span class="stat">76.6 km</span>
           <span class="stat">↗ 1431 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1759,7 +2032,8 @@
            data-distance="51.8" data-elevation="946"
            data-created="2026-07-02 07:50:17"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="lumberjack-gravel-road-ride-3"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/lumberjack-gravel-road-ride-3/">
       <div class="card-thumb">
 
@@ -1775,6 +2049,9 @@
         <p class="card-stats">
           <span class="stat">51.8 km</span>
           <span class="stat">↗ 946 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1784,7 +2061,8 @@
            data-distance="67.7" data-elevation="1467"
            data-created="2026-07-01 08:56:12"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="mollets-rouges-grange-pardue-68km-1400md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/mollets-rouges-grange-pardue-68km-1400md/">
       <div class="card-thumb">
 
@@ -1800,6 +2078,9 @@
         <p class="card-stats">
           <span class="stat">67.7 km</span>
           <span class="stat">↗ 1467 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1809,7 +2090,8 @@
            data-distance="69.4" data-elevation="1062"
            data-created="2026-07-01 08:55:38"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="moyen-lumberjack-3"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/moyen-lumberjack-3/">
       <div class="card-thumb">
 
@@ -1825,6 +2107,9 @@
         <p class="card-stats">
           <span class="stat">69.4 km</span>
           <span class="stat">↗ 1062 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1834,7 +2119,8 @@
            data-distance="69.4" data-elevation="1062"
            data-created="2026-07-01 08:55:37"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="moyen-lumberjack-2"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/moyen-lumberjack-2/">
       <div class="card-thumb">
 
@@ -1850,6 +2136,9 @@
         <p class="card-stats">
           <span class="stat">69.4 km</span>
           <span class="stat">↗ 1062 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1859,7 +2148,8 @@
            data-distance="69.2" data-elevation="1061"
            data-created="2026-07-01 08:55:34"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="moyen-lumberjack"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/moyen-lumberjack/">
       <div class="card-thumb">
 
@@ -1875,6 +2165,9 @@
         <p class="card-stats">
           <span class="stat">69.2 km</span>
           <span class="stat">↗ 1061 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1884,7 +2177,8 @@
            data-distance="112.8" data-elevation="1840"
            data-created="2026-07-01 08:55:32"
            data-ravitos="6" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="old-guitar"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/old-guitar/">
       <div class="card-thumb">
 
@@ -1900,6 +2194,9 @@
         <p class="card-stats">
           <span class="stat">112.8 km</span>
           <span class="stat">↗ 1840 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1909,7 +2206,8 @@
            data-distance="79.5" data-elevation="936"
            data-created="2026-07-01 08:56:11"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="paradise-city-80km-930md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/paradise-city-80km-930md/">
       <div class="card-thumb">
 
@@ -1925,6 +2223,9 @@
         <p class="card-stats">
           <span class="stat">79.5 km</span>
           <span class="stat">↗ 936 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1934,7 +2235,8 @@
            data-distance="70.9" data-elevation="1099"
            data-created="2026-07-01 08:55:28"
            data-ravitos="0" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="petite-suisse"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/petite-suisse/">
       <div class="card-thumb">
 
@@ -1950,6 +2252,9 @@
         <p class="card-stats">
           <span class="stat">70.9 km</span>
           <span class="stat">↗ 1099 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1959,7 +2264,8 @@
            data-distance="55.9" data-elevation="781"
            data-created="2026-07-01 08:56:17"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="petit-hippopotame-55km780md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/petit-hippopotame-55km780md/">
       <div class="card-thumb">
 
@@ -1975,6 +2281,9 @@
         <p class="card-stats">
           <span class="stat">55.9 km</span>
           <span class="stat">↗ 781 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -1984,7 +2293,8 @@
            data-distance="51.3" data-elevation="765"
            data-created="2026-07-01 08:55:37"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="petit-lumberjack-2"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/petit-lumberjack-2/">
       <div class="card-thumb">
 
@@ -2000,6 +2310,9 @@
         <p class="card-stats">
           <span class="stat">51.3 km</span>
           <span class="stat">↗ 765 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2009,7 +2322,8 @@
            data-distance="51.2" data-elevation="766"
            data-created="2026-07-01 08:55:34"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="petit-lumberjack"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/petit-lumberjack/">
       <div class="card-thumb">
 
@@ -2025,6 +2339,9 @@
         <p class="card-stats">
           <span class="stat">51.2 km</span>
           <span class="stat">↗ 766 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2034,7 +2351,8 @@
            data-distance="75.4" data-elevation="1263"
            data-created="2026-07-02 07:50:18"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="polar-bear"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/polar-bear/">
       <div class="card-thumb">
 
@@ -2050,6 +2368,9 @@
         <p class="card-stats">
           <span class="stat">75.4 km</span>
           <span class="stat">↗ 1263 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2059,7 +2380,8 @@
            data-distance="43.7" data-elevation="623"
            data-created="2026-07-01 08:55:28"
            data-ravitos="0" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="porc-epic"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/porc-epic/">
       <div class="card-thumb">
 
@@ -2075,6 +2397,9 @@
         <p class="card-stats">
           <span class="stat">43.7 km</span>
           <span class="stat">↗ 623 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2084,7 +2409,8 @@
            data-distance="52.8" data-elevation="839"
            data-created="2026-07-01 08:56:00"
            data-ravitos="0" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="porc-epic-coup-de-coeur"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/porc-epic-coup-de-coeur/">
       <div class="card-thumb">
 
@@ -2100,6 +2426,9 @@
         <p class="card-stats">
           <span class="stat">52.8 km</span>
           <span class="stat">↗ 839 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2109,7 +2438,8 @@
            data-distance="68.0" data-elevation="1027"
            data-created="2026-07-01 08:55:36"
            data-ravitos="1" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="porc-epic-long"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/porc-epic-long/">
       <div class="card-thumb">
 
@@ -2125,6 +2455,9 @@
         <p class="card-stats">
           <span class="stat">68.0 km</span>
           <span class="stat">↗ 1027 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2134,7 +2467,8 @@
            data-distance="58.9" data-elevation="908"
            data-created="2026-07-01 08:56:05"
            data-ravitos="0" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="pork-epic-59km"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/pork-epic-59km/">
       <div class="card-thumb">
 
@@ -2150,6 +2484,9 @@
         <p class="card-stats">
           <span class="stat">58.9 km</span>
           <span class="stat">↗ 908 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2159,7 +2496,8 @@
            data-distance="74.5" data-elevation="1147"
            data-created="2026-07-01 08:56:05"
            data-ravitos="1" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="pork-epic-75km"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/pork-epic-75km/">
       <div class="card-thumb">
 
@@ -2175,6 +2513,9 @@
         <p class="card-stats">
           <span class="stat">74.5 km</span>
           <span class="stat">↗ 1147 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2184,7 +2525,8 @@
            data-distance="77.9" data-elevation="1275"
            data-created="2026-07-01 08:56:09"
            data-ravitos="1" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="pork-epic-78km-1300md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/pork-epic-78km-1300md/">
       <div class="card-thumb">
 
@@ -2200,6 +2542,9 @@
         <p class="card-stats">
           <span class="stat">77.9 km</span>
           <span class="stat">↗ 1275 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2209,7 +2554,8 @@
            data-distance="70.5" data-elevation="779"
            data-created="2026-07-01 08:56:04"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="quittin-time-70km900md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/quittin-time-70km900md/">
       <div class="card-thumb">
 
@@ -2225,6 +2571,9 @@
         <p class="card-stats">
           <span class="stat">70.5 km</span>
           <span class="stat">↗ 779 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2234,7 +2583,8 @@
            data-distance="70.5" data-elevation="779"
            data-created="2026-07-01 08:56:15"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="quittin-time-70km900md-2"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/quittin-time-70km900md-2/">
       <div class="card-thumb">
 
@@ -2250,6 +2600,9 @@
         <p class="card-stats">
           <span class="stat">70.5 km</span>
           <span class="stat">↗ 779 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2259,7 +2612,8 @@
            data-distance="86.0" data-elevation="1062"
            data-created="2026-07-01 08:56:05"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="quittin-time-86km1220md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/quittin-time-86km1220md/">
       <div class="card-thumb">
 
@@ -2275,6 +2629,9 @@
         <p class="card-stats">
           <span class="stat">86.0 km</span>
           <span class="stat">↗ 1062 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2284,7 +2641,8 @@
            data-distance="46.0" data-elevation="648"
            data-created="2026-07-01 08:56:13"
            data-ravitos="0" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="rad-courte-2025"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/rad-courte-2025/">
       <div class="card-thumb">
 
@@ -2300,6 +2658,9 @@
         <p class="card-stats">
           <span class="stat">46.0 km</span>
           <span class="stat">↗ 648 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2309,7 +2670,8 @@
            data-distance="100.5" data-elevation="1368"
            data-created="2026-07-01 08:56:13"
            data-ravitos="0" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="rad-longue-2025"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/rad-longue-2025/">
       <div class="card-thumb">
 
@@ -2325,6 +2687,9 @@
         <p class="card-stats">
           <span class="stat">100.5 km</span>
           <span class="stat">↗ 1368 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2334,7 +2699,8 @@
            data-distance="58.1" data-elevation="1000"
            data-created="2026-07-01 08:55:33"
            data-ravitos="4" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="ride-before-the-sunset"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/ride-before-the-sunset/">
       <div class="card-thumb">
 
@@ -2350,6 +2716,9 @@
         <p class="card-stats">
           <span class="stat">58.1 km</span>
           <span class="stat">↗ 1000 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2359,7 +2728,8 @@
            data-distance="52.1" data-elevation="723"
            data-created="2026-07-01 08:56:03"
            data-ravitos="4" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="ride-on-julie"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/ride-on-julie/">
       <div class="card-thumb">
 
@@ -2375,6 +2745,9 @@
         <p class="card-stats">
           <span class="stat">52.1 km</span>
           <span class="stat">↗ 723 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2384,7 +2757,8 @@
            data-distance="49.8" data-elevation="525"
            data-created="2026-07-01 08:56:03"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="ride-on-julie2"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/ride-on-julie2/">
       <div class="card-thumb">
 
@@ -2400,6 +2774,9 @@
         <p class="card-stats">
           <span class="stat">49.8 km</span>
           <span class="stat">↗ 525 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2409,7 +2786,8 @@
            data-distance="70.2" data-elevation="658"
            data-created="2026-07-01 08:55:31"
            data-ravitos="2" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="road-before-return-to-work"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/road-before-return-to-work/">
       <div class="card-thumb">
 
@@ -2425,6 +2803,9 @@
         <p class="card-stats">
           <span class="stat">70.2 km</span>
           <span class="stat">↗ 658 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2434,7 +2815,8 @@
            data-distance="72.1" data-elevation="1314"
            data-created="2026-07-02 07:50:14"
            data-ravitos="4" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="rock-bottom"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/rock-bottom/">
       <div class="card-thumb">
 
@@ -2450,6 +2832,9 @@
         <p class="card-stats">
           <span class="stat">72.1 km</span>
           <span class="stat">↗ 1314 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2459,7 +2844,8 @@
            data-distance="72.2" data-elevation="1074"
            data-created="2026-07-01 08:56:18"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="rookie-ride"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/rookie-ride/">
       <div class="card-thumb">
 
@@ -2475,6 +2861,9 @@
         <p class="card-stats">
           <span class="stat">72.2 km</span>
           <span class="stat">↗ 1074 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2484,7 +2873,8 @@
            data-distance="70.5" data-elevation="1258"
            data-created="2026-07-01 08:56:18"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="rookie-ride-705km-1258md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/rookie-ride-705km-1258md/">
       <div class="card-thumb">
 
@@ -2500,6 +2890,9 @@
         <p class="card-stats">
           <span class="stat">70.5 km</span>
           <span class="stat">↗ 1258 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2509,7 +2902,8 @@
            data-distance="84.7" data-elevation="1411"
            data-created="2026-07-02 07:50:06"
            data-ravitos="4" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="roses-85km1400md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/roses-85km1400md/">
       <div class="card-thumb">
 
@@ -2525,6 +2919,9 @@
         <p class="card-stats">
           <span class="stat">84.7 km</span>
           <span class="stat">↗ 1411 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2534,7 +2931,8 @@
            data-distance="58.5" data-elevation="873"
            data-created="2026-07-01 08:56:06"
            data-ravitos="4" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="runnin-wild-59km-875md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/runnin-wild-59km-875md/">
       <div class="card-thumb">
 
@@ -2550,6 +2948,9 @@
         <p class="card-stats">
           <span class="stat">58.5 km</span>
           <span class="stat">↗ 873 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2559,7 +2960,8 @@
            data-distance="50.5" data-elevation="722"
            data-created="2026-07-02 07:50:05"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="saturday-coffee-ride"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/saturday-coffee-ride/">
       <div class="card-thumb">
 
@@ -2575,6 +2977,9 @@
         <p class="card-stats">
           <span class="stat">50.5 km</span>
           <span class="stat">↗ 722 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2584,7 +2989,8 @@
            data-distance="29.7" data-elevation="269"
            data-created="2026-07-01 08:55:34"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="saturday-sunset"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/saturday-sunset/">
       <div class="card-thumb">
 
@@ -2600,6 +3006,9 @@
         <p class="card-stats">
           <span class="stat">29.7 km</span>
           <span class="stat">↗ 269 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2609,7 +3018,8 @@
            data-distance="86.5" data-elevation="1380"
            data-created="2026-07-01 08:55:36"
            data-ravitos="4" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="semi-route-semi-trail"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/semi-route-semi-trail/">
       <div class="card-thumb">
 
@@ -2625,6 +3035,9 @@
         <p class="card-stats">
           <span class="stat">86.5 km</span>
           <span class="stat">↗ 1380 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2634,7 +3047,8 @@
            data-distance="76.7" data-elevation="1187"
            data-created="2026-07-02 07:50:15"
            data-ravitos="0" data-parkings="4"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="sloom"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/sloom/">
       <div class="card-thumb">
 
@@ -2650,6 +3064,9 @@
         <p class="card-stats">
           <span class="stat">76.7 km</span>
           <span class="stat">↗ 1187 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2659,7 +3076,8 @@
            data-distance="40.2" data-elevation="411"
            data-created="2026-07-02 07:50:04"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="slow-ride-avec-arret-virgin-hill-coffee"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/slow-ride-avec-arret-virgin-hill-coffee/">
       <div class="card-thumb">
 
@@ -2675,6 +3093,9 @@
         <p class="card-stats">
           <span class="stat">40.2 km</span>
           <span class="stat">↗ 411 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2684,7 +3105,8 @@
            data-distance="46.2" data-elevation="394"
            data-created="2026-07-01 08:55:40"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="snow-2"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/snow-2/">
       <div class="card-thumb">
 
@@ -2700,6 +3122,9 @@
         <p class="card-stats">
           <span class="stat">46.2 km</span>
           <span class="stat">↗ 394 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2709,7 +3134,8 @@
            data-distance="63.8" data-elevation="1015"
            data-created="2026-07-01 08:56:19"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="soiree-nocturne-64km-1000md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/soiree-nocturne-64km-1000md/">
       <div class="card-thumb">
 
@@ -2725,6 +3151,9 @@
         <p class="card-stats">
           <span class="stat">63.8 km</span>
           <span class="stat">↗ 1015 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2734,7 +3163,8 @@
            data-distance="75.2" data-elevation="649"
            data-created="2026-07-02 07:50:05"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="soleil-75km650md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/soleil-75km650md/">
       <div class="card-thumb">
 
@@ -2750,6 +3180,9 @@
         <p class="card-stats">
           <span class="stat">75.2 km</span>
           <span class="stat">↗ 649 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2759,7 +3192,8 @@
            data-distance="98.9" data-elevation="794"
            data-created="2026-07-01 08:56:14"
            data-ravitos="4" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="soleil-bleu"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/soleil-bleu/">
       <div class="card-thumb">
 
@@ -2775,6 +3209,9 @@
         <p class="card-stats">
           <span class="stat">98.9 km</span>
           <span class="stat">↗ 794 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2784,7 +3221,8 @@
            data-distance="59.9" data-elevation="979"
            data-created="2026-07-02 07:50:16"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="spirit-bird"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/spirit-bird/">
       <div class="card-thumb">
 
@@ -2800,6 +3238,9 @@
         <p class="card-stats">
           <span class="stat">59.9 km</span>
           <span class="stat">↗ 979 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2809,7 +3250,8 @@
            data-distance="76.3" data-elevation="1375"
            data-created="2026-07-01 08:56:09"
            data-ravitos="0" data-parkings="4"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="stayin-alive-76km-1375md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/stayin-alive-76km-1375md/">
       <div class="card-thumb">
 
@@ -2825,6 +3267,9 @@
         <p class="card-stats">
           <span class="stat">76.3 km</span>
           <span class="stat">↗ 1375 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2834,7 +3279,8 @@
            data-distance="49.8" data-elevation="742"
            data-created="2026-07-01 08:56:06"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="storm-boy-50km742md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/storm-boy-50km742md/">
       <div class="card-thumb">
 
@@ -2850,6 +3296,9 @@
         <p class="card-stats">
           <span class="stat">49.8 km</span>
           <span class="stat">↗ 742 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2859,7 +3308,8 @@
            data-distance="68.2" data-elevation="849"
            data-created="2026-07-01 08:56:07"
            data-ravitos="3" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="storm-boy-68km983md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/storm-boy-68km983md/">
       <div class="card-thumb">
 
@@ -2875,6 +3325,9 @@
         <p class="card-stats">
           <span class="stat">68.2 km</span>
           <span class="stat">↗ 849 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2884,7 +3337,8 @@
            data-distance="80.9" data-elevation="1323"
            data-created="2026-07-17 06:44:44"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="summer-days-81km-1350md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/summer-days-81km-1350md/">
       <div class="card-thumb">
 
@@ -2900,6 +3354,9 @@
         <p class="card-stats">
           <span class="stat">80.9 km</span>
           <span class="stat">↗ 1323 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2909,7 +3366,8 @@
            data-distance="60.7" data-elevation="933"
            data-created="2026-07-01 08:56:04"
            data-ravitos="0" data-parkings="4"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="sunrise-61km"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/sunrise-61km/">
       <div class="card-thumb">
 
@@ -2925,6 +3383,9 @@
         <p class="card-stats">
           <span class="stat">60.7 km</span>
           <span class="stat">↗ 933 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2934,7 +3395,8 @@
            data-distance="75.8" data-elevation="1165"
            data-created="2026-07-01 08:56:04"
            data-ravitos="0" data-parkings="4"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="sunrise-76km"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/sunrise-76km/">
       <div class="card-thumb">
 
@@ -2950,6 +3412,9 @@
         <p class="card-stats">
           <span class="stat">75.8 km</span>
           <span class="stat">↗ 1165 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2959,7 +3424,8 @@
            data-distance="56.5" data-elevation="666"
            data-created="2026-07-01 08:56:17"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="sun-to-me-57km-666md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/sun-to-me-57km-666md/">
       <div class="card-thumb">
 
@@ -2975,6 +3441,9 @@
         <p class="card-stats">
           <span class="stat">56.5 km</span>
           <span class="stat">↗ 666 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -2984,7 +3453,8 @@
            data-distance="84.8" data-elevation="1246"
            data-created="2026-07-02 07:50:14"
            data-ravitos="2" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="suspicious-mind"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/suspicious-mind/">
       <div class="card-thumb">
 
@@ -3000,6 +3470,9 @@
         <p class="card-stats">
           <span class="stat">84.8 km</span>
           <span class="stat">↗ 1246 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3009,7 +3482,8 @@
            data-distance="68.2" data-elevation="1104"
            data-created="2026-07-01 08:56:11"
            data-ravitos="2" data-parkings="0"
-           data-plaisirs="2">
+           data-plaisirs="2" data-ride-slug="sutton"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/sutton/">
       <div class="card-thumb">
 
@@ -3025,6 +3499,9 @@
         <p class="card-stats">
           <span class="stat">68.2 km</span>
           <span class="stat">↗ 1104 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3034,7 +3511,8 @@
            data-distance="62.7" data-elevation="889"
            data-created="2026-07-01 08:56:03"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="take-a-back-road-63km"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/take-a-back-road-63km/">
       <div class="card-thumb">
 
@@ -3050,6 +3528,9 @@
         <p class="card-stats">
           <span class="stat">62.7 km</span>
           <span class="stat">↗ 889 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3059,7 +3540,8 @@
            data-distance="79.9" data-elevation="1170"
            data-created="2026-07-01 08:56:02"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="take-a-back-road-80km"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/take-a-back-road-80km/">
       <div class="card-thumb">
 
@@ -3075,6 +3557,9 @@
         <p class="card-stats">
           <span class="stat">79.9 km</span>
           <span class="stat">↗ 1170 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3084,7 +3569,8 @@
            data-distance="41.1" data-elevation="465"
            data-created="2026-07-01 08:56:16"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="take-a-trip-41km-465md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/take-a-trip-41km-465md/">
       <div class="card-thumb">
 
@@ -3100,6 +3586,9 @@
         <p class="card-stats">
           <span class="stat">41.1 km</span>
           <span class="stat">↗ 465 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3109,7 +3598,8 @@
            data-distance="65.0" data-elevation="1185"
            data-created="2026-07-01 08:55:29"
            data-ravitos="0" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="take-yours-ill-take-mine"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/take-yours-ill-take-mine/">
       <div class="card-thumb">
 
@@ -3125,6 +3615,9 @@
         <p class="card-stats">
           <span class="stat">65.0 km</span>
           <span class="stat">↗ 1185 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3134,7 +3627,8 @@
            data-distance="81.8" data-elevation="1133"
            data-created="2026-07-01 08:55:30"
            data-ravitos="1" data-parkings="4"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="the-farmer"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/the-farmer/">
       <div class="card-thumb">
 
@@ -3150,6 +3644,9 @@
         <p class="card-stats">
           <span class="stat">81.8 km</span>
           <span class="stat">↗ 1133 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3159,7 +3656,8 @@
            data-distance="62.1" data-elevation="861"
            data-created="2026-07-01 08:55:31"
            data-ravitos="0" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="the-places-well-go"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/the-places-well-go/">
       <div class="card-thumb">
 
@@ -3175,6 +3673,9 @@
         <p class="card-stats">
           <span class="stat">62.1 km</span>
           <span class="stat">↗ 861 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3184,7 +3685,8 @@
            data-distance="69.6" data-elevation="1124"
            data-created="2026-07-01 08:55:31"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="till-the-sun-comes-up"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/till-the-sun-comes-up/">
       <div class="card-thumb">
 
@@ -3200,6 +3702,9 @@
         <p class="card-stats">
           <span class="stat">69.6 km</span>
           <span class="stat">↗ 1124 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3209,7 +3714,8 @@
            data-distance="49.4" data-elevation="568"
            data-created="2026-07-02 07:50:03"
            data-ravitos="0" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="too-much-too-young-too-fast"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/too-much-too-young-too-fast/">
       <div class="card-thumb">
 
@@ -3225,6 +3731,9 @@
         <p class="card-stats">
           <span class="stat">49.4 km</span>
           <span class="stat">↗ 568 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3234,7 +3743,8 @@
            data-distance="54.0" data-elevation="532"
            data-created="2026-07-01 08:56:03"
            data-ravitos="0" data-parkings="0"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="ulverton-5"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/ulverton-5/">
       <div class="card-thumb">
 
@@ -3250,6 +3760,9 @@
         <p class="card-stats">
           <span class="stat">54.0 km</span>
           <span class="stat">↗ 532 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3259,7 +3772,8 @@
            data-distance="71.6" data-elevation="873"
            data-created="2026-07-01 08:56:07"
            data-ravitos="2" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="une-belle-ride-avant-de-partir"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/une-belle-ride-avant-de-partir/">
       <div class="card-thumb">
 
@@ -3275,6 +3789,9 @@
         <p class="card-stats">
           <span class="stat">71.6 km</span>
           <span class="stat">↗ 873 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3284,7 +3801,8 @@
            data-distance="73.8" data-elevation="708"
            data-created="2026-07-01 08:56:08"
            data-ravitos="1" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="up-around-the-bend"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/up-around-the-bend/">
       <div class="card-thumb">
 
@@ -3300,6 +3818,9 @@
         <p class="card-stats">
           <span class="stat">73.8 km</span>
           <span class="stat">↗ 708 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3309,7 +3830,8 @@
            data-distance="78.6" data-elevation="1208"
            data-created="2026-07-01 08:55:33"
            data-ravitos="1" data-parkings="2"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="vacation"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/vacation/">
       <div class="card-thumb">
 
@@ -3325,6 +3847,9 @@
         <p class="card-stats">
           <span class="stat">78.6 km</span>
           <span class="stat">↗ 1208 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3334,7 +3859,8 @@
            data-distance="79.3" data-elevation="1150"
            data-created="2026-07-01 08:56:12"
            data-ravitos="1" data-parkings="4"
-           data-plaisirs="1">
+           data-plaisirs="1" data-ride-slug="we-were-young"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/we-were-young/">
       <div class="card-thumb">
 
@@ -3350,6 +3876,9 @@
         <p class="card-stats">
           <span class="stat">79.3 km</span>
           <span class="stat">↗ 1150 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3359,7 +3888,8 @@
            data-distance="53.3" data-elevation="497"
            data-created="2026-07-01 08:56:07"
            data-ravitos="0" data-parkings="1"
-           data-plaisirs="0">
+           data-plaisirs="0" data-ride-slug="when-i-get-to-heaven-53km500md"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="/rides/when-i-get-to-heaven-53km500md/">
       <div class="card-thumb">
 
@@ -3375,6 +3905,9 @@
         <p class="card-stats">
           <span class="stat">53.3 km</span>
           <span class="stat">↗ 497 m</span>
+
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+
         </p>
       </div>
     </a>
@@ -3392,7 +3925,10 @@
     </div>
   </footer>
 
-<script src="/assets/js/search.js?v=cfd43102b850" defer></script>
+<script src="/assets/js/search.js?v=92213fda81dd" defer></script>
+
+<script src="/assets/js/ratings.js?v=92213fda81dd" defer></script>
+
 
 </body>
 </html>

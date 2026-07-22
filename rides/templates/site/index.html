@@ -16,6 +16,10 @@
         <option value="distance">Distance</option>
         <option value="elevation">Dénivelé</option>
         <option value="city">Ville de départ</option>
+        {% if ratings_enabled %}
+        <option value="rating">Note moyenne</option>
+        <option value="votes">Nombre de votes</option>
+        {% endif %}
       </select>
     </label>
     <button type="button" id="sort-direction" class="sort-direction" data-direction="asc"
@@ -56,13 +60,15 @@
   </div>
 </section>
 
-<section class="grid" id="rides">
+<section class="grid" id="rides"
+         {% if ratings_enabled %}data-ratings-index data-ratings-api-url="{{ ratings_api_url }}"{% endif %}>
   {% for ride in rides %}
   <article class="card" data-name="{{ ride.name|lower }}" data-city="{{ ride.start_city|lower }}"
            data-distance="{{ ride.distance_km }}" data-elevation="{{ ride.elevation_m }}"
            data-created="{{ ride.created_at|date:'Y-m-d H:i:s' }}"
            data-ravitos="{{ ride.ravito_count }}" data-parkings="{{ ride.parking_count }}"
-           data-plaisirs="{{ ride.plaisir_count }}">
+           data-plaisirs="{{ ride.plaisir_count }}" data-ride-slug="{{ ride.slug }}"
+           data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="{{ base_path }}/rides/{{ ride.slug }}/">
       <div class="card-thumb">
         {% if ride.thumb_url %}
@@ -80,6 +86,9 @@
         <p class="card-stats">
           <span class="stat">{{ ride.distance_km }} km</span>
           <span class="stat">↗ {{ ride.elevation_m }} m</span>
+          {% if ratings_enabled %}
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+          {% endif %}
         </p>
       </div>
     </a>
@@ -92,4 +101,7 @@
 
 {% block scripts %}
 <script src="{{ base_path }}/assets/js/search.js?v={{ asset_version }}" defer></script>
+{% if ratings_enabled %}
+<script src="{{ base_path }}/assets/js/ratings.js?v={{ asset_version }}" defer></script>
+{% endif %}
 {% endblock %}
