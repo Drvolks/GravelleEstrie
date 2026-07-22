@@ -1,4 +1,6 @@
 const DEFAULT_ALLOWED_ORIGINS = [
+  "http://gravelleestrie.com",
+  "http://www.gravelleestrie.com",
   "https://gravelleestrie.com",
   "https://www.gravelleestrie.com",
 ];

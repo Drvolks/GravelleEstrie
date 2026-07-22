@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2025-01-01"
 
 [vars]
-ALLOWED_ORIGINS = "https://gravelleestrie.com,https://www.gravelleestrie.com"
+ALLOWED_ORIGINS = "http://gravelleestrie.com,http://www.gravelleestrie.com,https://gravelleestrie.com,https://www.gravelleestrie.com"
 
 [[d1_databases]]
 binding = "DB"

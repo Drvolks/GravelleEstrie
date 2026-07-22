@@ -1,1 +1,1 @@
-ALLOWED_ORIGINS="https://gravelleestrie.com,https://www.gravelleestrie.com,http://localhost:8080,http://127.0.0.1:8080,http://localhost:8765,http://127.0.0.1:8765"
+ALLOWED_ORIGINS="http://gravelleestrie.com,http://www.gravelleestrie.com,https://gravelleestrie.com,https://www.gravelleestrie.com,http://localhost:8080,http://127.0.0.1:8080,http://localhost:8765,http://127.0.0.1:8765"

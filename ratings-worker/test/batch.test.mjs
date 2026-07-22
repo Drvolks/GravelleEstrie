@@ -6,7 +6,12 @@ import { handleRequest } from "../src/index.js";
 function mockEnv(rows) {
   const queries = [];
   return {
-    ALLOWED_ORIGINS: "https://gravelleestrie.com,https://www.gravelleestrie.com",
+    ALLOWED_ORIGINS: [
+      "http://gravelleestrie.com",
+      "http://www.gravelleestrie.com",
+      "https://gravelleestrie.com",
+      "https://www.gravelleestrie.com",
+    ].join(","),
     queries,
     DB: {
       prepare(sql) {
@@ -108,4 +113,20 @@ test("allows preflight from the apex production origin", async () => {
   assert.equal(response.headers.get("Access-Control-Allow-Origin"), "https://gravelleestrie.com");
   assert.match(response.headers.get("Access-Control-Allow-Methods") || "", /POST/);
   assert.match(response.headers.get("Access-Control-Allow-Headers") || "", /Content-Type/);
+});
+
+test("allows preflight from the http www production origin", async () => {
+  const request = new Request("https://worker.example/api/ratings", {
+    method: "OPTIONS",
+    headers: {
+      Origin: "http://www.gravelleestrie.com",
+      "Access-Control-Request-Method": "POST",
+      "Access-Control-Request-Headers": "content-type,accept",
+    },
+  });
+
+  const response = await handleRequest(request, mockEnv([]));
+
+  assert.equal(response.status, 204);
+  assert.equal(response.headers.get("Access-Control-Allow-Origin"), "http://www.gravelleestrie.com");
 });
