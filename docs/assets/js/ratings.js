@@ -64,6 +64,7 @@
   }
 
   function setStatus(statusEl, message, tone) {
+    if (!statusEl) return;
     statusEl.textContent = message || "";
     statusEl.dataset.tone = tone || "";
   }
@@ -76,17 +77,26 @@
     }
   }
 
-  function renderSummary(averageEl, starButtons, summary) {
+  function setDisplayStars(displayStars, value) {
+    for (const star of displayStars) {
+      const rating = displayStars.indexOf(star) + 1;
+      star.classList.toggle("is-active", rating <= value);
+    }
+  }
+
+  function renderSummary(averageEl, starButtons, summary, displayStars = []) {
     const count = Number(summary.vote_count || 0);
     const average = Number(summary.average_rating || 0);
     if (!count) {
       averageEl.textContent = "Aucune note pour le moment";
       setStars(starButtons, 0);
+      setDisplayStars(displayStars, 0);
       return;
     }
 
     averageEl.textContent = `${average.toFixed(1)} / 5 (${count} vote${count > 1 ? "s" : ""})`;
     setStars(starButtons, Math.round(average));
+    setDisplayStars(displayStars, Math.round(average));
   }
 
   function setVotingDisabled(starButtons, disabled) {
@@ -170,9 +180,13 @@
     const averageEl = widget.querySelector("[data-rating-average]");
     const statusEl = widget.querySelector("[data-rating-status]");
     const turnstileEl = widget.querySelector("[data-rating-turnstile]");
+    const displayStars = Array.from(widget.querySelectorAll("[data-rating-display-star]"));
+    const voteButton = widget.querySelector("[data-rating-open]");
+    const dialog = widget.querySelector("[data-rating-dialog]");
+    const closeButton = widget.querySelector("[data-rating-close]");
     const starButtons = Array.from(widget.querySelectorAll("[data-rating-value]"));
 
-    if (!slug || !apiBase || !siteKey || !averageEl || !statusEl || !starButtons.length) {
+    if (!slug || !apiBase || !siteKey || !averageEl || !voteButton || !dialog || !starButtons.length) {
       widget.hidden = true;
       return;
     }
@@ -183,26 +197,48 @@
     let currentSummary = { vote_count: 0, average_rating: 0 };
     let turnstileWidgetId = null;
     let pendingRating = null;
+    let turnstileReadyPromise = null;
 
-    for (const button of starButtons) {
-      button.setAttribute("role", "radio");
-      button.addEventListener("mouseenter", () => setStars(starButtons, Number(button.dataset.ratingValue)));
-      button.addEventListener("focus", () => setStars(starButtons, Number(button.dataset.ratingValue)));
-      button.addEventListener("mouseleave", () => renderSummary(averageEl, starButtons, currentSummary));
-      button.addEventListener("blur", () => renderSummary(averageEl, starButtons, currentSummary));
-      button.addEventListener("click", () => submitVote(Number(button.dataset.ratingValue)));
+    function closeDialog() {
+      if (dialog.open && dialog.close) {
+        dialog.close();
+      } else {
+        dialog.hidden = true;
+      }
     }
 
-    if (voted) {
-      setVotingDisabled(starButtons, true);
-      if (turnstileEl) turnstileEl.hidden = true;
-      setStatus(statusEl, "Votre vote est enregistré pour cette sortie.", "success");
-    } else {
-      const turnstile = await waitForTurnstile(Date.now() + TURNSTILE_WAIT_MS);
-      if (!turnstile || !turnstileEl) {
-        setVotingDisabled(starButtons, true);
-        setStatus(statusEl, "La validation anti-robot n'est pas disponible pour le moment.", "error");
+    function openDialog() {
+      if (dialog.showModal) {
+        if (!dialog.open) dialog.showModal();
       } else {
+        dialog.hidden = false;
+      }
+      setStatus(statusEl, "", "");
+      ensureTurnstileReady();
+    }
+
+    function updateVotedState() {
+      const votedNow = hasVoted(slug);
+      voteButton.hidden = votedNow;
+      widget.classList.toggle("has-voted", votedNow);
+      if (votedNow) {
+        setVotingDisabled(starButtons, true);
+        if (turnstileEl) turnstileEl.hidden = true;
+        closeDialog();
+      }
+    }
+
+    function ensureTurnstileReady() {
+      if (turnstileWidgetId !== null) return Promise.resolve(true);
+      if (turnstileReadyPromise) return turnstileReadyPromise;
+
+      turnstileReadyPromise = waitForTurnstile(Date.now() + TURNSTILE_WAIT_MS).then((turnstile) => {
+        if (!turnstile || !turnstileEl) {
+          setVotingDisabled(starButtons, true);
+          setStatus(statusEl, "La validation anti-robot n'est pas disponible pour le moment.", "error");
+          return false;
+        }
+
         turnstileWidgetId = turnstile.render(turnstileEl, {
           sitekey: siteKey,
           action: "ride_rating",
@@ -222,6 +258,7 @@
           "expired-callback"() {
             currentToken = "";
             pendingRating = null;
+            setVotingDisabled(starButtons, false);
             setStatus(statusEl, "Validation expirée. Réessayez votre vote.", "error");
           },
           "error-callback"() {
@@ -231,8 +268,31 @@
             setStatus(statusEl, "Validation anti-robot indisponible.", "error");
           },
         });
-      }
+        return true;
+      });
+
+      return turnstileReadyPromise;
     }
+
+    for (const button of starButtons) {
+      button.setAttribute("role", "radio");
+      button.addEventListener("mouseenter", () => setStars(starButtons, Number(button.dataset.ratingValue)));
+      button.addEventListener("focus", () => setStars(starButtons, Number(button.dataset.ratingValue)));
+      button.addEventListener("mouseleave", () => renderSummary(averageEl, starButtons, currentSummary, displayStars));
+      button.addEventListener("blur", () => renderSummary(averageEl, starButtons, currentSummary, displayStars));
+      button.addEventListener("click", () => submitVote(Number(button.dataset.ratingValue)));
+    }
+
+    voteButton.addEventListener("click", openDialog);
+    if (closeButton) closeButton.addEventListener("click", closeDialog);
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) closeDialog();
+    });
+
+    if (voted) {
+      setStatus(statusEl, "Votre vote est enregistré pour cette sortie.", "success");
+    }
+    updateVotedState();
 
     async function loadSummary() {
       const response = await fetch(`${apiBase}/api/ratings/${encodeURIComponent(slug)}`, {
@@ -240,11 +300,14 @@
       });
       if (!response.ok) throw new Error("summary failed");
       currentSummary = await response.json();
-      renderSummary(averageEl, starButtons, currentSummary);
+      renderSummary(averageEl, starButtons, currentSummary, displayStars);
     }
 
     async function submitVote(rating) {
       if (submitting || hasVoted(slug)) return;
+      const turnstileReady = await ensureTurnstileReady();
+      if (!turnstileReady) return;
+
       if (!currentToken) {
         if (window.turnstile && turnstileWidgetId !== null) {
           pendingRating = rating;
@@ -279,9 +342,10 @@
         markVoted(slug);
         if (payload.summary) {
           currentSummary = payload.summary;
-          renderSummary(averageEl, starButtons, currentSummary);
+          renderSummary(averageEl, starButtons, currentSummary, displayStars);
         }
         setStatus(statusEl, "Vous avez déjà voté pour cette sortie.", "success");
+        updateVotedState();
         submitting = false;
         return;
       }
@@ -299,8 +363,9 @@
 
       markVoted(slug);
       currentSummary = payload.summary || payload;
-      renderSummary(averageEl, starButtons, currentSummary);
+      renderSummary(averageEl, starButtons, currentSummary, displayStars);
       setStatus(statusEl, "Merci, votre vote est enregistré.", "success");
+      updateVotedState();
       submitting = false;
     }
 

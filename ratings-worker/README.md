@@ -57,6 +57,44 @@ Deploy:
 npm run deploy
 ```
 
+## Updating Allowed Origins
+
+`ALLOWED_ORIGINS` is a comma-separated list of exact browser origins allowed by
+CORS. Origins include the scheme, so `http://www.gravelleestrie.com` and
+`https://www.gravelleestrie.com` are different values. No trailing slash.
+
+To update the deployed Cloudflare Worker configuration:
+
+1. Edit `ALLOWED_ORIGINS` in `wrangler.toml` under `[vars]`.
+2. Keep `DEFAULT_ALLOWED_ORIGINS` in `src/index.js` in sync as the code
+   fallback.
+3. Add or update a preflight test in `test/batch.test.mjs`.
+4. Run the tests:
+
+```bash
+npm test
+```
+
+5. Deploy the Worker:
+
+```bash
+npm run deploy
+```
+
+6. Verify the origin you added with a preflight request:
+
+```bash
+curl -i -X OPTIONS "https://gravelleestrie-ratings.fleece-00-clad.workers.dev/api/ratings" \
+  -H "Origin: http://localhost:8080" \
+  -H "Access-Control-Request-Method: POST" \
+  -H "Access-Control-Request-Headers: content-type,accept"
+```
+
+Expected result: `HTTP/2 204` and
+`access-control-allow-origin: <the exact Origin header>`. If a newly deployed
+origin still returns `403` immediately after deploy, wait a few seconds and
+retry once; Cloudflare propagation can briefly serve the previous version.
+
 ## Static Site Configuration
 
 Set these values in the Django `.env` before running `build_site`:
@@ -82,7 +120,8 @@ npm run dev
 ```
 
 Add the local Worker URL to `RATINGS_API_URL` when previewing the static site.
-Production `wrangler.toml` only allows public Gravelle Estrie origins. Local
-preview origins are kept in `.dev.vars`, which Wrangler loads during
+Production `wrangler.toml` allows public Gravelle Estrie origins plus
+`http://localhost:8080` for the Docker static-site preview. Additional local
+Worker development origins are kept in `.dev.vars`, which Wrangler loads during
 `npm run dev` and which is ignored by Git. Use `.dev.vars.example` as the
 template if you need to recreate it.

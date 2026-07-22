@@ -11,6 +11,7 @@ function mockEnv(rows) {
       "http://www.gravelleestrie.com",
       "https://gravelleestrie.com",
       "https://www.gravelleestrie.com",
+      "http://localhost:8080",
     ].join(","),
     queries,
     DB: {
@@ -129,4 +130,20 @@ test("allows preflight from the http www production origin", async () => {
 
   assert.equal(response.status, 204);
   assert.equal(response.headers.get("Access-Control-Allow-Origin"), "http://www.gravelleestrie.com");
+});
+
+test("allows preflight from the local static preview origin", async () => {
+  const request = new Request("https://worker.example/api/ratings", {
+    method: "OPTIONS",
+    headers: {
+      Origin: "http://localhost:8080",
+      "Access-Control-Request-Method": "POST",
+      "Access-Control-Request-Headers": "content-type,accept",
+    },
+  });
+
+  const response = await handleRequest(request, mockEnv([]));
+
+  assert.equal(response.status, 204);
+  assert.equal(response.headers.get("Access-Control-Allow-Origin"), "http://localhost:8080");
 });

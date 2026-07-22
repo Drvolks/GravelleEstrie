@@ -3,6 +3,7 @@ const DEFAULT_ALLOWED_ORIGINS = [
   "http://www.gravelleestrie.com",
   "https://gravelleestrie.com",
   "https://www.gravelleestrie.com",
+  "http://localhost:8080",
 ];
 
 const RATING_COLLECTION_ROUTE = /^\/api\/ratings$/;

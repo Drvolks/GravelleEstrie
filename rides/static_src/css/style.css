@@ -266,7 +266,21 @@ main.wrap { padding-top: 28px; }
 /* Detail page */
 .breadcrumb { margin-bottom: 16px; font-size: .9rem; font-weight: 700; }
 .breadcrumb a { color: var(--orange); }
-.detail-head h1 { margin: 0 0 6px; color: var(--ink); font-weight: 800; letter-spacing: -0.01em; }
+.detail-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 6px;
+}
+.detail-head h1 {
+  flex: 1 1 auto;
+  min-width: min(100%, 280px);
+  margin: 0;
+  color: var(--ink);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
 .detail-meta { color: var(--muted); font-weight: 600; display: flex; gap: 16px; flex-wrap: wrap; margin: 0 0 20px; }
 .detail-map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-strong); box-shadow: var(--shadow); background: #fff; }
 .detail-map img { width: 100%; display: block; }
@@ -292,37 +306,117 @@ main.wrap { padding-top: 28px; }
 .specs dt { color: var(--muted-2); font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; }
 .specs dd { margin: 4px 0 0; font-size: 1.25rem; font-weight: 700; color: var(--ink); }
 .ride-rating {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px 18px;
+  flex: 0 0 auto;
+  display: inline-flex;
   align-items: center;
-  margin: 24px 0;
-  padding: 16px;
+  gap: 10px;
+  min-height: 42px;
+}
+.ride-rating-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 10px;
   border: 1px solid var(--border-strong);
-  border-top: 3px solid var(--orange-light);
-  border-radius: var(--radius);
+  border-radius: 8px;
   background: var(--card);
   box-shadow: var(--shadow);
 }
-.ride-rating-summary h2 {
-  margin: 0;
-  color: var(--ink);
+.rating-display-stars {
+  display: inline-flex;
+  gap: 1px;
+  color: #c5cbd3;
   font-size: 1rem;
-  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+.rating-display-stars span.is-active {
+  color: #f0a202;
 }
 .rating-average {
-  margin: 4px 0 0;
+  margin: 0;
   color: var(--muted);
-  font-size: .9rem;
-  font-weight: 700;
+  font-size: .84rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.rating-vote-button {
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid rgba(232, 119, 34, .45);
+  border-radius: 8px;
+  background: var(--orange);
+  color: #1f2937;
+  font: inherit;
+  font-size: .88rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.rating-vote-button:hover {
+  background: var(--orange-light);
+}
+.rating-vote-button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.rating-dialog {
+  width: min(420px, calc(100vw - 32px));
+  padding: 18px;
+  border: 1px solid var(--border-stronger);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 24px 60px -24px rgba(15, 30, 61, .55);
+}
+.rating-dialog::backdrop {
+  background: rgba(15, 30, 61, .52);
+  backdrop-filter: blur(3px);
+}
+.rating-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 14px;
+}
+.rating-dialog-head h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.08rem;
+  font-weight: 900;
+}
+.rating-dialog-close {
+  width: 34px;
+  height: 34px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.rating-dialog-close:hover {
+  background: #f2f4f7;
+}
+.rating-dialog-close:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
 }
 .rating-stars {
   display: flex;
-  gap: 2px;
+  justify-content: center;
+  gap: 4px;
+  margin: 4px 0 12px;
 }
 .rating-stars button {
-  width: 38px;
-  height: 38px;
+  width: 48px;
+  height: 48px;
   display: inline-grid;
   place-items: center;
   border: 0;
@@ -348,11 +442,9 @@ main.wrap { padding-top: 28px; }
   opacity: .86;
 }
 .rating-turnstile {
-  grid-column: 1 / -1;
   min-height: 0;
 }
 .rating-status {
-  grid-column: 1 / -1;
   margin: 0;
   color: var(--muted);
   font-size: .85rem;
@@ -499,7 +591,7 @@ main.wrap { padding-top: 28px; }
 }
 body.has-ride-cover .detail-map,
 body.has-ride-cover .specs div,
-body.has-ride-cover .ride-rating,
+body.has-ride-cover .ride-rating-display,
 body.has-ride-cover .ravito,
 body.has-ride-cover .parking,
 body.has-ride-cover .plaisir,
@@ -516,12 +608,27 @@ body.has-ride-cover .ride-photo-thumb {
 .btn-gpx { background: var(--navy); color: #fff; }
 
 @media (max-width: 640px) {
-  .ride-rating {
-    grid-template-columns: 1fr;
+  .detail-title-row {
+    display: block;
   }
 
-  .rating-stars {
-    justify-content: flex-start;
+  .ride-rating {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .ride-rating-display {
+    min-width: 0;
+  }
+
+  .rating-average {
+    white-space: normal;
+  }
+
+  .rating-stars button {
+    width: 44px;
+    height: 44px;
   }
 
   .ride-photos {

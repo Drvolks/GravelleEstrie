@@ -9,7 +9,45 @@
 
 <article class="detail">
   <header class="detail-head">
-    <h1>{{ ride.name }}</h1>
+    <div class="detail-title-row">
+      <h1>{{ ride.name }}</h1>
+      {% if ratings_enabled %}
+      <section
+        class="ride-rating"
+        data-ride-rating
+        data-ride-slug="{{ ride.slug }}"
+        data-ratings-api-url="{{ ratings_api_url }}"
+        data-turnstile-site-key="{{ turnstile_site_key }}"
+        aria-label="Note de la sortie">
+        <div class="ride-rating-display">
+          <span class="rating-display-stars" aria-hidden="true">
+            <span data-rating-display-star>&#9733;</span>
+            <span data-rating-display-star>&#9733;</span>
+            <span data-rating-display-star>&#9733;</span>
+            <span data-rating-display-star>&#9733;</span>
+            <span data-rating-display-star>&#9733;</span>
+          </span>
+          <span class="rating-average" data-rating-average>Chargement...</span>
+        </div>
+        <button class="rating-vote-button" type="button" data-rating-open>Voter</button>
+        <dialog class="rating-dialog" data-rating-dialog aria-label="Voter pour {{ ride.name }}">
+          <div class="rating-dialog-head">
+            <h2>Votre note</h2>
+            <button class="rating-dialog-close" type="button" data-rating-close aria-label="Fermer">×</button>
+          </div>
+          <div class="rating-stars" role="radiogroup" aria-label="Votre note">
+            <button type="button" data-rating-value="1" aria-label="1 étoile"><span aria-hidden="true">&#9733;</span></button>
+            <button type="button" data-rating-value="2" aria-label="2 étoiles"><span aria-hidden="true">&#9733;</span></button>
+            <button type="button" data-rating-value="3" aria-label="3 étoiles"><span aria-hidden="true">&#9733;</span></button>
+            <button type="button" data-rating-value="4" aria-label="4 étoiles"><span aria-hidden="true">&#9733;</span></button>
+            <button type="button" data-rating-value="5" aria-label="5 étoiles"><span aria-hidden="true">&#9733;</span></button>
+          </div>
+          <div class="rating-turnstile" data-rating-turnstile></div>
+          <p class="rating-status" data-rating-status aria-live="polite"></p>
+        </dialog>
+      </section>
+      {% endif %}
+    </div>
     <p class="detail-meta">
       {% if ride.start_city %}<span>📍 Départ : {{ ride.start_city }}</span>{% endif %}
       {% if ride.ride_date %}<span>📅 {{ ride.ride_date }}</span>{% endif %}
@@ -60,30 +98,6 @@
     <div><dt>Dénivelé positif</dt><dd>{{ ride.elevation_m }} m</dd></div>
     {% if ride.start_city %}<div><dt>Ville de départ</dt><dd>{{ ride.start_city }}</dd></div>{% endif %}
   </dl>
-
-  {% if ratings_enabled %}
-  <section
-    class="ride-rating"
-    data-ride-rating
-    data-ride-slug="{{ ride.slug }}"
-    data-ratings-api-url="{{ ratings_api_url }}"
-    data-turnstile-site-key="{{ turnstile_site_key }}"
-    aria-label="Note de la sortie">
-    <div class="ride-rating-summary">
-      <h2>Avis</h2>
-      <p class="rating-average" data-rating-average>Chargement...</p>
-    </div>
-    <div class="rating-stars" role="radiogroup" aria-label="Votre note">
-      <button type="button" data-rating-value="1" aria-label="1 étoile"><span aria-hidden="true">&#9733;</span></button>
-      <button type="button" data-rating-value="2" aria-label="2 étoiles"><span aria-hidden="true">&#9733;</span></button>
-      <button type="button" data-rating-value="3" aria-label="3 étoiles"><span aria-hidden="true">&#9733;</span></button>
-      <button type="button" data-rating-value="4" aria-label="4 étoiles"><span aria-hidden="true">&#9733;</span></button>
-      <button type="button" data-rating-value="5" aria-label="5 étoiles"><span aria-hidden="true">&#9733;</span></button>
-    </div>
-    <div class="rating-turnstile" data-rating-turnstile></div>
-    <p class="rating-status" data-rating-status aria-live="polite"></p>
-  </section>
-  {% endif %}
 
   {% if ride.parkings %}
   <section class="parkings" aria-label="Stationnements près du départ">

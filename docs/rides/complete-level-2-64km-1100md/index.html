@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/style.css?v=92213fda81dd">
+  <link rel="stylesheet" href="/assets/css/style.css?v=df8d922b13e5">
 </head>
 <body class="has-ride-cover" style="--ride-cover-image: url('/assets/img/default-ride-cover.jpg');">
   <header class="site-header">
@@ -30,7 +30,45 @@
 
 <article class="detail">
   <header class="detail-head">
-    <h1>Complete Level 2 ---- 64KM / 1100MD+</h1>
+    <div class="detail-title-row">
+      <h1>Complete Level 2 ---- 64KM / 1100MD+</h1>
+
+      <section
+        class="ride-rating"
+        data-ride-rating
+        data-ride-slug="complete-level-2-64km-1100md"
+        data-ratings-api-url="https://gravelleestrie-ratings.fleece-00-clad.workers.dev"
+        data-turnstile-site-key="0x4AAAAAAD7bypRaC-ji7ApR"
+        aria-label="Note de la sortie">
+        <div class="ride-rating-display">
+          <span class="rating-display-stars" aria-hidden="true">
+            <span data-rating-display-star>&#9733;</span>
+            <span data-rating-display-star>&#9733;</span>
+            <span data-rating-display-star>&#9733;</span>
+            <span data-rating-display-star>&#9733;</span>
+            <span data-rating-display-star>&#9733;</span>
+          </span>
+          <span class="rating-average" data-rating-average>Chargement...</span>
+        </div>
+        <button class="rating-vote-button" type="button" data-rating-open>Voter</button>
+        <dialog class="rating-dialog" data-rating-dialog aria-label="Voter pour Complete Level 2 ---- 64KM / 1100MD+">
+          <div class="rating-dialog-head">
+            <h2>Votre note</h2>
+            <button class="rating-dialog-close" type="button" data-rating-close aria-label="Fermer">×</button>
+          </div>
+          <div class="rating-stars" role="radiogroup" aria-label="Votre note">
+            <button type="button" data-rating-value="1" aria-label="1 étoile"><span aria-hidden="true">&#9733;</span></button>
+            <button type="button" data-rating-value="2" aria-label="2 étoiles"><span aria-hidden="true">&#9733;</span></button>
+            <button type="button" data-rating-value="3" aria-label="3 étoiles"><span aria-hidden="true">&#9733;</span></button>
+            <button type="button" data-rating-value="4" aria-label="4 étoiles"><span aria-hidden="true">&#9733;</span></button>
+            <button type="button" data-rating-value="5" aria-label="5 étoiles"><span aria-hidden="true">&#9733;</span></button>
+          </div>
+          <div class="rating-turnstile" data-rating-turnstile></div>
+          <p class="rating-status" data-rating-status aria-live="polite"></p>
+        </dialog>
+      </section>
+
+    </div>
     <p class="detail-meta">
       <span>📍 Départ : Lac-Brome</span>
 
@@ -61,30 +99,6 @@
     <div><dt>Dénivelé positif</dt><dd>1098 m</dd></div>
     <div><dt>Ville de départ</dt><dd>Lac-Brome</dd></div>
   </dl>
-
-
-  <section
-    class="ride-rating"
-    data-ride-rating
-    data-ride-slug="complete-level-2-64km-1100md"
-    data-ratings-api-url="https://gravelleestrie-ratings.fleece-00-clad.workers.dev"
-    data-turnstile-site-key="0x4AAAAAAD7bypRaC-ji7ApR"
-    aria-label="Note de la sortie">
-    <div class="ride-rating-summary">
-      <h2>Avis</h2>
-      <p class="rating-average" data-rating-average>Chargement...</p>
-    </div>
-    <div class="rating-stars" role="radiogroup" aria-label="Votre note">
-      <button type="button" data-rating-value="1" aria-label="1 étoile"><span aria-hidden="true">&#9733;</span></button>
-      <button type="button" data-rating-value="2" aria-label="2 étoiles"><span aria-hidden="true">&#9733;</span></button>
-      <button type="button" data-rating-value="3" aria-label="3 étoiles"><span aria-hidden="true">&#9733;</span></button>
-      <button type="button" data-rating-value="4" aria-label="4 étoiles"><span aria-hidden="true">&#9733;</span></button>
-      <button type="button" data-rating-value="5" aria-label="5 étoiles"><span aria-hidden="true">&#9733;</span></button>
-    </div>
-    <div class="rating-turnstile" data-rating-turnstile></div>
-    <p class="rating-status" data-rating-status aria-live="polite"></p>
-  </section>
-
 
 
   <section class="parkings" aria-label="Stationnements près du départ">
@@ -137,7 +151,7 @@
 
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
-<script src="/assets/js/ratings.js?v=92213fda81dd" defer></script>
+<script src="/assets/js/ratings.js?v=df8d922b13e5" defer></script>
 
 
 </body>
