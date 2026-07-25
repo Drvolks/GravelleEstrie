@@ -84,8 +84,10 @@ class RideAdmin(admin.ModelAdmin):
 
     @admin.display(description="Dénivelé", ordering="elevation_gain_m")
     def elevation_display(self, obj):
-        if obj.strava_elevation_gain_m:
+        if obj.strava_elevation_gain_m is not None:
             return f"{obj.elevation_m} m (Strava)"
+        if obj.has_rwgps_only_elevation_adjustment:
+            return f"{obj.elevation_m} m (RWGPS +{obj.elevation_adjustment_percent}%)"
         return f"{obj.elevation_m} m"
 
     @admin.display(description="Points")

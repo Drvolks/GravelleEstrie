@@ -19,6 +19,8 @@ class Ride(models.Model):
         STRAVA = "strava", "Strava"
         RWGPS = "ridewithgps", "RideWithGPS"
 
+    RWGPS_ELEVATION_ADJUSTMENT_FACTOR = 1.25
+
     # Identity
     name = models.CharField("Nom", max_length=200)
     slug = models.SlugField("Slug", max_length=220, unique=True, blank=True)
@@ -127,10 +129,27 @@ class Ride(models.Model):
 
     @property
     def elevation_m(self) -> int:
-        """Climbing to display: Strava's figure when we have one, else RWGPS's."""
-        if self.strava_elevation_gain_m:
+        """Climbing to display, adjusted when RideWithGPS is the only source."""
+        if self.strava_elevation_gain_m is not None:
             return int(round(self.strava_elevation_gain_m))
+        if self.has_rwgps_only_elevation_adjustment:
+            return int(round(self.elevation_gain_m * self.RWGPS_ELEVATION_ADJUSTMENT_FACTOR))
         return int(round(self.elevation_gain_m))
+
+    @property
+    def raw_elevation_m(self) -> int:
+        return int(round(self.elevation_gain_m))
+
+    @property
+    def has_rwgps_only_elevation_adjustment(self) -> bool:
+        has_rwgps_link = bool(self.rwgps_route_id or self.ridewithgps_url)
+        has_strava_link = bool(self.strava_activity_id or self.strava_url)
+        has_strava_elevation = self.strava_elevation_gain_m is not None
+        return has_rwgps_link and not (has_strava_link or has_strava_elevation)
+
+    @property
+    def elevation_adjustment_percent(self) -> int:
+        return int(round((self.RWGPS_ELEVATION_ADJUSTMENT_FACTOR - 1) * 100))
 
     @property
     def has_geometry(self) -> bool:

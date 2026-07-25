@@ -96,7 +96,31 @@
 
   <dl class="specs">
     <div><dt>Distance</dt><dd>{{ ride.distance_km }} km</dd></div>
-    <div><dt>Dénivelé positif</dt><dd>{{ ride.elevation_m }} m</dd></div>
+    <div class="{% if ride.has_rwgps_only_elevation_adjustment %}spec-warning{% endif %}">
+      <dt>
+        Dénivelé positif
+        {% if ride.has_rwgps_only_elevation_adjustment %}
+        <details
+          class="elevation-warning"
+          title="Dénivelé ajusté de {{ ride.elevation_adjustment_percent }}% parce que la sortie a seulement une source RideWithGPS.">
+          <summary>
+            <span aria-hidden="true">!</span>
+            <span class="visually-hidden">Dénivelé ajusté</span>
+          </summary>
+          <div class="elevation-popover">
+            <strong>Dénivelé estimé</strong>
+            <p>
+              Cette sortie a seulement un lien RideWithGPS. On ajoute volontairement
+              {{ ride.elevation_adjustment_percent }}% au dénivelé RideWithGPS
+              original ({{ ride.raw_elevation_m }} m) pour mieux refléter le
+              dénivelé réel.
+            </p>
+          </div>
+        </details>
+        {% endif %}
+      </dt>
+      <dd>{{ ride.elevation_m }} m</dd>
+    </div>
     {% if ride.start_city %}<div><dt>Ville de départ</dt><dd>{{ ride.start_city }}</dd></div>{% endif %}
   </dl>
 

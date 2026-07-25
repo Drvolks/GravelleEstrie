@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/style.css?v=1b0af3c7411d">
+  <link rel="stylesheet" href="/assets/css/style.css?v=f172a18ba10a">
 </head>
 <body class="has-ride-cover" style="--ride-cover-image: url('/assets/img/default-ride-cover.jpg');">
   <header class="site-header">
@@ -97,7 +97,31 @@
 
   <dl class="specs">
     <div><dt>Distance</dt><dd>70.9 km</dd></div>
-    <div><dt>Dénivelé positif</dt><dd>1099 m</dd></div>
+    <div class="spec-warning">
+      <dt>
+        Dénivelé positif
+
+        <details
+          class="elevation-warning"
+          title="Dénivelé ajusté de 25% parce que la sortie a seulement une source RideWithGPS.">
+          <summary>
+            <span aria-hidden="true">!</span>
+            <span class="visually-hidden">Dénivelé ajusté</span>
+          </summary>
+          <div class="elevation-popover">
+            <strong>Dénivelé estimé</strong>
+            <p>
+              Cette sortie a seulement un lien RideWithGPS. On ajoute volontairement
+              25% au dénivelé RideWithGPS
+              original (1099 m) pour mieux refléter le
+              dénivelé réel.
+            </p>
+          </div>
+        </details>
+
+      </dt>
+      <dd>1374 m</dd>
+    </div>
     <div><dt>Ville de départ</dt><dd>Bolton-Ouest</dd></div>
   </dl>
 
@@ -134,7 +158,7 @@
 
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
-<script src="/assets/js/ratings.js?v=1b0af3c7411d" defer></script>
+<script src="/assets/js/ratings.js?v=f172a18ba10a" defer></script>
 
 
 </body>

@@ -283,6 +283,31 @@ class RideModelTests(TestCase):
         self.assertEqual(r.distance_km, 48.5)
         self.assertEqual(r.elevation_m, 1120)
 
+    def test_rwgps_only_elevation_is_adjusted_for_display(self):
+        r = Ride.objects.create(
+            name="X",
+            elevation_gain_m=1000,
+            rwgps_route_id="123",
+            ridewithgps_url="https://ridewithgps.com/routes/123",
+        )
+        self.assertEqual(r.raw_elevation_m, 1000)
+        self.assertEqual(r.elevation_m, 1250)
+        self.assertTrue(r.has_rwgps_only_elevation_adjustment)
+        self.assertEqual(r.elevation_adjustment_percent, 25)
+
+    def test_strava_elevation_disables_rwgps_adjustment(self):
+        r = Ride.objects.create(
+            name="X",
+            elevation_gain_m=1000,
+            strava_elevation_gain_m=1100,
+            rwgps_route_id="123",
+            ridewithgps_url="https://ridewithgps.com/routes/123",
+            strava_activity_id="456",
+            strava_url="https://www.strava.com/routes/456",
+        )
+        self.assertEqual(r.elevation_m, 1100)
+        self.assertFalse(r.has_rwgps_only_elevation_adjustment)
+
 
 class StravaRoutesFilterTests(TestCase):
     def _client(self, route_ids):
@@ -987,6 +1012,7 @@ class BuildSiteTests(TestCase):
             name="Sortie A",
             geometry=SQUARE,
             distance_m=1000,
+            elevation_gain_m=1000,
             start_city="Magog",
             rwgps_route_id="123",
             ridewithgps_url="https://ridewithgps.com/routes/123",
@@ -994,7 +1020,9 @@ class BuildSiteTests(TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             call_command("build_site", output=tmp)
             detail = Path(tmp) / "rides" / "sortie-a" / "index.html"
+            index = Path(tmp) / "index.html"
             html = detail.read_text(encoding="utf-8")
+            index_html = index.read_text(encoding="utf-8")
             self.assertIn(
                 'src="https://ridewithgps.com/embeds?type=route&amp;id=123&amp;sampleGraph=true"',
                 html,
@@ -1004,6 +1032,11 @@ class BuildSiteTests(TestCase):
             self.assertIn('width="100%"', html)
             self.assertIn('height="620"', html)
             self.assertIn("/Test/assets/img/default-ride-cover.jpg", html)
+            self.assertIn("<dd>1250 m</dd>", html)
+            self.assertIn('class="elevation-warning"', html)
+            self.assertIn("Cette sortie a seulement un lien RideWithGPS", html)
+            self.assertIn("original (1000 m)", html)
+            self.assertIn('data-elevation="1250"', index_html)
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_uses_strava_route_embed_when_no_ridewithgps_embed(self):
@@ -1032,6 +1065,8 @@ class BuildSiteTests(TestCase):
         self.assertIn('src="https://strava-embeds.com/embed.js"', html)
         self.assertIn("Carte interactive intégrée depuis Strava", html)
         self.assertNotIn("Carte et profil intégrés depuis RideWithGPS", html)
+        self.assertIn("<dd>804 m</dd>", html)
+        self.assertNotIn('class="elevation-warning"', html)
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_writes_gpx_download_for_rides_with_geometry(self):
