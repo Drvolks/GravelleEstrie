@@ -9,6 +9,7 @@ outside the configured user can be fetched directly by id via
 from __future__ import annotations
 
 import logging
+import math
 from dataclasses import dataclass, field
 from datetime import date
 
@@ -21,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 _API = "https://ridewithgps.com"
 _TIMEOUT = 30
+_EARTH_RADIUS_M = 6_371_000
 
 
 class RideWithGPSError(RuntimeError):
@@ -37,6 +39,7 @@ class RWGPSRide:
     start_city: str
     geometry: list[list[float]]
     ridewithgps_url: str
+    elevation_profile: list[list[float]] = field(default_factory=list)
     raw: dict = field(default_factory=dict)
 
 
@@ -183,11 +186,27 @@ class RideWithGPSClient:
     @staticmethod
     def _to_ride(route: dict) -> RWGPSRide:
         track = route.get("track_points") or []
-        geometry = [
-            [pt["y"], pt["x"]]
-            for pt in track
-            if pt.get("y") is not None and pt.get("x") is not None
+        valid_track = [
+            point
+            for point in track
+            if point.get("y") is not None and point.get("x") is not None
         ]
+        geometry = [[point["y"], point["x"]] for point in valid_track]
+        calculated_distances = RideWithGPSClient._cumulative_distances(geometry)
+        elevation_profile = []
+        for index, point in enumerate(valid_track):
+            try:
+                raw_distance = point.get("d")
+                distance_m = (
+                    float(raw_distance)
+                    if raw_distance is not None
+                    else calculated_distances[index]
+                )
+                elevation_m = float(point["e"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if math.isfinite(distance_m) and math.isfinite(elevation_m):
+                elevation_profile.append([distance_m, elevation_m])
         # RideWithGPS only exposes the *route's* created_at, i.e. when the
         # course was designed/uploaded — not the day the club actually rode
         # it. Deliberately left unset here rather than passed off as the ride
@@ -202,5 +221,27 @@ class RideWithGPSClient:
             start_city=route.get("locality") or route.get("administrative_area") or "",
             geometry=geometry,
             ridewithgps_url=f"https://ridewithgps.com/routes/{route.get('id')}",
+            elevation_profile=elevation_profile,
             raw=route,
         )
+
+    @staticmethod
+    def _cumulative_distances(geometry: list[list[float]]) -> list[float]:
+        if not geometry:
+            return []
+        distances = [0.0]
+        total = 0.0
+        for previous, current in zip(geometry, geometry[1:]):
+            lat1 = math.radians(float(previous[0]))
+            lat2 = math.radians(float(current[0]))
+            delta_lat = lat2 - lat1
+            delta_lng = math.radians(float(current[1]) - float(previous[1]))
+            value = (
+                math.sin(delta_lat / 2) ** 2
+                + math.cos(lat1)
+                * math.cos(lat2)
+                * math.sin(delta_lng / 2) ** 2
+            )
+            total += 2 * _EARTH_RADIUS_M * math.asin(min(1.0, math.sqrt(value)))
+            distances.append(total)
+        return distances

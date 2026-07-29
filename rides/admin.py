@@ -53,7 +53,18 @@ class RideAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        ("Tracé", {"fields": ("geometry", "point_count", "thumbnail", "thumb_preview")}),
+        (
+            "Tracé",
+            {
+                "fields": (
+                    "geometry",
+                    "elevation_profile",
+                    "point_count",
+                    "thumbnail",
+                    "thumb_preview",
+                )
+            },
+        ),
         ("Images locales", {"fields": ("local_image_folder", "local_images_preview")}),
         (
             "Source & liens",

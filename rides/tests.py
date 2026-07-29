@@ -340,7 +340,14 @@ class RideModelTests(TestCase):
 
 class StravaRoutesFilterTests(TestCase):
     def _client(self, route_ids):
-        return StravaClient(client_id="x", client_secret="y", refresh_token="z", route_ids=route_ids)
+        client = StravaClient(
+            client_id="x",
+            client_secret="y",
+            refresh_token="z",
+            route_ids=route_ids,
+        )
+        client._get_route_streams = mock.Mock(return_value={})
+        return client
 
     def test_fetch_rides_keeps_only_public_cycling_type_routes(self):
         client = self._client(route_ids=["1", "2", "3", "4"])
@@ -368,6 +375,42 @@ class StravaRoutesFilterTests(TestCase):
         self.assertEqual(len(rides), 1)
         self.assertEqual(rides[0].strava_url, "https://www.strava.com/routes/42")
         self.assertIsNone(rides[0].ride_date)
+
+    def test_route_streams_supply_geometry_and_elevation_profile(self):
+        client = self._client(route_ids=["42"])
+        client._get_route_streams.return_value = {
+            "latlng": [[45.0, -72.0], [45.01, -71.99], [45.02, -71.98]],
+            "distance": [0, 750.5, 1500],
+            "altitude": [210.2, 245.8, 225.1],
+        }
+        details = {
+            "42": {
+                "id": 42,
+                "type": 1,
+                "private": False,
+                "name": "Boucle",
+                "distance": 1500,
+                "elevation_gain": 50,
+                "map": {"polyline": QUEBEC_POLYLINE},
+            }
+        }
+
+        with mock.patch.object(
+            StravaClient,
+            "_get_route",
+            side_effect=lambda route_id: details[route_id],
+        ):
+            rides = client.fetch_rides()
+
+        self.assertEqual(
+            rides[0].geometry,
+            [[45.0, -72.0], [45.01, -71.99], [45.02, -71.98]],
+        )
+        self.assertEqual(
+            rides[0].elevation_profile,
+            [[0.0, 210.2], [750.5, 245.8], [1500.0, 225.1]],
+        )
+        client._get_route_streams.assert_called_once_with("42")
 
     def test_strava_routes_infer_start_city_from_geometry(self):
         client = self._client(route_ids=["42"])
@@ -461,6 +504,38 @@ class RideWithGPSCyclingFilterTests(TestCase):
         is_cycling = RideWithGPSClient._is_cycling
         self.assertTrue(is_cycling({}))
         self.assertTrue(is_cycling({"activity_types": []}))
+
+    def test_to_ride_extracts_distance_and_elevation_profile(self):
+        ride = RideWithGPSClient._to_ride(
+            {
+                "id": 10,
+                "name": "Gravel loop",
+                "distance": 1000,
+                "track_points": [
+                    {"y": 45.0, "x": -72.0, "d": 0, "e": 210.2},
+                    {"y": 45.01, "x": -71.99, "d": 1000, "e": 245.8},
+                ],
+            }
+        )
+
+        self.assertEqual(ride.elevation_profile, [[0.0, 210.2], [1000.0, 245.8]])
+
+    def test_to_ride_calculates_profile_distance_when_missing(self):
+        ride = RideWithGPSClient._to_ride(
+            {
+                "id": 10,
+                "name": "Old route",
+                "distance": 1000,
+                "track_points": [
+                    {"y": 45.0, "x": -72.0, "e": 210.2},
+                    {"y": 45.01, "x": -71.99, "e": 245.8},
+                ],
+            }
+        )
+
+        self.assertEqual(ride.elevation_profile[0], [0.0, 210.2])
+        self.assertGreater(ride.elevation_profile[1][0], 1000)
+        self.assertEqual(ride.elevation_profile[1][1], 245.8)
 
     def test_fetch_rides_skips_non_cycling_routes(self):
         client = RideWithGPSClient(api_key="k", user_id="1")
@@ -624,7 +699,11 @@ class ImporterTests(TestCase):
         self.assertEqual(Ride.objects.get(strava_activity_id="1").distance_m, 2000)
 
     def test_rwgps_import_skips_existing_ids_by_default(self):
-        Ride.objects.create(name="Existing", rwgps_route_id="9")
+        Ride.objects.create(
+            name="Existing",
+            rwgps_route_id="9",
+            elevation_profile=[[0, 200], [1000, 220]],
+        )
         client = mock.Mock(spec=RideWithGPSClient)
         client.fetch_rides.return_value = []
 
@@ -642,7 +721,11 @@ class ImporterTests(TestCase):
         client.fetch_rides.assert_called_once_with(skip_route_ids=set())
 
     def test_strava_import_skips_existing_ids_by_default(self):
-        Ride.objects.create(name="Existing", strava_activity_id="1")
+        Ride.objects.create(
+            name="Existing",
+            strava_activity_id="1",
+            elevation_profile=[[0, 200], [1000, 220]],
+        )
         client = mock.Mock(spec=StravaClient)
         client.fetch_rides.return_value = []
 
@@ -698,15 +781,27 @@ class ImporterTests(TestCase):
 
     @mock.patch("rides.services.importer.build_thumbnail_file", return_value=None)
     def test_strava_elevation_wins_over_rwgps_on_merged_ride(self, _thumb):
+        rwgps_profile = [[0, 200], [78_000, 300]]
+        strava_profile = [[0, 205], [78_000, 315]]
         rwgps_client = mock.Mock(spec=RideWithGPSClient)
         rwgps_client.fetch_rides.return_value = [
-            self._rwgps_payload(name="Pork Epic", distance_m=78000, elevation_gain_m=1178)
+            self._rwgps_payload(
+                name="Pork Epic",
+                distance_m=78000,
+                elevation_gain_m=1178,
+                elevation_profile=rwgps_profile,
+            )
         ]
         importer.import_ridewithgps(client=rwgps_client)
 
         strava_client = mock.Mock(spec=StravaClient)
         strava_client.fetch_rides.return_value = [
-            self._strava_payload(name="Pork Epic", distance_m=78000, elevation_gain_m=1275)
+            self._strava_payload(
+                name="Pork Epic",
+                distance_m=78000,
+                elevation_gain_m=1275,
+                elevation_profile=strava_profile,
+            )
         ]
         self.assertEqual(importer.import_strava(client=strava_client).merged, 1)
 
@@ -714,13 +809,21 @@ class ImporterTests(TestCase):
         self.assertEqual(ride.elevation_gain_m, 1178)  # RWGPS value kept as-is
         self.assertEqual(ride.strava_elevation_gain_m, 1275)
         self.assertEqual(ride.elevation_m, 1275)  # ...but Strava's is displayed
+        self.assertEqual(ride.elevation_profile, strava_profile)
 
         # A later --full RideWithGPS refresh must not undo it.
         rwgps_client.fetch_rides.return_value = [
-            self._rwgps_payload(name="Pork Epic", distance_m=78000, elevation_gain_m=1180)
+            self._rwgps_payload(
+                name="Pork Epic",
+                distance_m=78000,
+                elevation_gain_m=1180,
+                elevation_profile=[[0, 190], [78_000, 290]],
+            )
         ]
         importer.import_ridewithgps(client=rwgps_client, full=True)
-        self.assertEqual(Ride.objects.get().elevation_m, 1275)
+        refreshed = Ride.objects.get()
+        self.assertEqual(refreshed.elevation_m, 1275)
+        self.assertEqual(refreshed.elevation_profile, strava_profile)
 
     @mock.patch("rides.services.importer.build_thumbnail_file", return_value=None)
     def test_full_strava_reimport_keeps_denser_rwgps_track(self, _thumb):
@@ -1036,7 +1139,7 @@ class BuildSiteTests(TestCase):
             self.assertFalse(outside.exists())
 
     @override_settings(SITE_BASE_PATH="/Test")
-    def test_build_site_uses_ridewithgps_embed_on_detail_pages(self):
+    def test_build_site_replaces_ridewithgps_embed_with_local_map(self):
         from django.core.management import call_command
         import tempfile
 
@@ -1055,14 +1158,14 @@ class BuildSiteTests(TestCase):
             index = Path(tmp) / "index.html"
             html = detail.read_text(encoding="utf-8")
             index_html = index.read_text(encoding="utf-8")
+            self.assertNotIn("ridewithgps.com/embeds", html)
+            self.assertNotIn("<iframe", html)
+            self.assertIn('class="route-overview"', html)
+            self.assertIn('data-gpx-url="/Test/assets/gpx/sortie-a.gpx"', html)
             self.assertIn(
-                'src="https://ridewithgps.com/embeds?type=route&amp;id=123&amp;sampleGraph=true"',
+                'href="https://ridewithgps.com/routes/123"',
                 html,
             )
-            self.assertIn('title="Carte RideWithGPS de Sortie A"', html)
-            self.assertIn('class="rwgps-embed"', html)
-            self.assertIn('width="100%"', html)
-            self.assertIn('height="620"', html)
             self.assertIn("/Test/assets/img/default-ride-cover.jpg", html)
             self.assertIn("<dd>1250 m</dd>", html)
             self.assertIn('class="elevation-warning"', html)
@@ -1071,7 +1174,7 @@ class BuildSiteTests(TestCase):
             self.assertIn('data-elevation="1250"', index_html)
 
     @override_settings(SITE_BASE_PATH="/Test")
-    def test_build_site_uses_strava_route_embed_when_no_ridewithgps_embed(self):
+    def test_build_site_replaces_strava_embed_with_local_map(self):
         from django.core.management import call_command
         import tempfile
 
@@ -1088,15 +1191,14 @@ class BuildSiteTests(TestCase):
             detail = Path(tmp) / "rides" / "sortie-strava" / "index.html"
             html = detail.read_text(encoding="utf-8")
 
-        self.assertIn('class="strava-embed-placeholder"', html)
-        self.assertIn('data-embed-type="route"', html)
-        self.assertIn('data-embed-id="3279612223036285112"', html)
-        self.assertIn('data-full-width="true"', html)
-        self.assertIn('data-distance="65700"', html)
-        self.assertIn('data-elevation-gain="804"', html)
-        self.assertIn('src="https://strava-embeds.com/embed.js"', html)
-        self.assertIn("Carte interactive intégrée depuis Strava", html)
-        self.assertNotIn("Carte et profil intégrés depuis RideWithGPS", html)
+        self.assertNotIn("strava-embed-placeholder", html)
+        self.assertNotIn("strava-embeds.com", html)
+        self.assertIn('class="route-overview"', html)
+        self.assertIn('data-gpx-url="/Test/assets/gpx/sortie-strava.gpx"', html)
+        self.assertIn(
+            'href="https://www.strava.com/routes/3279612223036285112"',
+            html,
+        )
         self.assertIn("<dd>804 m</dd>", html)
         self.assertNotIn('class="elevation-warning"', html)
 
@@ -1111,6 +1213,13 @@ class BuildSiteTests(TestCase):
             distance_m=1000,
             start_city="Magog",
             description="Belle ride.",
+            elevation_profile=[
+                [0, 200],
+                [250, 225],
+                [500, 210],
+                [750, 260],
+                [1000, 205],
+            ],
         )
         with tempfile.TemporaryDirectory() as tmp:
             call_command("build_site", output=tmp)
@@ -1121,15 +1230,100 @@ class BuildSiteTests(TestCase):
             root = ET.parse(gpx).getroot()
             ns = {"gpx": "http://www.topografix.com/GPX/1/1"}
             points = root.findall(".//gpx:trkpt", ns)
+            elevations = root.findall(".//gpx:trkpt/gpx:ele", ns)
 
         self.assertTrue(gpx_exists)
         self.assertEqual("Sortie A", root.findtext(".//gpx:trk/gpx:name", namespaces=ns))
         self.assertEqual(len(SQUARE), len(points))
         self.assertEqual("45", points[0].attrib["lat"])
         self.assertEqual("-72", points[0].attrib["lon"])
+        self.assertEqual(
+            [element.text for element in elevations],
+            ["200", "225", "210", "260", "205"],
+        )
         self.assertIn('/Test/assets/gpx/sortie-a.gpx', html)
         self.assertIn("Télécharger GPX", html)
         self.assertIn("download", html)
+        self.assertIn('class="route-overview"', html)
+        self.assertIn('data-gpx-url="/Test/assets/gpx/sortie-a.gpx"', html)
+        self.assertIn('id="route-map-points"', html)
+        self.assertIn("leaflet@1.9.4/dist/leaflet.css", html)
+        self.assertIn("leaflet@1.9.4/dist/leaflet.js", html)
+        self.assertIn("/Test/assets/js/route-map.js?v=", html)
+        self.assertIn('class="elevation-profile"', html)
+        self.assertIn('data-elevation-chart', html)
+        self.assertIn('id="route-elevation-profile"', html)
+        self.assertIn("/Test/assets/js/elevation-profile.js?v=", html)
+        self.assertIn("200–260 m", html)
+
+        map_data = html.split(
+            '<script id="route-map-points" type="application/json">',
+            1,
+        )[1].split("</script>", 1)[0]
+        self.assertEqual(
+            json.loads(map_data),
+            [
+                {
+                    "category": "start",
+                    "name": "Point de départ",
+                    "detail": "Magog",
+                    "lat": 45.0,
+                    "lng": -72.0,
+                    "map_url": (
+                        "https://www.google.com/maps/search/"
+                        "?api=1&query=45%2C-72"
+                    ),
+                }
+            ],
+        )
+
+    @override_settings(
+        SITE_BASE_PATH="/Test",
+        RAVITO_POINTS="Dépanneur|45|-71.5",
+        RAVITO_RADIUS_M=500,
+        RAVITO_MIN_ROUTE_DISTANCE_M=30_000,
+        POINTS_INTERET="Belvédère|45|-71.9",
+        POINTS_INTERET_RADIUS_M=500,
+        POINTS_INTERET_MIN_ROUTE_DISTANCE_M=5_000,
+        PARKING_POINTS="P1|45|-72",
+        PARKING_RADIUS_M=500,
+        PLAISIRS_POINTS="Cantine|45|-71",
+        PLAISIRS_RADIUS_M=500,
+    )
+    def test_build_site_combined_map_contains_every_place_category(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(
+            name="Sortie A",
+            geometry=[[45.0, -72.0], [45.0, -71.0]],
+            distance_m=80_000,
+            start_city="Magog",
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            html = (
+                Path(tmp) / "rides" / "sortie-a" / "index.html"
+            ).read_text(encoding="utf-8")
+
+        map_data = html.split(
+            '<script id="route-map-points" type="application/json">',
+            1,
+        )[1].split("</script>", 1)[0]
+        points = json.loads(map_data)
+
+        self.assertEqual(
+            {point["category"] for point in points},
+            {"start", "parking", "ravito", "interest", "pleasure"},
+        )
+        self.assertEqual(
+            {point["name"] for point in points},
+            {"Point de départ", "P1", "Dépanneur", "Belvédère", "Cantine"},
+        )
+        self.assertIn("Stationnement", html)
+        self.assertIn("Ravito", html)
+        self.assertIn("route-map-key-interest", html)
+        self.assertIn("Après-ride", html)
 
     @override_settings(SITE_BASE_PATH="/Test")
     def test_build_site_copies_local_ride_images_to_detail_pages(self):

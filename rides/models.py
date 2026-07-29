@@ -11,7 +11,8 @@ class Ride(models.Model):
     """A single club ride/route consolidated from Strava or RideWithGPS.
 
     Route geometry is stored as a list of ``[lat, lng]`` pairs in ``geometry``
-    (JSON). Thumbnails are baked from that geometry at import time.
+    (JSON), with a separate ``[distance_m, elevation_m]`` profile. Thumbnails
+    are baked from the geometry at import time.
     """
 
     class Source(models.TextChoices):
@@ -49,6 +50,12 @@ class Ride(models.Model):
 
     # Geometry: list of [lat, lng] pairs (WGS84).
     geometry = models.JSONField("Tracé (points lat/lng)", default=list, blank=True)
+    elevation_profile = models.JSONField(
+        "Profil d'altitude (distance/élévation)",
+        default=list,
+        blank=True,
+        help_text="Liste de points [distance en mètres, altitude en mètres].",
+    )
 
     # Provenance / links.
     #

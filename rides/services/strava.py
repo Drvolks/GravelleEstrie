@@ -27,6 +27,7 @@ the account that created the routes.
 from __future__ import annotations
 
 import logging
+import math
 from dataclasses import dataclass, field
 from datetime import date
 
@@ -72,6 +73,7 @@ class StravaRide:
     start_city: str
     geometry: list[list[float]]
     strava_url: str
+    elevation_profile: list[list[float]] = field(default_factory=list)
     raw: dict = field(default_factory=dict)
 
 
@@ -122,6 +124,36 @@ class StravaClient:
         if resp.status_code != 200:
             raise StravaRouteFetchError(route_id, resp.status_code, resp.text)
         return resp.json()
+
+    def _get_route_streams(self, route_id) -> dict[str, list]:
+        try:
+            resp = requests.get(
+                f"{_API}/routes/{route_id}/streams",
+                headers=self._headers(),
+                timeout=_TIMEOUT,
+            )
+        except (requests.RequestException, StravaError) as exc:
+            logger.warning("Could not fetch Strava route %s streams: %s", route_id, exc)
+            return {}
+        if resp.status_code != 200:
+            logger.warning(
+                "Could not fetch Strava route %s streams (%s)",
+                route_id,
+                resp.status_code,
+            )
+            return {}
+        try:
+            payload = resp.json()
+        except requests.JSONDecodeError:
+            logger.warning("Strava route %s returned invalid stream JSON", route_id)
+            return {}
+        if not isinstance(payload, list):
+            return {}
+        return {
+            str(stream.get("type")): stream.get("data") or []
+            for stream in payload
+            if isinstance(stream, dict) and stream.get("type")
+        }
 
     @staticmethod
     def _is_public_cycling_route(route: dict) -> bool:
@@ -196,7 +228,7 @@ class StravaClient:
                     detail.get("private"),
                 )
                 continue
-            ride = self._to_ride(detail)
+            ride = self._to_ride(detail, self._get_route_streams(route_id))
             if not geometry_starts_in_quebec(ride.geometry):
                 logger.info("Skipping Strava route %s: start is outside Quebec", route_id)
                 continue
@@ -210,11 +242,38 @@ class StravaClient:
         return routes
 
     @staticmethod
-    def _to_ride(route: dict) -> StravaRide:
+    def _to_ride(route: dict, streams: dict[str, list] | None = None) -> StravaRide:
+        streams = streams or {}
         polyline = (route.get("map") or {}).get("polyline") or (route.get("map") or {}).get(
             "summary_polyline"
         ) or ""
         geometry = decode_polyline(polyline)
+        stream_geometry = []
+        for point in streams.get("latlng") or []:
+            if not isinstance(point, (list, tuple)) or len(point) < 2:
+                continue
+            try:
+                lat = float(point[0])
+                lng = float(point[1])
+            except (TypeError, ValueError):
+                continue
+            if math.isfinite(lat) and math.isfinite(lng):
+                stream_geometry.append([lat, lng])
+        if len(stream_geometry) >= 2:
+            geometry = stream_geometry
+
+        elevation_profile = []
+        for distance, altitude in zip(
+            streams.get("distance") or [],
+            streams.get("altitude") or [],
+        ):
+            try:
+                distance_m = float(distance)
+                elevation_m = float(altitude)
+            except (TypeError, ValueError):
+                continue
+            if math.isfinite(distance_m) and math.isfinite(elevation_m):
+                elevation_profile.append([distance_m, elevation_m])
         return StravaRide(
             external_id=str(route.get("id")),
             name=route.get("name") or "Parcours Strava",
@@ -228,5 +287,6 @@ class StravaClient:
             start_city=infer_start_city(geometry),
             geometry=geometry,
             strava_url=f"https://www.strava.com/routes/{route.get('id')}",
+            elevation_profile=elevation_profile,
             raw=route,
         )

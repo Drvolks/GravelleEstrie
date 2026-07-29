@@ -8,9 +8,9 @@ generates a **static website** you can publish on GitHub Pages.
 - **Search** by name and start city
 - **Filter** by distance and elevation gain
 - **Ride cards** with a baked map thumbnail
-- **Detail page** per ride: RideWithGPS or Strava route embed when available,
-  full specs, links to Strava & RideWithGPS, and a downloadable GPX file for
-  Garmin/manual import
+- **Detail page** per ride: a combined Leaflet map for the route and nearby
+  places, an interactive elevation profile, full specs, links to Strava &
+  RideWithGPS, and a downloadable GPX file for Garmin/manual import
 - **Ravitos** on detail pages when a configured grocery/convenience stop is
   near the route
 
@@ -23,10 +23,10 @@ Strava / RideWithGPS ──import──▶  Django + Postgres  ──build_site�
 
 The database and admin are **development/back-office only** — GitHub Pages only
 ever serves the generated static files in `docs/`. Map thumbnails are
-pre-rendered PNGs (OpenStreetMap tiles + the route line). Detail pages prefer
-the RideWithGPS embed, then the official Strava route embed for Strava-only
-routes, and fall back to the static thumbnail when no interactive embed is
-available.
+pre-rendered PNGs (OpenStreetMap tiles + the route line). Every detail page
+uses the local geometry for a combined Leaflet map showing its start, parkings,
+ravitos, points of interest and after-ride places. Imported point-by-point
+altitudes supply the interactive elevation profile below that map.
 
 ## Requirements
 
@@ -199,10 +199,11 @@ under-reports climbing (e.g. 1178 m vs Strava's 1275 m on the Pork Epic). Rides
 linked to a Strava route therefore display Strava's figure; the RideWithGPS
 value is kept alongside it and used as the fallback. Both steps are incremental
 by default: they still read
-the source route lists, but skip detail fetches for source ids already present
-locally, which keeps repeat runs lighter on API calls. Pass `--full` to fetch
-and update every configured route, including already-imported ones. Pass
-`--no-thumbnails` to skip tile downloads.
+the source route lists, but skip detail fetches for source ids whose altitude
+profile is already stored locally. Existing rides with a missing profile are
+retried automatically. Pass `--full` to fetch and update every configured
+route, including already-imported ones. Pass `--no-thumbnails` to skip tile
+downloads.
 
 You can also run either step on its own — `python manage.py import_ridewithgps`
 or `python manage.py import_strava` — each supports `--full` and a

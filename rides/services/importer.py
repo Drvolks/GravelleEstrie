@@ -141,6 +141,8 @@ def _upsert(
         # Strava's elevation is kept even though RWGPS created this row.
         if is_strava and payload.elevation_gain_m:
             ride.strava_elevation_gain_m = payload.elevation_gain_m
+        if payload.elevation_profile and (is_strava or not ride.elevation_profile):
+            ride.elevation_profile = payload.elevation_profile
         if not ride.start_city and payload.start_city:
             ride.start_city = payload.start_city
         if not ride.ride_date and payload.ride_date:
@@ -157,6 +159,12 @@ def _upsert(
         # fallback `elevation_m` falls back to instead of overwriting it.
         if not (is_strava and cross_linked):
             ride.elevation_gain_m = payload.elevation_gain_m
+        if payload.elevation_profile and (
+            is_strava
+            or not ride.strava_activity_id
+            or not ride.elevation_profile
+        ):
+            ride.elevation_profile = payload.elevation_profile
         # Same idea for the track: a re-import must never downgrade a
         # cross-linked ride to the other source's coarser polyline (Strava's
         # route polylines are far sparser than RideWithGPS's, and the GPX we
@@ -216,7 +224,9 @@ def import_strava(
     )
     result = ImportResult()
     skip_route_ids = set() if full else set(
-        Ride.objects.exclude(strava_activity_id="").values_list("strava_activity_id", flat=True)
+        Ride.objects.exclude(strava_activity_id="")
+        .exclude(elevation_profile=[])
+        .values_list("strava_activity_id", flat=True)
     )
     for ride in client.fetch_rides(skip_route_ids=skip_route_ids):
         _upsert(
@@ -248,7 +258,9 @@ def import_ridewithgps(
     )
     result = ImportResult()
     skip_route_ids = set() if full else set(
-        Ride.objects.exclude(rwgps_route_id="").values_list("rwgps_route_id", flat=True)
+        Ride.objects.exclude(rwgps_route_id="")
+        .exclude(elevation_profile=[])
+        .values_list("rwgps_route_id", flat=True)
     )
     for ride in client.fetch_rides(skip_route_ids=skip_route_ids):
         _upsert(

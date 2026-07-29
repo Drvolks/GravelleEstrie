@@ -3,6 +3,15 @@
 {% block title %}{{ ride.name }} · {{ site_title }}{% endblock %}
 {% block body_class %}{% if ride.cover_image_url %}has-ride-cover{% endif %}{% endblock %}
 {% block body_style %}{% if ride.cover_image_url %}--ride-cover-image: url('{{ ride.cover_image_url }}');{% endif %}{% endblock %}
+{% block head %}
+{% if ride.gpx_url %}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin="">
+{% endif %}
+{% endblock %}
 
 {% block content %}
 <nav class="breadcrumb"><a href="{{ base_path }}/">← Toutes les sorties</a></nav>
@@ -55,45 +64,6 @@
     </p>
   </header>
 
-  {% if ride.ridewithgps_embed_url %}
-  <div class="detail-map">
-    <iframe
-      class="rwgps-embed"
-      src="{{ ride.ridewithgps_embed_url }}"
-      title="Carte RideWithGPS de {{ ride.name }}"
-      width="100%"
-      height="620"
-      style="width: 100%; min-width: 100%; height: clamp(420px, 72vh, 700px); border: 0; display: block;"
-      loading="lazy"
-      referrerpolicy="strict-origin-when-cross-origin"
-      scrolling="no"></iframe>
-  </div>
-  {% elif ride.strava_embed_id %}
-  <div class="detail-map detail-map-strava">
-    <div
-      class="strava-embed-placeholder"
-      data-embed-type="route"
-      data-embed-id="{{ ride.strava_embed_id }}"
-      data-style="standard"
-      data-full-width="true"
-      data-distance="{{ ride.distance_m }}"
-      data-elevation-gain="{{ ride.elevation_m }}"
-      data-slippy="true"></div>
-  </div>
-  {% elif ride.thumb_url %}
-    <div class="detail-map">
-      <img src="{{ ride.thumb_url }}" alt="Carte du tracé de {{ ride.name }}">
-    </div>
-  {% endif %}
-
-  {% if ride.ridewithgps_embed_url %}
-  <p class="detail-map-note">Carte et profil intégrés depuis RideWithGPS — apparence gérée par RideWithGPS.</p>
-  {% elif ride.strava_embed_id %}
-  <p class="detail-map-note">Carte interactive intégrée depuis Strava — apparence gérée par Strava.</p>
-  {% elif ride.thumb_url %}
-  <p class="detail-map-note">Carte statique générée depuis le tracé local.</p>
-  {% endif %}
-
   <dl class="specs">
     <div><dt>Distance</dt><dd>{{ ride.distance_km }} km</dd></div>
     <div class="{% if ride.has_rwgps_only_elevation_adjustment %}spec-warning{% endif %}">
@@ -121,8 +91,49 @@
       </dt>
       <dd>{{ ride.elevation_m }} m</dd>
     </div>
-    {% if ride.start_city %}<div><dt>Ville de départ</dt><dd>{{ ride.start_city }}</dd></div>{% endif %}
   </dl>
+
+  {% if ride.gpx_url %}
+  <section class="route-overview" aria-labelledby="route-overview-title">
+    <div class="route-overview-heading">
+      <h2 id="route-overview-title">Carte du parcours</h2>
+      <div class="route-map-legend" aria-label="Légende de la carte">
+        <span><i class="route-map-key route-map-key-start" aria-hidden="true"></i>Départ</span>
+        {% if ride.parkings %}<span><i class="route-map-key route-map-key-parking" aria-hidden="true"></i>Stationnement</span>{% endif %}
+        {% if ride.ravitos %}<span><i class="route-map-key route-map-key-ravito" aria-hidden="true"></i>Ravito</span>{% endif %}
+        {% if ride.points_interet %}<span><i class="route-map-key route-map-key-interest" aria-hidden="true"></i>Point d'intérêt</span>{% endif %}
+        {% if ride.plaisirs %}<span><i class="route-map-key route-map-key-pleasure" aria-hidden="true"></i>Après-ride</span>{% endif %}
+      </div>
+    </div>
+    <div
+      class="route-map"
+      data-route-map
+      data-gpx-url="{{ ride.gpx_url }}"
+      aria-label="Carte interactive du parcours et des lieux à proximité">
+      <p class="route-map-status" data-route-map-status>Chargement de la carte...</p>
+    </div>
+    {{ ride.map_points|json_script:"route-map-points" }}
+    {% if ride.elevation_profile %}
+    <div class="elevation-profile">
+      <div class="elevation-profile-heading">
+        <h3>Profil d'élévation</h3>
+        <span>{{ ride.elevation_min_m }}–{{ ride.elevation_max_m }} m</span>
+      </div>
+      <div
+        class="elevation-chart"
+        data-elevation-chart
+        role="img"
+        aria-label="Profil d'élévation de {{ ride.name }}, de {{ ride.elevation_min_m }} à {{ ride.elevation_max_m }} mètres">
+        <div class="elevation-chart-tooltip" data-elevation-tooltip hidden>
+          <strong data-elevation-tooltip-altitude></strong>
+          <span data-elevation-tooltip-distance></span>
+        </div>
+      </div>
+      {{ ride.elevation_profile|json_script:"route-elevation-profile" }}
+    </div>
+    {% endif %}
+  </section>
+  {% endif %}
 
   {% if ride.parkings %}
   <section class="parkings" aria-label="Stationnements près du départ">
@@ -238,8 +249,16 @@
 {% endblock %}
 
 {% block scripts %}
-{% if ride.strava_embed_id and not ride.ridewithgps_embed_url %}
-<script src="https://strava-embeds.com/embed.js"></script>
+{% if ride.gpx_url %}
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+  defer></script>
+<script src="{{ base_path }}/assets/js/route-map.js?v={{ asset_version }}" defer></script>
+{% if ride.elevation_profile %}
+<script src="{{ base_path }}/assets/js/elevation-profile.js?v={{ asset_version }}" defer></script>
+{% endif %}
 {% endif %}
 {% if ride.images %}
 <script src="{{ base_path }}/assets/js/gallery.js?v={{ asset_version }}" defer></script>

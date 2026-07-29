@@ -59,12 +59,12 @@ python -m http.server 8765 --directory preview
   cross-source linking is via independent nullable `strava_activity_id` /
   `rwgps_route_id` fields on the *same row* (a ride can have both). `geometry` is a
   JSON list of `[lat, lng]` pairs used to bake thumbnails and detect nearby ravitos.
-  Elevation is stored twice: `elevation_gain_m` holds the creating source's figure
-  (usually RideWithGPS) and `strava_elevation_gain_m` holds Strava's when the ride is
-  linked to a Strava route. RideWithGPS systematically under-reports climbing, so the
-  `elevation_m` property — the only thing the site and admin display — prefers the
-  Strava value and falls back to `elevation_gain_m`. Clear the Strava field in the
-  admin to force the RideWithGPS/manual value.
+  `elevation_profile` stores `[distance_m, elevation_m]` points for the interactive
+  chart and GPX `<ele>` values. Elevation totals are stored twice:
+  `elevation_gain_m` holds the creating source's figure (usually RideWithGPS) and
+  `strava_elevation_gain_m` holds Strava's when the ride is linked to a Strava route.
+  RideWithGPS systematically under-reports climbing, so the `elevation_m` property
+  prefers the Strava value and falls back to `elevation_gain_m`.
 - `rides/services/` — `strava.py`, `ridewithgps.py` (API clients), `geometry.py`,
   `location.py` (Quebec start-point filtering), `thumbnails.py` (renders PNGs from
   route geometry + OSM tiles), `images.py` (discovers git-ignored local ride photos),
@@ -82,8 +82,9 @@ python -m http.server 8765 --directory preview
     of who authorized the token). It matches onto an existing RideWithGPS-sourced
     ride by same name (case/whitespace-insensitive) + distance within 15%, merging
     links onto one row, or creates a standalone ride if nothing matches.
-  - Both importers are incremental by default (skip already-imported ids); pass
-    `--full` to refetch everything, `--require-strava-match` /
+  - Both importers are incremental by default (skip ids whose altitude profile is
+    already stored, while retrying incomplete rides); pass `--full` to refetch
+    everything, `--require-strava-match` /
     `--require-rwgps-match` for strict enrich-only runs, `--no-thumbnails` to skip
     tile downloads.
   - Both importers only keep **cycling** routes starting in **Quebec**: RideWithGPS
@@ -98,9 +99,10 @@ python -m http.server 8765 --directory preview
     `rwgps_route_id` first, then Strava/manual ids, pk, and slug. Detail pages use the
     first local photo as a subtle background, falling back to
     `assets/img/default-ride-cover.jpg`. It also writes Garmin-compatible GPX Track
-    files from stored `Ride.geometry` to `assets/gpx/<slug>.gpx` and links them from
-    the detail page. Detail map rendering prefers the RideWithGPS iframe, then the
-    official Strava route embed for Strava-only routes, then the static thumbnail.
+    files from stored `Ride.geometry` and `Ride.elevation_profile` to
+    `assets/gpx/<slug>.gpx` and links them from the detail page. Detail pages use the
+    combined Leaflet map and interactive elevation profile from locally stored route
+    geometry and point-by-point altitude data.
     It also reads
     `RAVITO_POINTS`, `RAVITO_RADIUS_M`, `RAVITO_MIN_ROUTE_DISTANCE_M`, and
     `RAVITO_ENDPOINT_EXCLUSION_RADIUS_M` and shows configured Google Maps or

@@ -1,8 +1,9 @@
 """Generate the static website published to GitHub Pages.
 
 Renders an index (with client-side search/filter) plus one detail page per
-published ride into ``settings.SITE_OUTPUT_DIR``. Fully self-contained: copies
-the pre-rendered thumbnail PNGs and static assets, no runtime API or JS map.
+published ride into ``settings.SITE_OUTPUT_DIR``. Copies pre-rendered thumbnail
+PNGs, GPX tracks and static assets; detail pages enhance those tracks with a
+client-side interactive map.
 """
 from __future__ import annotations
 
@@ -166,8 +167,10 @@ class Command(BaseCommand):
         digest = hashlib.sha256()
         for relative in (
             Path("css/style.css"),
+            Path("js/elevation-profile.js"),
             Path("js/gallery.js"),
             Path("js/ratings.js"),
+            Path("js/route-map.js"),
             Path("js/search.js"),
         ):
             path = assets_dir / relative
@@ -217,6 +220,15 @@ class Command(BaseCommand):
         nearby_plaisirs = self._nearby_plaisir_views(ride, plaisirs)
 
         start_city = ride.start_city or infer_start_city(ride.geometry)
+        elevation_profile = self._elevation_profile_points(ride.elevation_profile)
+        map_points = self._route_map_points(
+            ride.geometry,
+            start_city,
+            nearby_parkings,
+            nearby_ravitos,
+            nearby_points_interet,
+            nearby_plaisirs,
+        )
 
         return SimpleNamespace(
             name=ride.name,
@@ -232,9 +244,7 @@ class Command(BaseCommand):
             has_rwgps_only_elevation_adjustment=ride.has_rwgps_only_elevation_adjustment,
             elevation_adjustment_percent=ride.elevation_adjustment_percent,
             strava_url=ride.strava_url,
-            strava_embed_id=ride.strava_activity_id,
             ridewithgps_url=ride.ridewithgps_url,
-            ridewithgps_embed_url=self._ridewithgps_embed_url(ride),
             thumb_url=thumb_url,
             images=images,
             ravitos=nearby_ravitos,
@@ -246,6 +256,18 @@ class Command(BaseCommand):
             plaisirs=nearby_plaisirs,
             plaisir_count=len(nearby_plaisirs),
             gpx_url=gpx_url,
+            map_points=map_points,
+            elevation_profile=elevation_profile,
+            elevation_min_m=(
+                int(round(min(point[1] for point in elevation_profile)))
+                if elevation_profile
+                else 0
+            ),
+            elevation_max_m=(
+                int(round(max(point[1] for point in elevation_profile)))
+                if elevation_profile
+                else 0
+            ),
             cover_image_url=(
                 images[0].url if images else self._default_cover_url(base_path)
             ),
@@ -276,6 +298,12 @@ class Command(BaseCommand):
         points = self._geometry_points(ride.geometry)
         if len(points) < 2:
             return ""
+        elevation_profile = self._elevation_profile_points(ride.elevation_profile)
+        elevations = (
+            [point[1] for point in elevation_profile]
+            if len(elevation_profile) == len(points)
+            else []
+        )
 
         dest_dir = out / "assets" / "gpx"
         dest_dir.mkdir(parents=True, exist_ok=True)
@@ -299,8 +327,8 @@ class Command(BaseCommand):
         trk = ET.SubElement(root, f"{{{GPX_NS}}}trk")
         ET.SubElement(trk, f"{{{GPX_NS}}}name").text = ride.name
         trkseg = ET.SubElement(trk, f"{{{GPX_NS}}}trkseg")
-        for lat, lon in points:
-            ET.SubElement(
+        for index, (lat, lon) in enumerate(points):
+            track_point = ET.SubElement(
                 trkseg,
                 f"{{{GPX_NS}}}trkpt",
                 {
@@ -308,6 +336,10 @@ class Command(BaseCommand):
                     "lon": self._format_coordinate(lon),
                 },
             )
+            if elevations:
+                ET.SubElement(track_point, f"{{{GPX_NS}}}ele").text = (
+                    self._format_coordinate(elevations[index])
+                )
 
         ET.indent(root, space="  ")
         ET.ElementTree(root).write(dest, encoding="utf-8", xml_declaration=True)
@@ -415,6 +447,56 @@ class Command(BaseCommand):
             for match in matches
         ]
 
+    def _route_map_points(
+        self,
+        geometry,
+        start_city: str,
+        parkings: list[SimpleNamespace],
+        ravitos: list[SimpleNamespace],
+        points_interet: list[SimpleNamespace],
+        plaisirs: list[SimpleNamespace],
+    ) -> list[dict]:
+        points = self._geometry_points(geometry)
+        if not points:
+            return []
+
+        start_lat, start_lng = points[0]
+        map_points = [
+            {
+                "category": "start",
+                "name": "Point de départ",
+                "detail": start_city,
+                "lat": start_lat,
+                "lng": start_lng,
+                "map_url": self._map_url(start_lat, start_lng),
+            }
+        ]
+        categories = (
+            ("parking", parkings),
+            ("ravito", ravitos),
+            ("interest", points_interet),
+            ("pleasure", plaisirs),
+        )
+        for category, places in categories:
+            for place in places:
+                detail_parts = []
+                route_distance_label = getattr(place, "route_distance_label", "")
+                if route_distance_label:
+                    detail_parts.append(route_distance_label)
+                if place.distance_label:
+                    detail_parts.append(place.distance_label)
+                map_points.append(
+                    {
+                        "category": category,
+                        "name": place.name,
+                        "detail": " · ".join(detail_parts),
+                        "lat": place.lat,
+                        "lng": place.lng,
+                        "map_url": place.map_url,
+                    }
+                )
+        return map_points
+
     @classmethod
     def _ravito_map_url(cls, lat: float, lng: float) -> str:
         return cls._map_url(lat, lng)
@@ -460,21 +542,27 @@ class Command(BaseCommand):
         return points
 
     @staticmethod
-    def _format_coordinate(value: float) -> str:
-        return f"{value:.7f}".rstrip("0").rstrip(".")
+    def _elevation_profile_points(profile) -> list[list[float]]:
+        points = []
+        for point in profile or []:
+            if not isinstance(point, (list, tuple)) or len(point) < 2:
+                continue
+            try:
+                distance_m = float(point[0])
+                elevation_m = float(point[1])
+            except (TypeError, ValueError):
+                continue
+            if (
+                math.isfinite(distance_m)
+                and math.isfinite(elevation_m)
+                and distance_m >= 0
+            ):
+                points.append([distance_m, elevation_m])
+        return sorted(points, key=lambda point: point[0])
 
     @staticmethod
-    def _ridewithgps_embed_url(ride: Ride) -> str:
-        if not ride.rwgps_route_id:
-            return ""
-        query = urlencode(
-            {
-                "type": "route",
-                "id": ride.rwgps_route_id,
-                "sampleGraph": "true",
-            }
-        )
-        return f"https://ridewithgps.com/embeds?{query}"
+    def _format_coordinate(value: float) -> str:
+        return f"{value:.7f}".rstrip("0").rstrip(".")
 
     @staticmethod
     def _ceil_max(values, *, default: int, step: int) -> int:
