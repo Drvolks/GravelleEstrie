@@ -19,6 +19,10 @@
   const elevationMaxOut = document.getElementById("elevation-max-out");
   const adminWithoutRavitoFilter = document.getElementById("admin-without-ravito-filter");
   const adminWithoutRavito = document.getElementById("admin-without-ravito");
+  const adminWithoutPointInteretFilter = document.getElementById(
+    "admin-without-point-interet-filter"
+  );
+  const adminWithoutPointInteret = document.getElementById("admin-without-point-interet");
   const adminWithoutParkingFilter = document.getElementById("admin-without-parking-filter");
   const adminWithoutParking = document.getElementById("admin-without-parking");
   const adminWithoutPlaisirFilter = document.getElementById("admin-without-plaisir-filter");
@@ -35,6 +39,9 @@
 
   if (isAdmin && adminWithoutRavitoFilter) {
     adminWithoutRavitoFilter.hidden = false;
+  }
+  if (isAdmin && adminWithoutPointInteretFilter) {
+    adminWithoutPointInteretFilter.hidden = false;
   }
   if (isAdmin && adminWithoutParkingFilter) {
     adminWithoutParkingFilter.hidden = false;
@@ -155,8 +162,15 @@
     const [minDist, maxDist] = normalizeRange(distanceMin, distanceMax, activeInput);
     const [minElev, maxElev] = normalizeRange(elevationMin, elevationMax, activeInput);
     const onlyWithoutRavito = Boolean(isAdmin && adminWithoutRavito && adminWithoutRavito.checked);
-    const onlyWithoutParking = Boolean(isAdmin && adminWithoutParking && adminWithoutParking.checked);
-    const onlyWithoutPlaisir = Boolean(isAdmin && adminWithoutPlaisir && adminWithoutPlaisir.checked);
+    const onlyWithoutPointInteret = Boolean(
+      isAdmin && adminWithoutPointInteret && adminWithoutPointInteret.checked
+    );
+    const onlyWithoutParking = Boolean(
+      isAdmin && adminWithoutParking && adminWithoutParking.checked
+    );
+    const onlyWithoutPlaisir = Boolean(
+      isAdmin && adminWithoutPlaisir && adminWithoutPlaisir.checked
+    );
 
     updateRangeSlider(distanceSlider, distanceMin, distanceMax);
     updateRangeSlider(elevationSlider, elevationMin, elevationMax);
@@ -173,6 +187,7 @@
       const d = Number(card.dataset.distance);
       const e = Number(card.dataset.elevation);
       const ravitoCount = Number(card.dataset.ravitos || 0);
+      const pointInteretCount = Number(card.dataset.pointsInteret || 0);
       const parkingCount = Number(card.dataset.parkings || 0);
       const plaisirCount = Number(card.dataset.plaisirs || 0);
 
@@ -180,9 +195,18 @@
       const matchesDist = d >= minDist && d <= maxDist;
       const matchesElev = e >= minElev && e <= maxElev;
       const matchesRavito = !onlyWithoutRavito || ravitoCount === 0;
+      const matchesPointInteret = !onlyWithoutPointInteret || pointInteretCount === 0;
       const matchesParking = !onlyWithoutParking || parkingCount === 0;
       const matchesPlaisir = !onlyWithoutPlaisir || plaisirCount === 0;
-      const show = matchesText && matchesDist && matchesElev && matchesRavito && matchesParking && matchesPlaisir;
+      const show = (
+        matchesText &&
+        matchesDist &&
+        matchesElev &&
+        matchesRavito &&
+        matchesPointInteret &&
+        matchesParking &&
+        matchesPlaisir
+      );
 
       card.hidden = !show;
       if (show) visible++;
@@ -215,6 +239,9 @@
   if (adminWithoutRavito) {
     adminWithoutRavito.addEventListener("change", function () { apply(); });
   }
+  if (adminWithoutPointInteret) {
+    adminWithoutPointInteret.addEventListener("change", function () { apply(); });
+  }
   if (adminWithoutPlaisir) {
     adminWithoutPlaisir.addEventListener("change", function () { apply(); });
   }
@@ -232,6 +259,9 @@
     elevationMax.value = elevationMax.max;
     if (adminWithoutRavito) {
       adminWithoutRavito.checked = false;
+    }
+    if (adminWithoutPointInteret) {
+      adminWithoutPointInteret.checked = false;
     }
     if (adminWithoutPlaisir) {
       adminWithoutPlaisir.checked = false;

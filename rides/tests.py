@@ -21,9 +21,11 @@ from rides.services.ravitos import (
     Ravito,
     find_nearby_parking,
     find_nearby_plaisirs,
+    find_nearby_points_interet,
     find_nearby_ravitos,
     parse_parking_points,
     parse_plaisir_points,
+    parse_points_interet,
     parse_ravito_points,
 )
 from rides.services.ridewithgps import RideWithGPSClient, RWGPSRide
@@ -117,6 +119,11 @@ class RavitoTests(TestCase):
         url = "https://www.google.com/maps/place/Long+Google+Name/@45.0004,-71.995,17z"
         ravitos = parse_ravito_points(f"Ravito court|{url}")
         self.assertEqual([r.name for r in ravitos], ["Ravito court"])
+
+    def test_parse_points_interet_defaults_name(self):
+        points_interet = parse_points_interet("https://www.google.com/maps/@45,-71.5,17z")
+
+        self.assertEqual([point.name for point in points_interet], ["Point d'intérêt"])
 
     def test_parse_parking_points_uses_parking_default_name(self):
         parkings = parse_parking_points("https://www.google.com/maps/search/?api=1&query=45,-72")
@@ -222,6 +229,28 @@ class RavitoTests(TestCase):
 
         self.assertEqual([match.ravito.name for match in matches], ["Relevant"])
         self.assertGreaterEqual(matches[0].route_distance_m, 30_000)
+
+    def test_find_nearby_points_interet_uses_lower_min_route_distance(self):
+        route = [[45.0, -72.0], [45.0, -71.0]]
+        points_interet = [
+            Ravito("Too early", 45.0, -71.98),
+            Ravito("Point de vue", 45.0, -71.9),
+            Ravito("Ravito zone", 45.0, -71.5),
+        ]
+
+        matches = find_nearby_points_interet(
+            route,
+            points_interet,
+            radius_m=500,
+            min_route_distance_m=5_000,
+        )
+
+        self.assertEqual(
+            [match.point_interet.name for match in matches],
+            ["Point de vue", "Ravito zone"],
+        )
+        self.assertGreaterEqual(matches[0].route_distance_m, 5_000)
+        self.assertLess(matches[0].route_distance_m, 30_000)
 
     def test_find_nearby_parking_matches_only_route_start(self):
         route = [[45.0, -72.0], [45.0, -71.0]]
@@ -868,7 +897,7 @@ class ImportCommandTests(TestCase):
         )
 
 
-@override_settings(RAVITO_POINTS="", PARKING_POINTS="", PLAISIRS_POINTS="")
+@override_settings(RAVITO_POINTS="", POINTS_INTERET="", PARKING_POINTS="", PLAISIRS_POINTS="")
 class BuildSiteTests(TestCase):
     @override_settings(SITE_BASE_PATH="/Test", SITE_CUSTOM_DOMAIN="www.example.com")
     def test_build_site_writes_pages(self):
@@ -905,9 +934,12 @@ class BuildSiteTests(TestCase):
             self.assertIn('id="elevation-slider"', html)
             self.assertIn('id="admin-without-ravito-filter"', html)
             self.assertIn('id="admin-without-ravito"', html)
+            self.assertIn('id="admin-without-point-interet-filter"', html)
+            self.assertIn('id="admin-without-point-interet"', html)
             self.assertIn('id="admin-without-parking-filter"', html)
             self.assertIn('id="admin-without-parking"', html)
             self.assertIn('data-ravitos="0"', html)
+            self.assertIn('data-points-interet="0"', html)
             self.assertIn('data-parkings="0"', html)
 
     @override_settings(SITE_BASE_PATH="/Test", RATINGS_API_URL="", TURNSTILE_SITE_KEY="")
@@ -1167,6 +1199,35 @@ class BuildSiteTests(TestCase):
         self.assertNotIn("Ravito depart", html)
         self.assertNotIn("Ravito arrivee", html)
         self.assertIn('data-ravitos="1"', index_html)
+
+    @override_settings(
+        SITE_BASE_PATH="/Test",
+        POINTS_INTERET="Point de vue|45|-71.9;Point trop tot|45|-71.98",
+        POINTS_INTERET_RADIUS_M=500,
+        POINTS_INTERET_MIN_ROUTE_DISTANCE_M=5_000,
+    )
+    def test_build_site_shows_nearby_points_interet_on_detail_pages(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(
+            name="Sortie A",
+            geometry=[[45.0, -72.0], [45.0, -71.0]],
+            distance_m=80_000,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            detail = Path(tmp) / "rides" / "sortie-a" / "index.html"
+            html = detail.read_text(encoding="utf-8")
+            index_html = (Path(tmp) / "index.html").read_text(encoding="utf-8")
+
+        self.assertIn("Points d'intérêt", html)
+        self.assertIn("Point de vue", html)
+        self.assertIn("après ~", html)
+        self.assertIn("du parcours", html)
+        self.assertIn("https://www.google.com/maps/search/?api=1&amp;query=45%2C-71.9", html)
+        self.assertNotIn("Point trop tot", html)
+        self.assertIn('data-points-interet="1"', index_html)
 
     @override_settings(
         SITE_BASE_PATH="/Test",

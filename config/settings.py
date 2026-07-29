@@ -167,6 +167,12 @@ RAVITO_RADIUS_M = env_int("RAVITO_RADIUS_M", 500)
 RAVITO_MIN_ROUTE_DISTANCE_M = env_int("RAVITO_MIN_ROUTE_DISTANCE_M", 30_000)
 RAVITO_ENDPOINT_EXCLUSION_RADIUS_M = env_int("RAVITO_ENDPOINT_EXCLUSION_RADIUS_M", 3_000)
 
+# Semicolon-separated points of interest along routes. Same entry formats as
+# RAVITO_POINTS, but with a lower minimum distance from the route start.
+POINTS_INTERET = os.environ.get("POINTS_INTERET", "")
+POINTS_INTERET_RADIUS_M = env_int("POINTS_INTERET_RADIUS_M", 500)
+POINTS_INTERET_MIN_ROUTE_DISTANCE_M = env_int("POINTS_INTERET_MIN_ROUTE_DISTANCE_M", 5_000)
+
 # Semicolon-separated parking points near known ride starts. Same entry
 # formats as RAVITO_POINTS.
 PARKING_POINTS = os.environ.get("PARKING_POINTS", "")

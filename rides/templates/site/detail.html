@@ -142,6 +142,24 @@
   </section>
   {% endif %}
 
+  {% if ride.points_interet %}
+  <section class="points-interet" aria-label="Points d'intérêt près du parcours">
+    <h2>Points d'intérêt</h2>
+    <div class="point-interet-list">
+      {% for point_interet in ride.points_interet %}
+        <article class="point-interet">
+          <div>
+            <h3>{{ point_interet.name }}</h3>
+            <p>{{ point_interet.route_distance_label }} · {{ point_interet.distance_label }}</p>
+          </div>
+          <a href="{{ point_interet.map_url }}" target="_blank" rel="noopener"
+             aria-label="Ouvrir {{ point_interet.name }} sur la carte">Carte</a>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
   {% if ride.ravitos %}
   <section class="ravitos" aria-label="Ravitos près du parcours">
     <h2>Ravitos</h2>

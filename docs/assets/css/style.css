@@ -540,9 +540,11 @@ main.wrap { padding-top: 28px; }
 .rating-status[data-tone="success"] { color: #276749; }
 .rating-status[data-tone="error"] { color: #b42318; }
 .ravitos,
+.points-interet,
 .parkings,
 .plaisirs { margin: 24px 0; }
 .ravitos h2,
+.points-interet h2,
 .parkings h2,
 .plaisirs h2 {
   margin: 0 0 12px;
@@ -551,6 +553,7 @@ main.wrap { padding-top: 28px; }
   font-weight: 800;
 }
 .ravito-list,
+.point-interet-list,
 .parking-list,
 .plaisir-list {
   display: grid;
@@ -558,6 +561,7 @@ main.wrap { padding-top: 28px; }
   gap: 12px;
 }
 .ravito,
+.point-interet,
 .parking,
 .plaisir {
   display: flex;
@@ -572,9 +576,11 @@ main.wrap { padding-top: 28px; }
   background: var(--card);
   box-shadow: var(--shadow);
 }
+.point-interet { border-top-color: #276749; }
 .parking { border-top-color: var(--navy); }
 .plaisir { border-top-color: var(--orange-light); }
 .ravito h3,
+.point-interet h3,
 .parking h3,
 .plaisir h3 {
   margin: 0;
@@ -583,6 +589,7 @@ main.wrap { padding-top: 28px; }
   font-weight: 800;
 }
 .ravito p,
+.point-interet p,
 .parking p,
 .plaisir p {
   margin: 4px 0 0;
@@ -591,6 +598,7 @@ main.wrap { padding-top: 28px; }
   font-weight: 700;
 }
 .ravito a,
+.point-interet a,
 .parking a,
 .plaisir a {
   flex: 0 0 auto;
@@ -601,8 +609,10 @@ main.wrap { padding-top: 28px; }
   font-size: .85rem;
   font-weight: 800;
 }
+.point-interet a { background: #276749; }
 .parking a { background: var(--orange); color: var(--navy); }
 .ravito a:hover,
+.point-interet a:hover,
 .parking a:hover,
 .plaisir a:hover { text-decoration: none; opacity: .92; }
 .ride-photos {
@@ -680,6 +690,7 @@ body.has-ride-cover .detail-map,
 body.has-ride-cover .specs > div,
 body.has-ride-cover .ride-rating-display,
 body.has-ride-cover .ravito,
+body.has-ride-cover .point-interet,
 body.has-ride-cover .parking,
 body.has-ride-cover .plaisir,
 body.has-ride-cover .ride-photo-thumb {

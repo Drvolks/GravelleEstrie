@@ -299,10 +299,11 @@ commands.
 
 ### Ravitos
 
-Known grocery stores, cafés, dépanneurs, and parking spots can be listed in
+Known grocery stores, cafés, dépanneurs, points of interest, and parking spots can be listed in
 `.env`. `build_site` automatically shows ravitos within `RAVITO_RADIUS_M` of
 each route on the ride detail page, once the closest point on the route is far
-enough from the start. Parking spots use the same entry format, but are matched
+enough from the start. Points of interest use the same route matching with their
+own lower minimum distance. Parking spots use the same entry format, but are matched
 against the route's first GPS point, and "plaisirs après ride" (places to eat
 and drink once the ride is done) are matched against the route's last GPS
 point.
@@ -312,6 +313,9 @@ RAVITO_POINTS=https://maps.app.goo.gl/bCT3vqf9aJ38ohCo9;Nom court|https://www.go
 RAVITO_RADIUS_M=500
 RAVITO_MIN_ROUTE_DISTANCE_M=30000
 RAVITO_ENDPOINT_EXCLUSION_RADIUS_M=3000
+POINTS_INTERET=Vue|https://maps.app.goo.gl/...;Belvedere manuel|45.123456|-72.123456
+POINTS_INTERET_RADIUS_M=500
+POINTS_INTERET_MIN_ROUTE_DISTANCE_M=5000
 PARKING_POINTS=Stationnement|https://maps.app.goo.gl/...;Stationnement manuel|45.123456|-72.123456
 PARKING_RADIUS_M=500
 PLAISIRS_POINTS=Resto|https://maps.app.goo.gl/...;Bar manuel|45.123456|-72.123456

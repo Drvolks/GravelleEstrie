@@ -48,6 +48,10 @@
       <input type="checkbox" id="admin-without-ravito">
       <span>Sans ravito</span>
     </label>
+    <label class="admin-filter" id="admin-without-point-interet-filter" hidden>
+      <input type="checkbox" id="admin-without-point-interet">
+      <span>Sans point d'intérêt</span>
+    </label>
     <label class="admin-filter" id="admin-without-parking-filter" hidden>
       <input type="checkbox" id="admin-without-parking">
       <span>Sans stationnement</span>
@@ -67,6 +71,7 @@
            data-distance="{{ ride.distance_km }}" data-elevation="{{ ride.elevation_m }}"
            data-created="{{ ride.created_at|date:'Y-m-d H:i:s' }}"
            data-ravitos="{{ ride.ravito_count }}" data-parkings="{{ ride.parking_count }}"
+           data-points-interet="{{ ride.point_interet_count }}"
            data-plaisirs="{{ ride.plaisir_count }}" data-ride-slug="{{ ride.slug }}"
            data-rating-average="0" data-rating-votes="0">
     <a class="card-link" href="{{ base_path }}/rides/{{ ride.slug }}/">

@@ -106,6 +106,9 @@ python -m http.server 8765 --directory preview
     `RAVITO_ENDPOINT_EXCLUSION_RADIUS_M` and shows configured Google Maps or
     coordinate-based ravitos that fall near each route after the first 30 km,
     excluding stops too close to the route's start/finish points.
+    `POINTS_INTERET`, `POINTS_INTERET_RADIUS_M`, and
+    `POINTS_INTERET_MIN_ROUTE_DISTANCE_M` use the same route matching for
+    points of interest, with a lower minimum route distance from the start.
     `PARKING_POINTS` and `PARKING_RADIUS_M` use the same point format and show
     configured parking spots near the route's first GPS point;
     `PLAISIRS_POINTS` and `PLAISIRS_RADIUS_M` do the same for "plaisirs après

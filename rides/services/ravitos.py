@@ -46,6 +46,14 @@ class RavitoMatch:
 
 
 @dataclass(frozen=True)
+class PointInteretMatch:
+    point_interet: Ravito
+    distance_m: float
+    route_distance_m: float
+    remaining_distance_m: float
+
+
+@dataclass(frozen=True)
 class ParkingMatch:
     parking: Ravito
     distance_m: float
@@ -66,6 +74,10 @@ def parse_ravito_points(raw: str) -> list[Ravito]:
     - ``Name|https://maps.app.goo.gl/...`` to override the displayed name
     """
     return parse_map_points(raw, default_name="Ravito")
+
+
+def parse_points_interet(raw: str) -> list[Ravito]:
+    return parse_map_points(raw, default_name="Point d'intérêt")
 
 
 def parse_parking_points(raw: str) -> list[Ravito]:
@@ -307,14 +319,67 @@ def find_nearby_ravitos(
     endpoint_exclusion_radius_m: float = 0,
 ) -> list[RavitoMatch]:
     """Return ravitos within ``radius_m`` of the route geometry, closest first."""
+    return _find_nearby_route_points(
+        geometry,
+        ravitos,
+        radius_m=radius_m,
+        min_route_distance_m=min_route_distance_m,
+        endpoint_exclusion_radius_m=endpoint_exclusion_radius_m,
+        build_match=(
+            lambda point, distance, route_distance, remaining_distance: RavitoMatch(
+                ravito=point,
+                distance_m=distance,
+                route_distance_m=route_distance,
+                remaining_distance_m=remaining_distance,
+            )
+        ),
+        name_getter=lambda match: match.ravito.name,
+    )
+
+
+def find_nearby_points_interet(
+    geometry: Iterable[Iterable[float]],
+    points_interet: Iterable[Ravito],
+    radius_m: float,
+    min_route_distance_m: float = 0,
+) -> list[PointInteretMatch]:
+    """Return configured points of interest near the route geometry."""
+    return _find_nearby_route_points(
+        geometry,
+        points_interet,
+        radius_m=radius_m,
+        min_route_distance_m=min_route_distance_m,
+        endpoint_exclusion_radius_m=0,
+        build_match=(
+            lambda point, distance, route_distance, remaining_distance: PointInteretMatch(
+                point_interet=point,
+                distance_m=distance,
+                route_distance_m=route_distance,
+                remaining_distance_m=remaining_distance,
+            )
+        ),
+        name_getter=lambda match: match.point_interet.name,
+    )
+
+
+def _find_nearby_route_points(
+    geometry: Iterable[Iterable[float]],
+    candidates: Iterable[Ravito],
+    radius_m: float,
+    min_route_distance_m: float,
+    endpoint_exclusion_radius_m: float,
+    *,
+    build_match,
+    name_getter,
+):
     points = _geometry_points(geometry)
     if len(points) < 2 or radius_m <= 0:
         return []
 
     matches = []
-    for ravito in ravitos:
+    for candidate in candidates:
         distance, route_distance, route_length = _nearest_route_position_m(
-            (ravito.lat, ravito.lng),
+            (candidate.lat, candidate.lng),
             points,
         )
         remaining_distance = max(0.0, route_length - route_distance)
@@ -322,20 +387,18 @@ def find_nearby_ravitos(
             route_distance,
             min_route_distance_m,
         ) and not _is_near_route_endpoint(
-            (ravito.lat, ravito.lng),
+            (candidate.lat, candidate.lng),
             points,
             endpoint_exclusion_radius_m,
         ):
             matches.append(
-                RavitoMatch(
-                    ravito=ravito,
-                    distance_m=distance,
-                    route_distance_m=route_distance,
-                    remaining_distance_m=remaining_distance,
-                )
+                build_match(candidate, distance, route_distance, remaining_distance)
             )
 
-    return sorted(matches, key=lambda match: (match.distance_m, match.ravito.name.lower()))
+    return sorted(
+        matches,
+        key=lambda match: (match.distance_m, name_getter(match).lower()),
+    )
 
 
 def find_nearby_parking(

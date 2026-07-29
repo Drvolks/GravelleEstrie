@@ -25,9 +25,11 @@ from rides.services.location import geometry_starts_in_quebec, infer_start_city
 from rides.services.ravitos import (
     find_nearby_parking,
     find_nearby_plaisirs,
+    find_nearby_points_interet,
     find_nearby_ravitos,
     parse_parking_points,
     parse_plaisir_points,
+    parse_points_interet,
     parse_ravito_points,
 )
 
@@ -76,6 +78,7 @@ class Command(BaseCommand):
                 rides_qs = rides_qs.exclude(rwgps_route_id__in=settings.RWGPS_EXCLUDED_ROUTE_IDS)
             rides = [ride for ride in rides_qs if geometry_starts_in_quebec(ride.geometry)]
             ravitos = parse_ravito_points(settings.RAVITO_POINTS)
+            points_interet = parse_points_interet(settings.POINTS_INTERET)
             parkings = parse_parking_points(settings.PARKING_POINTS)
             plaisirs = parse_plaisir_points(settings.PLAISIRS_POINTS)
             views = [
@@ -86,6 +89,7 @@ class Command(BaseCommand):
                     thumbs_dir,
                     thumb_backup_dir,
                     ravitos,
+                    points_interet,
                     parkings,
                     plaisirs,
                 )
@@ -187,6 +191,7 @@ class Command(BaseCommand):
         thumbs_dir: Path,
         thumb_backup_dir: Path | None,
         ravitos: list,
+        points_interet: list,
         parkings: list,
         plaisirs: list,
     ) -> SimpleNamespace:
@@ -204,6 +209,10 @@ class Command(BaseCommand):
         images = self._copy_ride_images(ride, base_path, out)
         gpx_url = self._write_gpx_file(ride, base_path, out)
         nearby_ravitos = self._nearby_ravito_views(ride, ravitos)
+        nearby_points_interet = self._nearby_points_interet_views(
+            ride,
+            points_interet,
+        )
         nearby_parkings = self._nearby_parking_views(ride, parkings)
         nearby_plaisirs = self._nearby_plaisir_views(ride, plaisirs)
 
@@ -230,6 +239,8 @@ class Command(BaseCommand):
             images=images,
             ravitos=nearby_ravitos,
             ravito_count=len(nearby_ravitos),
+            points_interet=nearby_points_interet,
+            point_interet_count=len(nearby_points_interet),
             parkings=nearby_parkings,
             parking_count=len(nearby_parkings),
             plaisirs=nearby_plaisirs,
@@ -324,6 +335,39 @@ class Command(BaseCommand):
                 map_url=(
                     match.ravito.url
                     or self._ravito_map_url(match.ravito.lat, match.ravito.lng)
+                ),
+            )
+            for match in matches
+        ]
+
+    def _nearby_points_interet_views(
+        self,
+        ride: Ride,
+        points_interet: list,
+    ) -> list[SimpleNamespace]:
+        matches = find_nearby_points_interet(
+            ride.geometry,
+            points_interet,
+            radius_m=settings.POINTS_INTERET_RADIUS_M,
+            min_route_distance_m=settings.POINTS_INTERET_MIN_ROUTE_DISTANCE_M,
+        )
+        return [
+            SimpleNamespace(
+                name=match.point_interet.name,
+                lat=match.point_interet.lat,
+                lng=match.point_interet.lng,
+                distance_m=round(match.distance_m),
+                distance_label=self._point_distance_label(
+                    match.distance_m,
+                    "du parcours",
+                ),
+                route_distance_km=round(match.route_distance_m / 1000, 1),
+                route_distance_label=self._ravito_route_distance_label(
+                    match.route_distance_m
+                ),
+                map_url=(
+                    match.point_interet.url
+                    or self._map_url(match.point_interet.lat, match.point_interet.lng)
                 ),
             )
             for match in matches
