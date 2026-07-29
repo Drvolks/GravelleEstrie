@@ -1,4 +1,6 @@
 (() => {
+  const elevationHoverEvent = "gravelle:elevation-hover";
+  const elevationLeaveEvent = "gravelle:elevation-leave";
   const mapElement = document.querySelector("[data-route-map]");
   const pointsElement = document.getElementById("route-map-points");
   if (!mapElement || !pointsElement) return;
@@ -35,6 +37,12 @@
     preferCanvas: true,
   });
   const bounds = window.L.latLngBounds([]);
+  let routeCoordinates = [];
+  let routeDistances = [];
+  let routeDistance = 0;
+  let profileCursor = null;
+  let cursorAnimationFrame = 0;
+  let pendingCursorPosition = null;
 
   window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
@@ -66,6 +74,79 @@
     }
     return popup;
   };
+
+  const coordinateAtProfilePosition = ({ distanceM, maxDistanceM }) => {
+    if (
+      routeCoordinates.length < 2 ||
+      routeDistance <= 0 ||
+      !Number.isFinite(distanceM) ||
+      !Number.isFinite(maxDistanceM) ||
+      maxDistanceM <= 0
+    ) {
+      return null;
+    }
+
+    const progress = Math.max(0, Math.min(1, distanceM / maxDistanceM));
+    const targetDistance = progress * routeDistance;
+    let low = 1;
+    let high = routeDistances.length - 1;
+    while (low < high) {
+      const middle = Math.floor((low + high) / 2);
+      if (routeDistances[middle] < targetDistance) low = middle + 1;
+      else high = middle;
+    }
+
+    const segmentStartDistance = routeDistances[low - 1];
+    const segmentLength = routeDistances[low] - segmentStartDistance;
+    const segmentProgress =
+      segmentLength > 0
+        ? (targetDistance - segmentStartDistance) / segmentLength
+        : 0;
+    const start = routeCoordinates[low - 1];
+    const end = routeCoordinates[low];
+    return [
+      start[0] + (end[0] - start[0]) * segmentProgress,
+      start[1] + (end[1] - start[1]) * segmentProgress,
+    ];
+  };
+
+  const updateProfileCursor = () => {
+    cursorAnimationFrame = 0;
+    if (!pendingCursorPosition) return;
+
+    const coordinate = coordinateAtProfilePosition(pendingCursorPosition);
+    if (!coordinate) return;
+    if (!profileCursor) {
+      profileCursor = window.L.circleMarker(coordinate, {
+        radius: 8,
+        color: "#ffffff",
+        weight: 3,
+        fillColor: "#0f1e3d",
+        fillOpacity: 1,
+        opacity: 1,
+        interactive: false,
+        className: "route-map-profile-cursor",
+      }).addTo(map);
+    } else {
+      profileCursor.setLatLng(coordinate);
+    }
+    profileCursor.bringToFront();
+  };
+
+  window.addEventListener(elevationHoverEvent, (event) => {
+    pendingCursorPosition = event.detail;
+    if (cursorAnimationFrame) return;
+    cursorAnimationFrame = requestAnimationFrame(updateProfileCursor);
+  });
+  window.addEventListener(elevationLeaveEvent, () => {
+    pendingCursorPosition = null;
+    cancelAnimationFrame(cursorAnimationFrame);
+    cursorAnimationFrame = 0;
+    if (profileCursor) {
+      map.removeLayer(profileCursor);
+      profileCursor = null;
+    }
+  });
 
   points.forEach((point) => {
     const markerStyle = markerStyles[point.category];
@@ -132,6 +213,13 @@
         .filter(([lat, lng]) => Number.isFinite(lat) && Number.isFinite(lng));
       if (route.length < 2) throw new Error("Tracé GPX vide");
 
+      routeCoordinates = route;
+      routeDistances = [0];
+      for (let index = 1; index < route.length; index += 1) {
+        routeDistance += map.distance(route[index - 1], route[index]);
+        routeDistances.push(routeDistance);
+      }
+
       window.L.polyline(route, {
         color: "#0f1e3d",
         weight: 8,
@@ -146,6 +234,7 @@
       }).addTo(map);
       route.forEach((coordinate) => bounds.extend(coordinate));
       fitMap();
+      if (pendingCursorPosition) updateProfileCursor();
       if (statusElement) statusElement.remove();
     })
     .catch(() => {

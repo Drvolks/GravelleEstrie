@@ -375,6 +375,9 @@ main.wrap { padding-top: 28px; }
   box-shadow: var(--shadow);
 }
 .route-map-status[data-tone="error"] { color: #b42318; }
+.route-map-profile-cursor {
+  filter: drop-shadow(0 2px 4px rgba(15, 30, 61, .48));
+}
 .leaflet-marker-icon.route-map-marker {
   display: grid;
   place-items: center;

@@ -1,4 +1,6 @@
 (() => {
+  const elevationHoverEvent = "gravelle:elevation-hover";
+  const elevationLeaveEvent = "gravelle:elevation-leave";
   const chart = document.querySelector("[data-elevation-chart]");
   const dataElement = document.getElementById("route-elevation-profile");
   if (!chart || !dataElement) return;
@@ -216,12 +218,23 @@
         tooltip.style.top = `${placeBelow ? y + 10 : y - 8}px`;
         tooltip.hidden = false;
       }
+      window.dispatchEvent(
+        new CustomEvent(elevationHoverEvent, {
+          detail: {
+            distanceM: point[0],
+            maxDistanceM: maxDistance,
+          },
+        }),
+      );
     });
-    interaction.addEventListener("pointerleave", () => {
+    const clearInteraction = () => {
       crosshair.setAttribute("visibility", "hidden");
       pointMarker.setAttribute("visibility", "hidden");
       if (tooltip) tooltip.hidden = true;
-    });
+      window.dispatchEvent(new CustomEvent(elevationLeaveEvent));
+    };
+    interaction.addEventListener("pointerleave", clearInteraction);
+    interaction.addEventListener("pointercancel", clearInteraction);
     svg.appendChild(interaction);
 
     chart.querySelector("svg")?.remove();
