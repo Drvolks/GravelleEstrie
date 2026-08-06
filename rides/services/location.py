@@ -10,6 +10,7 @@ _QUEBEC_MIN_LNG = -79.9
 _QUEBEC_MAX_LNG = -57.0
 _EARTH_RADIUS_M = 6_371_000
 _CITY_INFERENCE_RADIUS_M = 8_000
+_CITY_CORRECTION_RADIUS_M = 1_000
 
 # Strava routes do not expose a locality like RideWithGPS does. Keep a small,
 # deterministic set of common club departure hubs so imports and static builds
@@ -20,6 +21,7 @@ _START_CITY_ANCHORS = (
     ("Bromont", 45.3170, -72.6510),
     ("Bromont", 45.3433, -72.6489),
     ("Waterloo", 45.3355, -72.5120),
+    ("Shefford", 45.3834, -72.5724),
     ("Dunham", 45.1313, -72.8002),
     ("Frelighsburg", 45.0554, -72.8367),
     ("Ayer's Cliff", 45.1696, -72.0432),
@@ -37,6 +39,14 @@ _START_CITY_ANCHORS = (
     ("Victoriaville", 46.0501, -71.9658),
     ("Shawinigan", 46.5660, -72.7460),
     ("Rivière-du-Loup", 47.8988, -69.3280),
+)
+
+# RideWithGPS occasionally returns the nearest better-known town instead of
+# the municipality containing the route's start point. These deliberately
+# tight spatial corrections take precedence over the source locality while
+# leaving manually entered or otherwise accurate cities alone elsewhere.
+_START_CITY_CORRECTIONS = (
+    ("Shefford", 45.3834, -72.5724),
 )
 
 
@@ -107,6 +117,16 @@ def infer_start_city(geometry, *, max_distance_m: float = _CITY_INFERENCE_RADIUS
     if distance_m <= max_distance_m:
         return city
     return ""
+
+
+def resolve_start_city(declared_city, geometry) -> str:
+    """Return a corrected source city, falling back to GPS inference."""
+    point = first_geometry_point(geometry)
+    if point:
+        for city, lat, lng in _START_CITY_CORRECTIONS:
+            if _distance_between_points_m(point, (lat, lng)) <= _CITY_CORRECTION_RADIUS_M:
+                return city
+    return str(declared_city or "").strip() or infer_start_city(geometry)
 
 
 def _distance_between_points_m(

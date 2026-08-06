@@ -16,6 +16,7 @@ from rides.services.location import (
     administrative_area_is_quebec,
     geometry_starts_in_quebec,
     infer_start_city,
+    resolve_start_city,
 )
 from rides.services.ravitos import (
     Ravito,
@@ -297,8 +298,19 @@ class QuebecLocationFilterTests(TestCase):
     def test_infer_start_city_from_known_departure_hubs(self):
         self.assertEqual(infer_start_city([[45.22231, -72.53192]]), "Lac-Brome")
         self.assertEqual(infer_start_city([[45.33559, -72.51204]]), "Waterloo")
+        self.assertEqual(infer_start_city([[45.38339, -72.57238]]), "Shefford")
         self.assertEqual(infer_start_city([[47.89885, -69.32799]]), "Rivière-du-Loup")
         self.assertEqual(infer_start_city([[45.0, -72.0]]), "")
+
+    def test_resolve_start_city_corrects_rwgps_waterloo_near_shefford_hub(self):
+        geometry = [[45.38339, -72.57238]]
+
+        self.assertEqual(resolve_start_city("Waterloo", geometry), "Shefford")
+
+    def test_resolve_start_city_keeps_waterloo_at_waterloo_hub(self):
+        geometry = [[45.33559, -72.51204]]
+
+        self.assertEqual(resolve_start_city("Waterloo", geometry), "Waterloo")
 
 
 class RideModelTests(TestCase):
@@ -519,6 +531,18 @@ class RideWithGPSCyclingFilterTests(TestCase):
         )
 
         self.assertEqual(ride.elevation_profile, [[0.0, 210.2], [1000.0, 245.8]])
+
+    def test_to_ride_corrects_source_locality_at_shefford_hub(self):
+        ride = RideWithGPSClient._to_ride(
+            {
+                "id": 10,
+                "name": "Petit Hippopotame",
+                "locality": "Waterloo",
+                "track_points": [{"y": 45.38339, "x": -72.57238}],
+            }
+        )
+
+        self.assertEqual(ride.start_city, "Shefford")
 
     def test_to_ride_calculates_profile_distance_when_missing(self):
         ride = RideWithGPSClient._to_ride(

@@ -22,7 +22,7 @@ from django.template.loader import render_to_string
 
 from rides.models import Ride
 from rides.services.images import list_ride_images
-from rides.services.location import geometry_starts_in_quebec, infer_start_city
+from rides.services.location import geometry_starts_in_quebec, resolve_start_city
 from rides.services.ravitos import (
     find_nearby_parking,
     find_nearby_plaisirs,
@@ -219,7 +219,7 @@ class Command(BaseCommand):
         nearby_parkings = self._nearby_parking_views(ride, parkings)
         nearby_plaisirs = self._nearby_plaisir_views(ride, plaisirs)
 
-        start_city = ride.start_city or infer_start_city(ride.geometry)
+        start_city = resolve_start_city(ride.start_city, ride.geometry)
         elevation_profile = self._elevation_profile_points(ride.elevation_profile)
         map_points = self._route_map_points(
             ride.geometry,

@@ -16,7 +16,7 @@ from datetime import date
 import requests
 from django.conf import settings
 
-from .location import rwgps_route_starts_in_quebec
+from .location import resolve_start_city, rwgps_route_starts_in_quebec
 
 logger = logging.getLogger(__name__)
 
@@ -218,7 +218,10 @@ class RideWithGPSClient:
             distance_m=float(route.get("distance") or 0),
             elevation_gain_m=float(route.get("elevation_gain") or 0),
             ride_date=None,
-            start_city=route.get("locality") or route.get("administrative_area") or "",
+            start_city=resolve_start_city(
+                route.get("locality") or route.get("administrative_area"),
+                geometry,
+            ),
             geometry=geometry,
             ridewithgps_url=f"https://ridewithgps.com/routes/{route.get('id')}",
             elevation_profile=elevation_profile,
