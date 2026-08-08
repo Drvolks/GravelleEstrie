@@ -223,13 +223,13 @@
       window.L.polyline(route, {
         color: "#0f1e3d",
         weight: 8,
-        opacity: 0.8,
+        opacity: 0.3,
         interactive: false,
       }).addTo(map);
       window.L.polyline(route, {
         color: "#e87722",
         weight: 4,
-        opacity: 1,
+        opacity: 0.55,
         interactive: false,
       }).addTo(map);
       route.forEach((coordinate) => bounds.extend(coordinate));
