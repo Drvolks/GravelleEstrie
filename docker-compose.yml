@@ -65,6 +65,7 @@ services:
       GOOGLE_MAPS_URL_CACHE_PATH: ${GOOGLE_MAPS_URL_CACHE_PATH:-/app/.cache/google-maps-url-cache.json}
       SITE_BASE_PATH: ${SITE_BASE_PATH:-}
       SITE_CUSTOM_DOMAIN: ${SITE_CUSTOM_DOMAIN:-www.gravelleestrie.com}
+      EVENEMENTS: ${EVENEMENTS:-}
       RATINGS_API_URL: ${RATINGS_API_URL:-}
       TURNSTILE_SITE_KEY: ${TURNSTILE_SITE_KEY:-}
     ports:

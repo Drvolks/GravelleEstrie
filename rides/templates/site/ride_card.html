@@ -1,0 +1,31 @@
+  <article class="card" data-name="{{ ride.name|lower }}" data-city="{{ ride.start_city|lower }}"
+           data-distance="{{ ride.distance_km }}" data-elevation="{{ ride.elevation_m }}"
+           data-created="{{ ride.created_at|date:'Y-m-d H:i:s' }}"
+           data-ravitos="{{ ride.ravito_count }}" data-parkings="{{ ride.parking_count }}"
+           data-points-interet="{{ ride.point_interet_count }}"
+           data-plaisirs="{{ ride.plaisir_count }}" data-ride-slug="{{ ride.slug }}"
+           data-rating-average="0" data-rating-votes="0">
+    <a class="card-link" href="{{ base_path }}/rides/{{ ride.slug }}/">
+      <div class="card-thumb">
+        {% if ride.thumb_url %}
+          <img src="{{ ride.thumb_url }}" alt="Carte de la sortie {{ ride.name }}" loading="lazy">
+        {% else %}
+          <div class="thumb-placeholder">Pas de tracé</div>
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <h2>{{ ride.name }}</h2>
+        <p class="card-meta">
+          {% if ride.start_city %}<span>📍 {{ ride.start_city }}</span>{% endif %}
+          {% if ride.ride_date %}<span>📅 {{ ride.ride_date }}</span>{% endif %}
+        </p>
+        <p class="card-stats">
+          <span class="stat">{{ ride.distance_km }} km</span>
+          <span class="stat">↗ {{ ride.elevation_m }} m</span>
+          {% if ratings_enabled %}
+          <span class="stat card-rating-stat" data-card-rating-summary hidden></span>
+          {% endif %}
+        </p>
+      </div>
+    </a>
+  </article>

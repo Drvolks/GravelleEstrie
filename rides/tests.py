@@ -1026,6 +1026,71 @@ class ImportCommandTests(TestCase):
 
 @override_settings(RAVITO_POINTS="", POINTS_INTERET="", PARKING_POINTS="", PLAISIRS_POINTS="")
 class BuildSiteTests(TestCase):
+    @override_settings(
+        SITE_BASE_PATH="/Test", EVENEMENTS=" Premier | 22 ; 11 ; 22 , Deuxième|11;99 ",
+        RATINGS_API_URL="", TURNSTILE_SITE_KEY="",
+    )
+    def test_build_site_groups_event_choices_in_configured_order(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(name="Court", rwgps_route_id="11", geometry=SQUARE, start_city="Magog")
+        Ride.objects.create(name="Long", rwgps_route_id="22", geometry=SQUARE, start_city="Magog")
+        Ride.objects.create(name="Autre", rwgps_route_id="33", geometry=SQUARE, start_city="Magog")
+        errors = StringIO()
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp, stderr=errors)
+            html = (Path(tmp) / "evenements" / "index.html").read_text(encoding="utf-8")
+            routes = (Path(tmp) / "index.html").read_text(encoding="utf-8")
+            first = (Path(tmp) / "evenements" / "premier" / "index.html").read_text(encoding="utf-8")
+            second = (Path(tmp) / "evenements" / "deuxieme" / "index.html").read_text(encoding="utf-8")
+
+        self.assertIn('href="/Test/evenements/" aria-current="page"', html)
+        self.assertIn('href="/Test/" aria-current="page"', routes)
+        self.assertLess(html.index(">Premier</h2>"), html.index(">Deuxième</h2>"))
+        self.assertEqual(html.count('class="card event-card"'), 2)
+        self.assertIn('href="/Test/evenements/premier/"', html)
+        self.assertIn('href="/Test/evenements/deuxieme/"', html)
+        self.assertNotIn('/rides/', html)
+        self.assertLess(first.index('href="/Test/rides/long/"'), first.index('href="/Test/rides/court/"'))
+        self.assertEqual(first.count('href="/Test/rides/long/"'), 1)
+        self.assertEqual(first.count('href="/Test/rides/court/"'), 1)
+        self.assertEqual(second.count('href="/Test/rides/court/"'), 1)
+        self.assertNotIn('/rides/long/', second)
+        self.assertNotIn('/rides/autre/', first + second)
+        self.assertIn('href="/Test/evenements/">← Tous les événements</a>', first)
+        self.assertIn('href="/Test/evenements/" aria-current="page"', first)
+        self.assertNotIn('/assets/js/search.js', html)
+        self.assertIn("RideWithGPS 99 absent", errors.getvalue())
+
+    @override_settings(EVENEMENTS="", RATINGS_API_URL="", TURNSTILE_SITE_KEY="")
+    def test_build_site_shows_empty_events(self):
+        from django.core.management import call_command
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp)
+            html = (Path(tmp) / "evenements" / "index.html").read_text(encoding="utf-8")
+        self.assertIn("Aucun événement pour le moment", html)
+
+    @override_settings(EVENEMENTS="Invalide,|11,Vide|,Texte|abc,À venir|99;44;55")
+    def test_build_site_reports_invalid_and_unavailable_event_routes(self):
+        from django.core.management import call_command
+        import tempfile
+
+        Ride.objects.create(name="Masquée", rwgps_route_id="44", is_published=False, geometry=SQUARE)
+        Ride.objects.create(name="Hors Québec", rwgps_route_id="55", geometry=[[38, -77], [38.1, -77]])
+        errors = StringIO()
+        with tempfile.TemporaryDirectory() as tmp:
+            call_command("build_site", output=tmp, stderr=errors)
+            html = (Path(tmp) / "evenements" / "index.html").read_text(encoding="utf-8")
+            detail = (Path(tmp) / "evenements" / "a-venir" / "index.html").read_text(encoding="utf-8")
+        self.assertEqual(errors.getvalue().count("Événement ignoré"), 4)
+        self.assertEqual(errors.getvalue().count("absent des sorties publiées"), 3)
+        self.assertIn("À venir", html)
+        self.assertIn("Les parcours de cet événement ne sont pas encore disponibles", detail)
+        self.assertNotIn('/rides/masquee/', detail)
+
     @override_settings(SITE_BASE_PATH="/Test", SITE_CUSTOM_DOMAIN="www.example.com")
     def test_build_site_writes_pages(self):
         from django.core.management import call_command

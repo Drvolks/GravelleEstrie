@@ -19,6 +19,7 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
+from django.utils.text import slugify
 
 from rides.models import Ride
 from rides.services.images import list_ride_images
@@ -119,6 +120,7 @@ class Command(BaseCommand):
                     "site/index.html",
                     {
                         **common,
+                        "active_tab": "routes",
                         "rides": views,
                         "max_distance": max_distance,
                         "max_elevation": max_elevation,
@@ -127,12 +129,41 @@ class Command(BaseCommand):
                 encoding="utf-8",
             )
 
+            # Events group the same published rides by their RideWithGPS ids.
+            events_dir = out / "evenements"
+            events_dir.mkdir(parents=True, exist_ok=True)
+            events = self._event_views(settings.EVENEMENTS, rides, views)
+            (events_dir / "index.html").write_text(
+                self._render_template(
+                    "site/events.html",
+                    {
+                        **common,
+                        "active_tab": "events",
+                        "events": events,
+                    },
+                ),
+                encoding="utf-8",
+            )
+            for event in events:
+                event_dir = events_dir / event.slug
+                event_dir.mkdir(parents=True, exist_ok=True)
+                (event_dir / "index.html").write_text(
+                    self._render_template(
+                        "site/event_detail.html",
+                        {**common, "active_tab": "events", "event": event},
+                    ),
+                    encoding="utf-8",
+                )
+
             # Detail pages at /rides/<slug>/index.html
             for view in views:
                 ride_dir = out / "rides" / view.slug
                 ride_dir.mkdir(parents=True, exist_ok=True)
                 (ride_dir / "index.html").write_text(
-                    self._render_template("site/detail.html", {**common, "ride": view}),
+                    self._render_template(
+                        "site/detail.html",
+                        {**common, "active_tab": "routes", "ride": view},
+                    ),
                     encoding="utf-8",
                 )
 
@@ -151,6 +182,51 @@ class Command(BaseCommand):
         )
 
     # -- helpers ------------------------------------------------------------
+
+    def _event_views(self, raw: str, rides: list, views: list) -> list[SimpleNamespace]:
+        by_id = {
+            ride.rwgps_route_id: view
+            for ride, view in zip(rides, views)
+            if ride.rwgps_route_id
+        }
+        events = []
+        used_slugs = set()
+        for entry in raw.split(","):
+            if not entry.strip():
+                continue
+            name, separator, route_ids = entry.partition("|")
+            name = name.strip()
+            ids = list(dict.fromkeys(
+                rid.strip() for rid in route_ids.split(";") if rid.strip()
+            ))
+            valid_ids = all(rid.isascii() and rid.isdigit() for rid in ids)
+            if not separator or not name or not ids or not valid_ids:
+                self.stderr.write(self.style.WARNING(
+                    f"Événement ignoré (format attendu : Nom|id_rwg1;id_rwg2) : {entry.strip()}"
+                ))
+                continue
+            choices = []
+            for route_id in ids:
+                if route_id in by_id:
+                    choices.append(by_id[route_id])
+                else:
+                    self.stderr.write(self.style.WARNING(
+                        f"Événement « {name} » : parcours RideWithGPS {route_id} absent des sorties publiées."
+                    ))
+            base_slug = slugify(name) or "evenement"
+            slug = base_slug
+            suffix = 2
+            while slug in used_slugs:
+                slug = f"{base_slug}-{suffix}"
+                suffix += 1
+            used_slugs.add(slug)
+            events.append(SimpleNamespace(
+                name=name,
+                slug=slug,
+                rides=choices,
+                thumb_url=next((ride.thumb_url for ride in choices if ride.thumb_url), ""),
+            ))
+        return events
 
     @staticmethod
     def _render_template(template_name: str, context: dict) -> str:

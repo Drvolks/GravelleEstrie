@@ -1,0 +1,32 @@
+{% extends "site/base.html" %}
+
+{% block title %}Événements · {{ site_title }}{% endblock %}
+{% block body_class %}has-ride-cover{% endblock %}
+{% block body_style %}--ride-cover-image: url('{{ default_cover_url }}');{% endblock %}
+
+{% block content %}
+<header class="events-heading">
+  <h1>Événements</h1>
+  <p>Découvrez les événements et leurs choix de ride.</p>
+</header>
+
+<div class="grid events-grid">
+  {% for event in events %}
+  <article class="card event-card">
+    <a class="card-link" href="{{ base_path }}/evenements/{{ event.slug }}/">
+      <div class="card-thumb">
+        <img src="{% if event.thumb_url %}{{ event.thumb_url }}{% else %}{{ default_cover_url }}{% endif %}"
+             alt="" loading="lazy">
+      </div>
+      <div class="card-body">
+        <h2>{{ event.name }}</h2>
+        <p class="card-meta">{{ event.rides|length }} choix de ride</p>
+        <span class="event-card-action">Voir les rides <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
+  </article>
+  {% empty %}
+    <p class="empty event-empty">Aucun événement pour le moment. Revenez bientôt !</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "site/base.html" %}
+
+{% block title %}{{ event.name }} · {{ site_title }}{% endblock %}
+{% block body_class %}has-ride-cover{% endblock %}
+{% block body_style %}--ride-cover-image: url('{{ default_cover_url }}');{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb" aria-label="Fil d’Ariane">
+  <a href="{{ base_path }}/evenements/">← Tous les événements</a>
+</nav>
+<header class="events-heading">
+  <h1>{{ event.name }}</h1>
+  <p>{{ event.rides|length }} choix de ride · Choisissez votre parcours.</p>
+</header>
+
+<section class="grid" aria-label="Choix de ride"
+         {% if ratings_enabled %}data-ratings-index data-ratings-api-url="{{ ratings_api_url }}"{% endif %}>
+  {% for ride in event.rides %}
+    {% include "site/ride_card.html" %}
+  {% empty %}
+    <p class="event-empty">Les parcours de cet événement ne sont pas encore disponibles.</p>
+  {% endfor %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+{% if ratings_enabled %}
+<script src="{{ base_path }}/assets/js/ratings.js?v={{ asset_version }}" defer></script>
+{% endif %}
+{% endblock %}

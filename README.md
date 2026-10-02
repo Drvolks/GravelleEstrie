@@ -8,6 +8,7 @@ generates a **static website** you can publish on GitHub Pages.
 - **Search** by name and start city
 - **Filter** by distance and elevation gain
 - **Ride cards** with a baked map thumbnail
+- **Routes / Événements tabs**, with multiple ride choices per event
 - **Detail page** per ride: a combined Leaflet map for the route and nearby
   places, an interactive elevation profile, full specs, links to Strava &
   RideWithGPS, and a downloadable GPX file for Garmin/manual import
@@ -86,6 +87,30 @@ docker compose --profile preview up preview
 
 Re-run `build_site` and refresh the page to see changes — nginx reads
 straight from the mounted `docs/` directory.
+
+### Configuring events
+
+Set `EVENEMENTS` in `.env` to populate the **Événements** tab:
+
+```dotenv
+EVENEMENTS="Lumberjack|123456;234567,Porc Épic|345678;456789"
+```
+
+Separate events with commas, the event name and route ids with `|`, and
+RideWithGPS route ids with semicolons. Event names cannot contain commas or
+`|`. Events and ride choices keep the configured order; repeated ids within
+an event appear once. A route can belong to several events.
+
+The Événements tab shows one tile per event. Clicking a tile opens
+`/evenements/<event-slug>/` with that event's ride choices and a link back to
+all events. Each tile uses an available route thumbnail, or the default cover.
+Choices link to the site's existing ride detail pages. Routes must already
+be imported, published, and eligible for the site (starting in Quebec and not
+excluded). For routes belonging to another RideWithGPS account, add their ids
+to `RWGPS_EXTRA_ROUTE_IDS` and import them first. Re-run `build_site` after
+changing `EVENEMENTS` to generate `/evenements/`. The build reports malformed
+entries and unavailable route ids; events without available routes show a
+message until their routes are published.
 
 ## Setup (without Docker)
 

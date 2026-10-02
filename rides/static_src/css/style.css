@@ -99,6 +99,20 @@ body.has-ride-cover .site-header {
 
 main.wrap { padding-top: 28px; }
 
+/* Routes / events navigation */
+.site-tabs { display: flex; gap: 8px; margin-bottom: 28px; border-bottom: 1px solid var(--border-stronger); }
+.site-tabs a { padding: 12px 20px; color: var(--ink); font-weight: 800; border-bottom: 3px solid transparent; }
+.site-tabs a:hover { color: var(--orange); text-decoration: none; }
+.site-tabs a[aria-current="page"] { color: var(--orange); border-bottom-color: var(--orange); }
+.site-tabs a:focus-visible { outline: 2px solid var(--orange); outline-offset: -2px; }
+.events-heading { margin-bottom: 28px; }
+.events-heading h1 { margin: 0 0 8px; }
+.events-heading p { margin: 0; color: var(--ink); }
+.events-heading h1, .event-card h2 { overflow-wrap: anywhere; }
+.event-card-action { color: var(--orange); font-size: .9rem; font-weight: 800; }
+.event-card .card-link:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
+.event-empty { grid-column: 1 / -1; margin: 0; padding: 20px; background: var(--card); border-radius: var(--radius); color: var(--muted); }
+
 /* Controls */
 .controls { margin-bottom: 24px; }
 .search-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }

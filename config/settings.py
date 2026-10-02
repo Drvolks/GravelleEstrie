@@ -155,6 +155,9 @@ SITE_CUSTOM_DOMAIN = os.environ.get("SITE_CUSTOM_DOMAIN", "www.gravelleestrie.co
 SITE_TITLE = "Gravelle Estrie"
 SITE_TAGLINE = "Sorties gravelle du club Gravelle Estrie"
 
+# Comma-separated events: Name|rwgps_id;rwgps_id,Name|rwgps_id;rwgps_id.
+EVENEMENTS = os.environ.get("EVENEMENTS", "")
+
 # Optional static-site ratings. When both values are set, ride detail pages
 # load the rating widget and submit votes to the Cloudflare Worker API.
 RATINGS_API_URL = os.environ.get("RATINGS_API_URL", "").strip().rstrip("/")
